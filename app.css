@@ -1,4 +1,6 @@
+
 /* index*/
+
 :root {
   font-family: "Trebuchet MS", Verdana, sans-serif;
   color: #183b39;
@@ -178,6 +180,7 @@ nav a[aria-current="page"],
     justify-content: flex-start;
   }
 }
+
 
 /* Blog */
 .blog-hero {
