@@ -1,4 +1,3 @@
-
 /* index*/
 
 :root {
@@ -181,7 +180,6 @@ nav a[aria-current="page"],
   }
 }
 
-
 /* Blog */
 .blog-hero {
   background: linear-gradient(135deg, #dff1df 0%, #ecf7ee 100%);
@@ -363,8 +361,7 @@ img.blog-card-image {
   box-shadow: 0 3px 10px rgba(24, 59, 57, 0.04);
 }
 
-<!--seccion de filtros de los los productos --->
-.filter-section h2 {
+<!--seccion de filtros de los los productos --- > .filter-section h2 {
   margin: 0 0 0.9rem;
   color: #176b58;
   font-size: 1.1rem;
@@ -463,7 +460,9 @@ img.blog-card-image {
   border: 1px solid #dce8df;
   border-radius: 10px;
   box-shadow: 0 3px 10px rgba(24, 59, 57, 0.06); /* Sombra muy suave */
-  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Transición fluida al pasar el mouse */
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease; /* Transición fluida al pasar el mouse */
 }
 /* Efecto al pasar el mouse por encima del producto (se eleva un poquito) */
 .product-card:hover {
@@ -527,7 +526,7 @@ img.blog-card-image {
 /*diseño del boton de compra y el precio de los productos*/
 /* cuadro que contiene el precio y el botón */
 .product-footer {
-  margin-top: auto; 
+  margin-top: auto;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -559,7 +558,6 @@ img.blog-card-image {
   background: #d26945;
 }
 
-
 /* computadoras: muestra  3 productos por fila */
 @media (max-width: 1100px) {
   .products-grid {
@@ -575,7 +573,7 @@ img.blog-card-image {
   }
 
   .products-introduction {
-    position: static; 
+    position: static;
   }
 
   .products-grid {
@@ -599,3 +597,204 @@ img.blog-card-image {
   }
 }
 
+/* Quiénes somos */
+.quienes-somos-hero {
+  background: linear-gradient(135deg, #dceee2 0%, #edf7ef 100%);
+  padding: 4rem 0 3rem;
+}
+
+.quienes-somos-hero-content {
+  max-width: 760px;
+}
+
+.quienes-somos-kicker {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  color: #d26945;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.quienes-somos-hero h1 {
+  margin: 0 0 1rem;
+  color: #176b58;
+  font-size: clamp(2.3rem, 5vw, 4rem);
+}
+
+.quienes-somos-hero p {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #2b4a45;
+}
+
+.about-section,
+.values-section,
+.features-section,
+.team-section,
+.cta-section {
+  padding: 4rem 0;
+}
+
+.about-layout {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.about-intro {
+  background: #ffffff;
+  border: 1px solid #dce8df;
+  border-radius: 18px;
+  padding: 2rem;
+  box-shadow: 0 8px 24px rgba(24, 59, 57, 0.04);
+}
+
+.about-intro h2,
+.values-section h2,
+.features-section h2,
+.team-section h2 {
+  margin: 0 0 1rem;
+  color: #176b58;
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+}
+
+.about-intro p {
+  margin: 0 0 1rem;
+  line-height: 1.7;
+  color: #355a55;
+}
+
+.about-intro p:last-child {
+  margin-bottom: 0;
+}
+
+.about-visual {
+  min-height: 360px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #eaf6ed 0%, #dceee2 100%);
+  border: 1px dashed #bfceb9;
+  border-radius: 18px;
+  text-align: center;
+  color: #176b58;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  box-shadow: 0 8px 24px rgba(24, 59, 57, 0.04);
+}
+
+.values-grid,
+.features-grid,
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.value-card,
+.feature-card,
+.team-card {
+  background: #ffffff;
+  border: 1px solid #dce8df;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 20px rgba(24, 59, 57, 0.04);
+}
+
+.value-card h3,
+.feature-card h3,
+.team-card h3 {
+  margin: 0 0 0.75rem;
+  color: #176b58;
+  font-size: 1.2rem;
+}
+
+.value-card p,
+.feature-card p,
+.team-card p {
+  margin: 0;
+  line-height: 1.7;
+  color: #496560;
+}
+
+.team-avatar {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 1rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #dceee2;
+  color: #176b58;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.cta-box {
+  background: linear-gradient(135deg, #176b58 0%, #0f4f45 100%);
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  box-shadow: 0 12px 28px rgba(23, 107, 88, 0.15);
+}
+
+.cta-box h2 {
+  margin: 0 0 0.6rem;
+  font-size: clamp(1.8rem, 4vw, 2.3rem);
+}
+
+.cta-box p {
+  margin: 0;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 0.9rem 1.4rem;
+  border-radius: 999px;
+  background: #d26945;
+  color: #ffffff;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+@media (max-width: 800px) {
+  .about-layout,
+  .values-grid,
+  .features-grid,
+  .team-grid,
+  .cta-box {
+    grid-template-columns: 1fr;
+  }
+
+  .about-layout {
+    display: grid;
+  }
+
+  .cta-box {
+    display: grid;
+  }
+}
+
+@media (max-width: 520px) {
+  .quienes-somos-hero {
+    padding-top: 3rem;
+  }
+
+  .about-section,
+  .values-section,
+  .features-section,
+  .team-section,
+  .cta-section {
+    padding: 3rem 0;
+  }
+}
