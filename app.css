@@ -595,3 +595,59 @@ img.blog-card-image {
     grid-template-columns: 1fr; /* Un solo producto a lo ancho */
   }
 }
+
+/*VISTA: CONSULTAS (Bayron)*/
+.titulo-consultas {
+  text-align: center;
+  color: #176b58;
+  margin-bottom: 3rem;
+  font-size: 2rem;
+}
+
+@media (min-width: 801px) {
+  .consultas-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}
+
+.btn-agendar {
+  display: inline-block;
+  margin-top: 1.2rem;
+  padding: 0.6rem 1.2rem;
+  background: #176b58;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.btn-agendar:hover {
+  background: #183b39;
+  color: #ffffff;
+}
+
+/* VISTA: QUIENES SOMOS (Bayron)*/
+.about-section {
+  padding: 4rem 0;
+  line-height: 1.8;
+}
+
+.about-section h1, .about-section h2 {
+  color: #176b58;
+}
+
+.about-section h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+}
+
+.about-section h2 {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+  font-size: 1.75rem;
+}
+
+.about-section p {
+  font-size: 1.1rem;
+}
