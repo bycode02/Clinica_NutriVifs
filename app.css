@@ -1,0 +1,597 @@
+/* index*/
+:root {
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+  color: #183b39;
+  background: #f4f8f4;
+}
+
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: #f4f8f4;
+}
+a {
+  color: inherit;
+}
+.container {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #ffffff;
+  border-bottom: 1px solid #dce8df;
+}
+.header-content {
+  min-height: 76px;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+.brand {
+  color: #176b58;
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex: 1;
+}
+nav a,
+.profile-link {
+  text-decoration: none;
+  font-weight: 700;
+}
+.carrito-compras {
+  color: #176b58;
+  font-weight: 700;
+  text-decoration: none;
+}
+nav a:hover,
+nav a[aria-current="page"],
+.profile-link:hover {
+  color: #d26945;
+}
+.profile-link {
+  color: #176b58;
+}
+.hero {
+  background: #dceee2;
+}
+.hero-content {
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+.hero h1 {
+  margin: 0 0 0.75rem;
+  color: #176b58;
+  font-size: clamp(2.25rem, 5vw, 4rem);
+}
+.hero p {
+  max-width: 560px;
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+.services-section {
+  padding: 4rem 0;
+}
+.services-section h2 {
+  margin: 0 0 2rem;
+  text-align: center;
+  color: #176b58;
+  font-size: 2rem;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem;
+}
+.service-card {
+  padding: 1rem;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #dce8df;
+  border-radius: 8px;
+}
+.image-placeholder {
+  min-height: 150px;
+  display: grid;
+  place-items: center;
+  background: #eef4ed;
+  color: #6b8178;
+  border: 1px dashed #9eb5a7;
+}
+.service-card h3 {
+  margin: 1rem 0 0.4rem;
+  color: #176b58;
+}
+.service-card p {
+  margin: 0;
+  line-height: 1.5;
+}
+.site-footer {
+  background: #183b39;
+  color: #f4f8f4;
+  padding: 2.5rem 0;
+}
+.footer-content {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 2rem;
+}
+.site-footer h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+  color: #f5c58b;
+}
+.site-footer p {
+  margin: 0.35rem 0;
+}
+.site-footer ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  line-height: 1.8;
+}
+.site-footer a {
+  color: #ffffff;
+}
+
+@media (max-width: 800px) {
+  .header-content {
+    flex-wrap: wrap;
+    padding: 1rem 0;
+    gap: 1rem;
+  }
+  nav {
+    order: 3;
+    flex-basis: 100%;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .services-grid,
+  .footer-content {
+    grid-template-columns: 1fr;
+  }
+  .header-content {
+    align-items: flex-start;
+  }
+  nav {
+    justify-content: flex-start;
+  }
+}
+
+/* Blog */
+.blog-hero {
+  background: linear-gradient(135deg, #dff1df 0%, #ecf7ee 100%);
+  padding: 4rem 0;
+}
+
+.blog-hero-content {
+  max-width: 760px;
+}
+
+.blog-label {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  color: #d26945;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.blog-hero h1 {
+  margin: 0 0 1rem;
+  color: #176b58;
+  font-size: clamp(2.3rem, 5vw, 3.5rem);
+}
+
+.blog-hero p {
+  margin: 0;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #2d4a45;
+}
+
+.blog-main {
+  padding: 3rem 0 4rem;
+}
+
+.featured-post {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  background: #ffffff;
+  border: 1px solid #dce8df;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  box-shadow: 0 6px 18px rgba(24, 59, 57, 0.05);
+}
+
+.featured-image,
+.blog-card-image {
+  width: 100%;
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  background: #eef5ef;
+  color: #6e827a;
+  border: 1px dashed #b3c8bd;
+  font-weight: 700;
+}
+
+img.blog-card-image {
+  display: block;
+  height: 220px;
+  object-fit: cover;
+  border: 0;
+}
+
+.featured-content {
+  padding: 2rem 1.5rem;
+}
+
+.post-tag {
+  display: inline-block;
+  margin-bottom: 0.8rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  background: #edf7f1;
+  color: #176b58;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.featured-content h2,
+.blog-card-content h3 {
+  margin: 0 0 0.8rem;
+  color: #176b58;
+}
+
+.featured-content p,
+.blog-card-content p {
+  margin: 0 0 1rem;
+  line-height: 1.7;
+  color: #4d665f;
+}
+
+.read-more,
+.blog-card-content a {
+  color: #176b58;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.blog-card {
+  background: #ffffff;
+  border: 1px solid #dce8df;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(24, 59, 57, 0.04);
+}
+
+.blog-card-content {
+  padding: 1.2rem;
+}
+
+@media (max-width: 800px) {
+  .featured-post,
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*pagina de los productos*/
+/* Divide la pantalla en 2 columnas: la barra lateral fija y el catálogo a la derecha */
+.products-page {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  display: grid;
+  /* La columna izquierda mide 280px y la derecha toma el espacio restante (1fr) */
+  grid-template-columns: 280px 1fr;
+  gap: 3rem; /* Espacio de separación entre ambas columnas */
+  align-items: start; /* Alinea ambas columnas arriba del todo */
+}
+/* columna del lado izquierdo */
+/* Hace que el bloque de introducción se quede "pegado" al hacer scroll en computadores */
+.products-introduction {
+  position: sticky;
+  top: 100px; /* Distancia desde el techo de la pantalla al quedar pegado */
+}
+
+/* El texto pequeño "Clinica NutriDifs" sobre el título principal */
+.products-label {
+  display: inline-block;
+  margin-bottom: 0.75rem;
+  color: #d26945; /* Tono terracota */
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase; /* Todo en mayúsculas */
+  letter-spacing: 0.05em; /* Un poquito de espacio entre letras */
+}
+
+/* El título principal "Nuestros productos" */
+.products-introduction h1 {
+  margin: 0 0 1rem;
+  color: #176b58; /* Verde corporativo */
+  font-size: 2.4rem;
+}
+
+/* Párrafos descriptivos de la introducción */
+.products-introduction p {
+  margin: 0 0 1rem;
+  line-height: 1.6; /* Altura de línea para que se lea cómodo */
+}
+
+/* Contenedor de las 3 cajitas pequeñas (Calidad, Variedad, Bienestar) */
+.filter-section {
+  grid-column: 1 / -1;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: #ffffff;
+  border: 1px solid #dce8df;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(24, 59, 57, 0.04);
+}
+
+<!--seccion de filtros de los los productos --->
+.filter-section h2 {
+  margin: 0 0 0.9rem;
+  color: #176b58;
+  font-size: 1.1rem;
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.filter-btn {
+  border: 1px solid #dce8df;
+  background: #f4faf6;
+  color: #183b39;
+  border-radius: 8px;
+  padding: 0.7rem 0.95rem;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+  background: #176b58;
+  color: #ffffff;
+  border-color: #176b58;
+}
+
+.products-info {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column; /* Una debajo de la otra */
+  gap: 0.75rem;
+}
+
+/* Cada tarjeta pequeña de información */
+.products-info-item {
+  padding: 0.9rem;
+  background: #ffffff;
+  border: 1px solid #dce8df;
+  border-radius: 8px; /* Bordes suavemente redondeados */
+}
+
+/* El texto en negrita dentro de la cajita (ej. "Calidad") */
+.products-info-item strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: #176b58;
+}
+
+/* descripción pequeña del cuadro */
+.products-info-item span {
+  color: #6b8178;
+  font-size: 0.9rem;
+}
+/* seccion de catalogo del lado de la derecha*/
+/* Contenedor principal del catálogo */
+.products-catalog {
+  min-width: 0; /* Evita que los elementos internos rompan el ancho en pantallas pequeñas */
+}
+
+/* Encabezado del catálogo (Soportamos ambas clases por si usas "catalogo" o "catalog") */
+.catalogo-header,
+.catalog-header {
+  margin-bottom: 1.5rem;
+}
+
+.catalogo-header h2,
+.catalog-header h2 {
+  margin: 0 0 0.4rem;
+  color: #176b58;
+  font-size: 1.8rem;
+}
+
+.catalogo-header p,
+.catalog-header p {
+  margin: 0;
+  color: #6b8178;
+}
+
+/* Por defecto en pantallas grandes: 4 productos por fila */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columnas iguales */
+  gap: 1.5rem; /* Espacio uniforme entre productos */
+}
+/* diseño de las tarjetas de los productos*/
+/* Estructura base de cada producto */
+.product-card {
+  display: flex;
+  flex-direction: column; /* Coloca imagen, texto y botón en fila vertical */
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #dce8df;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(24, 59, 57, 0.06); /* Sombra muy suave */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Transición fluida al pasar el mouse */
+}
+/* Efecto al pasar el mouse por encima del producto (se eleva un poquito) */
+.product-card:hover {
+  transform: translateY(-4px); /* Sube 4 píxeles */
+  box-shadow: 0 8px 20px rgba(24, 59, 57, 0.12); /* La sombra se intensifica */
+}
+
+/* Espacio donde irá la foto del producto */
+.product-image-placeholder {
+  min-height: 180px;
+  display: grid;
+  place-items: center; /* Centra el texto "Imagen" en todo el medio */
+  background: #eef4ed;
+  color: #6b8178;
+  border-bottom: 1px dashed #9eb5a7; /* Línea punteada abajo */
+  font-weight: 700;
+}
+
+.product-image {
+  display: block;
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  background: #eef4ed;
+  border-bottom: 1px dashed #9eb5a7;
+  padding: 0.7rem;
+}
+
+/* Cuerpo con la información escrita del producto */
+.product-content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1; /* Ocupa todo el espacio disponible para empujar el footer hacia abajo */
+}
+
+/* Categoría en letra pequeña naranja (ej. "ANTIBIÓTICOS") */
+.product-category {
+  color: #d26945;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+/* Nombre del producto */
+.product-content h3 {
+  margin: 0.5rem 0;
+  color: #176b58;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+/* Descripción del producto */
+.product-content p {
+  margin: 0 0 1rem;
+  color: #5f716b;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/*diseño del boton de compra y el precio de los productos*/
+/* cuadro que contiene el precio y el botón */
+.product-footer {
+  margin-top: auto; 
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Texto del precio */
+.product-price {
+  color: #183b39;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+/* Botón de compra */
+.add-cart-button {
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  background: #176b58; /* Verde base */
+  color: #ffffff;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+/* Cambia de color al pasar el cursor sobre el botón */
+.add-cart-button:hover {
+  background: #d26945;
+}
+
+
+/* computadoras: muestra  3 productos por fila */
+@media (max-width: 1100px) {
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* diseño para las tablets*/
+@media (max-width: 800px) {
+  .products-page {
+    grid-template-columns: 1fr; /* Una sola columna para toda la página */
+    gap: 2rem;
+  }
+
+  .products-introduction {
+    position: static; 
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr); /*se mostran 2 productos por fila */
+  }
+}
+
+/*  diseño para celulares */
+@media (max-width: 520px) {
+  .products-page {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .products-introduction h1 {
+    font-size: 2rem; /* Achica un poco el título principal */
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr; /* Un solo producto a lo ancho */
+  }
+}
