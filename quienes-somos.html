@@ -225,8 +225,23 @@
         </div>
       </div>
     </footer>
-  </body>
-</html>
+    <div class="cart-overlay" data-cart-close></div>
+    <aside class="cart-panel" id="cart-panel" aria-labelledby="cart-title" aria-hidden="true">
+      <div class="cart-panel-header">
+        <h2 id="cart-title">Tu carrito</h2>
+        <button class="cart-close-button" type="button" aria-label="Cerrar carrito" data-cart-close>&times;</button>
+      </div>
+      <div class="cart-content" id="cart-content"></div>
+      <form class="cart-contact-form" id="cart-contact-form" novalidate>
+        <h3>Solicitar pedido</h3>
+        <label for="cart-customer-name">Nombre</label>
+        <input id="cart-customer-name" name="name" type="text" required>
+        <label for="cart-customer-email">Correo</label>
+        <input id="cart-customer-email" name="email" type="email" required>
+        <button type="submit" class="cart-submit-button">Enviar solicitud</button>
+        <p class="cart-form-message" id="cart-form-message" role="status"></p>
+      </form>
+    </aside>
     <script src="app.js"></script>
   </body>
 </html>

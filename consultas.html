@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Clinica NutriDifs | Consultas</title>
-    <meta name="description" content="Agenda tu consulta veterinaria en Clinica NutriDifs." />
+    <meta
+      name="description"
+      content="Agenda tu consulta veterinaria en Clinica NutriDifs."
+    />
     <link rel="stylesheet" href="app.css" />
   </head>
   <body>
@@ -24,33 +27,58 @@
     </header>
 
     <main>
-      <section class="services-section container" aria-labelledby="consultas-title">
-        <h1 id="consultas-title" class="titulo-consultas">Nuestras Consultas</h1>
+      <section
+        class="services-section container"
+        aria-labelledby="consultas-title"
+      >
+        <h1 id="consultas-title" class="titulo-consultas">
+          Nuestras Consultas
+        </h1>
         <div class="services-grid consultas-grid">
           <article class="service-card">
-            <div class="image-placeholder" role="img" aria-label="Imagen de consulta general">
+            <div
+              class="image-placeholder"
+              role="img"
+              aria-label="Imagen de consulta general"
+            >
               Imagen
             </div>
             <h3>Consulta general</h3>
-            <p>Revisión médica completa para evaluar el estado de salud de tu mascota.</p>
+            <p>
+              Revisión médica completa para evaluar el estado de salud de tu
+              mascota.
+            </p>
             <a href="#" class="btn-agendar">Agendar</a>
           </article>
-          
+
           <article class="service-card">
-            <div class="image-placeholder" role="img" aria-label="Imagen de vacunas">
+            <div
+              class="image-placeholder"
+              role="img"
+              aria-label="Imagen de vacunas"
+            >
               Imagen
             </div>
             <h3>Vacunas</h3>
-            <p>Aplicación de calendario de vacunación para prevenir enfermedades.</p>
+            <p>
+              Aplicación de calendario de vacunación para prevenir enfermedades.
+            </p>
             <a href="#" class="btn-agendar">Agendar</a>
           </article>
-          
+
           <article class="service-card">
-            <div class="image-placeholder" role="img" aria-label="Imagen de especializaciones">
+            <div
+              class="image-placeholder"
+              role="img"
+              aria-label="Imagen de especializaciones"
+            >
               Imagen
             </div>
             <h3>Especializaciones</h3>
-            <p>Atención médica detallada con especialistas (pendientes de definir).</p>
+            <p>
+              Atención médica detallada con especialistas (pendientes de
+              definir).
+            </p>
             <a href="#" class="btn-agendar">Agendar</a>
           </article>
         </div>
@@ -80,6 +108,37 @@
         </div>
       </div>
     </footer>
+    <div class="cart-overlay" data-cart-close></div>
+    <aside
+      class="cart-panel"
+      id="cart-panel"
+      aria-labelledby="cart-title"
+      aria-hidden="true"
+    >
+      <div class="cart-panel-header">
+        <h2 id="cart-title">Tu carrito</h2>
+        <button
+          class="cart-close-button"
+          type="button"
+          aria-label="Cerrar carrito"
+          data-cart-close
+        >
+          &times;
+        </button>
+      </div>
+      <div class="cart-content" id="cart-content"></div>
+      <form class="cart-contact-form" id="cart-contact-form" novalidate>
+        <h3>Solicitar pedido</h3>
+        <label for="cart-customer-name">Nombre</label>
+        <input id="cart-customer-name" name="name" type="text" required />
+        <label for="cart-customer-email">Correo</label>
+        <input id="cart-customer-email" name="email" type="email" required />
+        <button type="submit" class="cart-submit-button">
+          Enviar solicitud
+        </button>
+        <p class="cart-form-message" id="cart-form-message" role="status"></p>
+      </form>
+    </aside>
     <script src="app.js"></script>
   </body>
 </html>
