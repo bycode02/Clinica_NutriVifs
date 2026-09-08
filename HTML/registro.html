@@ -17,13 +17,19 @@
       <input type="text" id="reg-standalone-name" name="name" required>
       <label for="reg-standalone-email">Correo electrónico</label>
       <input type="email" id="reg-standalone-email" name="email" data-allowed-email placeholder="usuario@gmail.com" required>
-      <label for="reg-standalone-phone">Teléfono</label>
-      <input type="tel" id="reg-standalone-phone" name="phone" placeholder="+56 9 1234 5678" required>
+      <label for="reg-standalone-phone">Teléfono (opcional)</label>
+      <input type="tel" id="reg-standalone-phone" name="phone" placeholder="+56 9 1234 5678">
       <label for="reg-standalone-birth">Fecha de nacimiento</label>
       <!-- El calendario se limita a fechas que corresponden a personas mayores de edad. -->
       <input type="date" id="reg-standalone-birth" name="birthDate" data-adult-birth required>
+      <label for="reg-standalone-region">Región</label>
+      <select id="reg-standalone-region" name="region" data-region-select required></select>
+      <label for="reg-standalone-comuna">Comuna</label>
+      <select id="reg-standalone-comuna" name="comuna" data-comuna-select required></select>
       <label for="reg-standalone-pass">Contraseña</label>
       <input type="password" id="reg-standalone-pass" name="password" required>
+      <label for="reg-standalone-confirm-pass">Confirmar contraseña</label>
+      <input type="password" id="reg-standalone-confirm-pass" name="confirmPassword" required>
       <button type="submit" class="btn-primary">Registrarme</button>
       <p id="standalone-register-message" class="profile-message" role="status"></p>
     </form>

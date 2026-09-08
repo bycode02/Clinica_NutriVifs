@@ -84,6 +84,68 @@ function isValidRut(rut) {
   return calculated === verifier;
 }
 
+// =========================================================
+// REGIONES Y COMUNAS (selects encadenados)
+// =========================================================
+
+const REGIONES_COMUNAS = {
+  "Arica y Parinacota": ["Arica", "Camarones", "Putre", "General Lagos"],
+  "Tarapacá": ["Iquique", "Alto Hospicio", "Pozo Almonte"],
+  "Antofagasta": ["Antofagasta", "Calama", "Tocopilla"],
+  "Atacama": ["Copiapó", "Vallenar", "Chañaral"],
+  "Coquimbo": ["La Serena", "Coquimbo", "Ovalle"],
+  "Valparaíso": ["Valparaíso", "Viña del Mar", "Quilpué"],
+  "Metropolitana de Santiago": [
+    "Santiago", "Providencia", "Las Condes", "Maipú",
+    "Puente Alto", "Ñuñoa", "La Florida", "Peñalolén",
+  ],
+  "Libertador General Bernardo O'Higgins": ["Rancagua", "San Fernando", "Rengo"],
+  "Maule": ["Talca", "Curicó", "Linares"],
+  "Ñuble": ["Chillán", "San Carlos", "Bulnes"],
+  "Biobío": ["Concepción", "Talcahuano", "Los Ángeles"],
+  "La Araucanía": ["Temuco", "Villarrica", "Angol"],
+  "Los Ríos": ["Valdivia", "La Unión"],
+  "Los Lagos": ["Puerto Montt", "Osorno", "Castro"],
+  "Aysén": ["Coyhaique", "Puerto Aysén"],
+  "Magallanes": ["Punta Arenas", "Puerto Natales"],
+};
+
+function updateComunaOptions(region, comunaSelect) {
+  if (!comunaSelect) return;
+
+  const comunas = REGIONES_COMUNAS[region] || [];
+
+  comunaSelect.innerHTML = comunas.length
+    ? '<option value="">-- Selecciona la comuna --</option>' +
+      comunas.map((c) => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join("")
+    : '<option value="">Selecciona primero una región</option>';
+
+  comunaSelect.disabled = comunas.length === 0;
+}
+
+function initializeRegionComunaSelects() {
+  document.querySelectorAll("[data-region-select]").forEach((regionSelect) => {
+    if (regionSelect.dataset.populated === "true") return;
+
+    regionSelect.innerHTML =
+      '<option value="">-- Selecciona la región --</option>' +
+      Object.keys(REGIONES_COMUNAS)
+        .map((region) => `<option value="${escapeHtml(region)}">${escapeHtml(region)}</option>`)
+        .join("");
+    regionSelect.dataset.populated = "true";
+
+    const comunaSelect = regionSelect
+      .closest("form")
+      ?.querySelector("[data-comuna-select]");
+
+    updateComunaOptions(regionSelect.value, comunaSelect);
+
+    regionSelect.addEventListener("change", () => {
+      updateComunaOptions(regionSelect.value, comunaSelect);
+    });
+  });
+}
+
 function isAdultBirthDate(birthDate) {
   if (!birthDate) return false;
 
@@ -636,6 +698,10 @@ function handleRegisterSubmit(event) {
   const email = normalizeEmail(form.elements.email.value);
   const birthDate = form.elements.birthDate.value.trim();
   const password = form.elements.password.value;
+  const confirmPassword = form.elements.confirmPassword.value;
+  const phone = form.elements.phone.value.trim();
+  const region = form.elements.region.value;
+  const comuna = form.elements.comuna.value;
   const message = document.querySelector("#register-message");
 
   if (
@@ -654,6 +720,20 @@ function handleRegisterSubmit(event) {
     return;
   }
 
+  if (password !== confirmPassword) {
+    if (message) {
+      message.textContent = "La confirmación de contraseña no coincide.";
+    }
+    return;
+  }
+
+  if (!region || !comuna) {
+    if (message) {
+      message.textContent = "Selecciona tu región y comuna.";
+    }
+    return;
+  }
+
   const emailAlreadyUsed = state.profiles.some((item) => item.email === email);
   const passwordAlreadyUsed = state.profiles.some(
     (item) => item.password === password
@@ -666,7 +746,7 @@ function handleRegisterSubmit(event) {
     return;
   }
 
-  const profile = { name, email, birthDate, password };
+  const profile = { name, email, birthDate, phone, region, comuna, password };
   state.profiles.push(profile);
   saveToStorage(STORAGE_KEYS.PROFILES, state.profiles);
   startSession(profile);
@@ -1427,6 +1507,20 @@ function initializeStandaloneAuth() {
       return;
     }
 
+    if (data.password !== data.confirmPassword) {
+      if (message) {
+        message.textContent = "La confirmación de contraseña no coincide.";
+      }
+      return;
+    }
+
+    if (!data.region || !data.comuna) {
+      if (message) {
+        message.textContent = "Selecciona tu región y comuna.";
+      }
+      return;
+    }
+
     if (state.profiles.some((item) => item.email === email)) {
       if (message) {
         message.textContent = "Ese correo ya está registrado.";
@@ -1439,6 +1533,8 @@ function initializeStandaloneAuth() {
       email,
       birthDate: data.birthDate,
       phone: String(data.phone || "").trim(),
+      region: data.region,
+      comuna: data.comuna,
       password: data.password,
     };
 
@@ -1637,6 +1733,7 @@ function initializeProducts() {
 
 document.addEventListener("DOMContentLoaded", () => {
   initializeState();
+  initializeRegionComunaSelects();
   renderCart();
   updateCartCounter();
   renderProfile();
