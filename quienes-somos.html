@@ -234,13 +234,55 @@
       <div class="cart-content" id="cart-content"></div>
       <form class="cart-contact-form" id="cart-contact-form" novalidate>
         <h3>Solicitar pedido</h3>
-        <label for="cart-customer-name">Nombre</label>
-        <input id="cart-customer-name" name="name" type="text" required>
-        <label for="cart-customer-email">Correo</label>
-        <input id="cart-customer-email" name="email" type="email" required>
+        <p class="cart-profile-message">La solicitud se enviará con los datos de tu perfil.</p>
         <button type="submit" class="cart-submit-button">Enviar solicitud</button>
         <p class="cart-form-message" id="cart-form-message" role="status"></p>
       </form>
+    </aside>
+    <div class="profile-overlay" data-profile-close></div>
+    <aside class="profile-panel" id="profile-panel" aria-labelledby="profile-title" aria-hidden="true">
+      <div class="profile-panel-header">
+        <h2 id="profile-title">Perfil</h2>
+        <button class="profile-close-button" type="button" aria-label="Cerrar perfil" data-profile-close>&times;</button>
+      </div>
+      <div id="profile-auth-view">
+        <div id="login-view" class="profile-view">
+          <h3>Sign in</h3>
+          <form id="login-form" class="profile-form" novalidate>
+            <label for="login-email">Gmail</label>
+            <input id="login-email" name="email" type="email" placeholder="clinicVetDef@gmail.com" required />
+            <label for="login-password">Contraseña</label>
+            <input id="login-password" name="password" type="password" placeholder="Ilovecats" required />
+            <button class="profile-submit-button" type="submit">Log in</button>
+            <p id="login-message" class="profile-message" role="status"></p>
+          </form>
+          <button class="profile-switch-button" type="button" data-profile-view="register">Register</button>
+        </div>
+        <div id="register-view" class="profile-view" hidden>
+          <h3>Register</h3>
+          <form id="register-form" class="profile-form" novalidate>
+            <label for="register-name">Nombre</label>
+            <input id="register-name" name="name" type="text" placeholder="Clinica Vet Difs" required />
+            <label for="register-email">Gmail</label>
+            <input id="register-email" name="email" type="email" placeholder="clinicVetDef@gmail.com" required />
+            <label for="register-birth-date">Fecha de nacimiento</label>
+            <input id="register-birth-date" name="birthDate" type="text" placeholder="dd/mm/yyyy" required />
+            <label for="register-password">Contraseña</label>
+            <input id="register-password" name="password" type="password" placeholder="Ilovecats" required />
+            <small>Debe tener entre 4 y 13 caracteres y al menos una mayúscula.</small>
+            <button class="profile-submit-button" type="submit">Registrar</button>
+            <p id="register-message" class="profile-message" role="status"></p>
+          </form>
+          <button class="profile-switch-button" type="button" data-profile-view="login">Volver a Sign in</button>
+        </div>
+      </div>
+      <div id="profile-session-view" hidden>
+        <h3>Sesión activa</h3>
+        <p id="profile-session-name"></p>
+        <p id="profile-session-email"></p>
+        <p id="profile-session-message" class="profile-message" role="status"></p>
+        <button class="profile-submit-button" type="button" data-profile-logout>Cerrar sesión</button>
+      </div>
     </aside>
     <script src="app.js"></script>
   </body>
