@@ -60,7 +60,7 @@
 
             <div class="campo-formulario">
               <label for="correo">Correo electronico</label>
-              <input id="correo" name="correo" type="email" required />
+              <input id="correo" name="correo" type="email" data-allowed-email required />
             </div>
 
             <div class="campo-formulario">
@@ -107,8 +107,8 @@
             </div>
 
             <div class="campo-formulario campo-completo">
-              <label for="motivo">Motivo de la consulta (minimo 300 caracteres)</label>
-              <textarea id="motivo" name="motivo" rows="5" minlength="10" placeholder="Describe con detalle lo que le ocurre a tu mascota" required></textarea>
+              <label for="motivo">Motivo de la consulta (minimo 20 caracteres)</label>
+              <textarea id="motivo" name="motivo" rows="5" minlength="20" maxlength="500" placeholder="Describe con detalle lo que le ocurre a tu mascota" required></textarea>
             </div>
 
             <button type="submit" class="btn-agendar campo-completo">Solicitar consulta</button>

@@ -31,15 +31,15 @@
         <div class="contacto-grid">
           <!-- Columna Izquierda: Formulario -->
           <div class="contacto-formulario">
-            <form id="form-contacto">
+            <form id="form-contacto" novalidate>
               <div class="campo-formulario">
                 <label for="contacto-identificacion">Correo o Teléfono:</label>
-                <input type="text" id="contacto-identificacion" placeholder="Ej: +569... o correo@mail.com" required>
+                <input type="text" id="contacto-identificacion" name="identificacion" placeholder="Ej: +569... o correo@mail.com" required>
               </div>
 
               <div class="campo-formulario">
                 <label for="contacto-motivo">Motivo de contacto:</label>
-                <select id="contacto-motivo" required>
+                <select id="contacto-motivo" name="motivo" required>
                   <option value="" disabled selected>Selecciona un motivo...</option>
                   <option value="reclamo">Reclamo / Devolución</option>
                   <option value="consulta">Consulta por información</option>
@@ -54,6 +54,7 @@
               </div>
 
               <button type="submit" class="btn-agendar">Enviar Mensaje</button>
+              <p id="form-contacto-message" role="status" aria-live="polite"></p>
             </form>
           </div>
 

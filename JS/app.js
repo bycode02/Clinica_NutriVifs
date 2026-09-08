@@ -84,6 +84,30 @@ function isValidRut(rut) {
   return calculated === verifier;
 }
 
+// Quita puntos y guion para aceptar RUT escrito como 12.345.678-5 o 123456785.
+function normalizeRut(rut) {
+  return String(rut || "").replace(/[.\-\s]/g, "").toUpperCase();
+}
+
+// Acepta números chilenos con o sin +56, con o sin espacios (8 o 9 dígitos).
+function isValidPhone(phone) {
+  const digits = String(phone || "").replace(/[\s()-]/g, "");
+  return /^(\+?56)?9?\d{8}$/.test(digits);
+}
+
+// Comprueba que una fecha (yyyy-mm-dd) no sea anterior a hoy.
+function isTodayOrFutureDate(dateValue) {
+  if (!dateValue) return false;
+
+  const selected = new Date(`${dateValue}T00:00:00`);
+  if (Number.isNaN(selected.getTime())) return false;
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  return selected.getTime() >= today.getTime();
+}
+
 // =========================================================
 // REGIONES Y COMUNAS (selects encadenados)
 // =========================================================
@@ -1145,12 +1169,117 @@ function initializeAppointment() {
     tipoConsulta.value = "general";
   }
 
+  const validarAgendamiento = () => {
+    const rutInput = formulario.elements["rut"];
+    const correoInput = formulario.elements["correo"];
+    const telefonoInput = formulario.elements["telefono"];
+    const fechaInput = formulario.elements["fecha"];
+
+    rutInput.setCustomValidity("");
+    correoInput.setCustomValidity("");
+    telefonoInput.setCustomValidity("");
+    fechaInput.setCustomValidity("");
+
+    if (!isValidRut(normalizeRut(rutInput.value))) {
+      rutInput.setCustomValidity(
+        "Ingresa un RUT chileno válido, con o sin puntos y guion (ej: 12.345.678-5)."
+      );
+      return rutInput;
+    }
+
+    if (!isValidEmail(correoInput.value)) {
+      correoInput.setCustomValidity(
+        "Solo se permiten correos @duoc.cl, @profesor.duoc.cl o @gmail.com."
+      );
+      return correoInput;
+    }
+
+    if (!isValidPhone(telefonoInput.value)) {
+      telefonoInput.setCustomValidity(
+        "Ingresa un teléfono chileno válido (ej: +56 9 1234 5678)."
+      );
+      return telefonoInput;
+    }
+
+    if (!isTodayOrFutureDate(fechaInput.value)) {
+      fechaInput.setCustomValidity(
+        "La fecha preferida no puede ser anterior a hoy."
+      );
+      return fechaInput;
+    }
+
+    return null;
+  };
+
   formulario.addEventListener("submit", (event) => {
     event.preventDefault();
+
+    const campoInvalido = validarAgendamiento();
+
+    if (campoInvalido || !formulario.checkValidity()) {
+      formulario.reportValidity();
+      return;
+    }
+
     mensaje.textContent =
       "Solicitud enviada. Nos pondremos en contacto contigo para confirmar.";
     formulario.reset();
     actualizarOtraEspecie();
+  });
+}
+
+// =========================================================
+// FORMULARIO DE LA PÁGINA CONTÁCTANOS
+// =========================================================
+
+function initializeContactPage() {
+  const formulario = document.querySelector("#form-contacto");
+  if (!formulario) return;
+
+  const identificacion = formulario.elements["identificacion"];
+  const motivo = formulario.elements["motivo"];
+  const mensajeInput = formulario.elements["mensaje"];
+  const feedback = document.querySelector("#form-contacto-message");
+
+  formulario.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    identificacion.setCustomValidity("");
+    motivo.setCustomValidity("");
+    mensajeInput.setCustomValidity("");
+
+    const valor = identificacion.value.trim();
+    const esCorreoValido = isValidEmail(valor);
+    const esTelefonoValido = isValidPhone(valor);
+
+    if (!valor || (!esCorreoValido && !esTelefonoValido)) {
+      identificacion.setCustomValidity(
+        "Ingresa un correo permitido (@duoc.cl, @profesor.duoc.cl o @gmail.com) o un teléfono chileno válido."
+      );
+      formulario.reportValidity();
+      return;
+    }
+
+    if (!motivo.value) {
+      motivo.setCustomValidity("Selecciona un motivo de contacto.");
+      formulario.reportValidity();
+      return;
+    }
+
+    if (!mensajeInput.value.trim()) {
+      mensajeInput.setCustomValidity(
+        "Escribe tu mensaje (máximo 500 caracteres)."
+      );
+      formulario.reportValidity();
+      return;
+    }
+
+    if (feedback) {
+      feedback.textContent =
+        "Mensaje enviado correctamente. Te contactaremos pronto.";
+    }
+
+    formulario.reset();
   });
 }
 
@@ -1573,6 +1702,7 @@ document.addEventListener("DOMContentLoaded", () => {
   bindSiteEvents();
   initializeConsultas();
   initializeAppointment();
+  initializeContactPage();
   initializeAdminModule();
   initializeStandaloneAuth();
   initializeProducts();
