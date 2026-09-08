@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clinica NutriDifs | Contáctanos</title>
+    <meta name="description" content="Ponte en contacto con Clinica NutriDifs o encuéntranos en nuestro mapa." />
+    <link rel="stylesheet" href="../CSS/app.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-content">
+        <a class="brand" href="index.html">Clinica NutriDifs</a>
+        <nav aria-label="Navegación principal">
+          <a href="index.html">Inicio</a>
+          <a href="consultas.html">Consultas</a>
+          <a href="productos.html">Productos</a>
+          <a href="blog.html">Blog</a>
+          <a href="contactanos.html" aria-current="page">Contáctanos</a>
+          <a href="quienes-somos.html">Quiénes somos</a>
+        </nav>
+        <a class="profile-link" href="#perfil">Perfil</a>
+        <a class="carrito-compras" href="#carrito">Carrito</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="contacto-section container" aria-labelledby="contacto-title">
+        <h1 id="contacto-title" class="titulo-consultas">Contáctanos</h1>
+        
+        <div class="contacto-grid">
+          <!-- Columna Izquierda: Formulario -->
+          <div class="contacto-formulario">
+            <form id="form-contacto">
+              <div class="campo-formulario">
+                <label for="contacto-identificacion">Correo o Teléfono:</label>
+                <input type="text" id="contacto-identificacion" placeholder="Ej: +569... o correo@mail.com" required>
+              </div>
+
+              <div class="campo-formulario">
+                <label for="contacto-motivo">Motivo de contacto:</label>
+                <select id="contacto-motivo" required>
+                  <option value="" disabled selected>Selecciona un motivo...</option>
+                  <option value="reclamo">Reclamo / Devolución</option>
+                  <option value="consulta">Consulta por información</option>
+                  <option value="sugerencia">Sugerencias</option>
+                </select>
+              </div>
+
+              <div class="campo-formulario">
+                <label for="mensaje">Mensaje:</label>
+                <!-- La pauta exige un máximo de 500 caracteres. -->
+                <textarea id="mensaje" name="mensaje" maxlength="500" required placeholder="Escribe tu consulta (máximo 500 caracteres)..."></textarea>
+              </div>
+
+              <button type="submit" class="btn-agendar">Enviar Mensaje</button>
+            </form>
+          </div>
+
+          <!-- Columna Derecha: Mapa de ubicación -->
+          <div class="contacto-mapa">
+            <h3>Nuestra Ubicación</h3>
+            <p>Encuéntranos en Rancagua, Región del Libertador General Bernardo O'Higgins.</p>
+            <div class="mapa-placeholder">
+                 <iframe
+                title="Ubicación de Clinica NutriDifs en Google Maps"
+                src="https://www.google.com/maps?q=Clinica+NutriDifs+Chile&output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <div>
+          <h2>Clinica NutriDifs</h2>
+          <p>Teléfono: +56 9 4567 8910</p>
+          <p><a href="mailto:ClinicVEtDifs@gmail.com">ClinicVEtDifs@gmail.com</a></p>
+        </div>
+        <div>
+          <h2>Integrantes</h2>
+          <ul>
+            <li>Francisco Arce</li>
+            <li>Bayron Mena</li>
+            <li>Carolina Quinan</li>
+          </ul>
+        </div>
+        <div>
+          <h2>Sección</h2>
+          <p>DSY1104 – 2026</p>
+        </div>
+      </div>
+    </footer>
+
+    <div class="cart-overlay" data-cart-close></div>
+    <aside class="cart-panel" id="cart-panel" aria-labelledby="cart-title" aria-hidden="true">
+      <div class="cart-panel-header">
+        <h2 id="cart-title">Tu carrito</h2>
+        <button class="cart-close-button" type="button" aria-label="Cerrar carrito" data-cart-close>&times;</button>
+      </div>
+      <div class="cart-content" id="cart-content"></div>
+      <form class="cart-contact-form" id="cart-contact-form" novalidate>
+        <h3>Solicitar pedido</h3>
+        <p class="cart-profile-message">La solicitud se enviará con los datos de tu perfil.</p>
+        <button type="submit" class="cart-submit-button">Enviar solicitud</button>
+        <p class="cart-form-message" id="cart-form-message" role="status"></p>
+      </form>
+    </aside>
+
+    <div class="profile-overlay" data-profile-close></div>
+    <aside class="profile-panel" id="profile-panel" aria-labelledby="profile-title" aria-hidden="true">
+      <div class="profile-panel-header">
+        <h2 id="profile-title">Perfil</h2>
+        <button class="profile-close-button" type="button" aria-label="Cerrar perfil" data-profile-close>&times;</button>
+      </div>
+      <div id="profile-auth-view">
+        <div id="login-view" class="profile-view">
+          <h3>Iniciar sesión</h3>
+          <form id="login-form" class="profile-form" novalidate>
+            <label for="login-email">Correo electrónico</label>
+            <input id="login-email" name="email" type="email" data-allowed-email required />
+            <label for="login-password">Contraseña</label>
+            <input id="login-password" name="password" type="password" required />
+            <button class="profile-submit-button" type="submit">Ingresar</button>
+            <p id="login-message" class="profile-message" role="status"></p>
+          </form>
+          <button class="profile-switch-button" type="button" data-profile-view="register">Crear cuenta</button>
+        </div>
+        <div id="register-view" class="profile-view" hidden>
+          <h3>Crear cuenta</h3>
+          <form id="register-form" class="profile-form" novalidate>
+            <label for="register-name">Nombre</label>
+            <input id="register-name" name="name" type="text" required />
+            <label for="register-email">Correo electrónico</label>
+            <input id="register-email" name="email" type="email" data-allowed-email required />
+            <label for="register-birth-date">Fecha de nacimiento</label>
+            <!-- Calendario limitado a personas mayores de 18 años. -->
+            <input id="register-birth-date" name="birthDate" type="date" data-adult-birth required />
+            <label for="register-password">Contraseña</label>
+            <input id="register-password" name="password" type="password" required />
+            <button class="profile-submit-button" type="submit">Registrarme</button>
+            <p id="register-message" class="profile-message" role="status"></p>
+          </form>
+          <button class="profile-switch-button" type="button" data-profile-view="login">Volver</button>
+        </div>
+      </div>
+      <div id="profile-session-view" hidden>
+        <h3>Sesión activa</h3>
+        <p id="profile-session-name"></p>
+        <p id="profile-session-email"></p>
+        <p id="profile-session-message" class="profile-message" role="status"></p>
+        <button class="profile-submit-button" type="button" data-profile-logout>Cerrar sesión</button>
+      </div>
+    </aside>
+    <script src="../JS/app.js" defer></script>
+  </body>
+</html>

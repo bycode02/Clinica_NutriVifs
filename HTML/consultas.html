@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clínica NutriDifs| Consultas</title>
+    <meta name="description" content="Agenda tu consulta veterinaria en Clinica NutriDifs." />
+    <link rel="stylesheet" href="../CSS/app.css" />
+  </head>
+
+  <body>
+    <!-- =====================================================
+          HEADER
+    ====================================================== -->
+    <header class="site-header">
+      <div class="container header-content">
+        <a class="brand" href="index.html">Clinica NutriDifs</a>
+
+        <nav aria-label="Navegación principal">
+          <a href="index.html">Inicio</a>
+          <a href="consultas.html" aria-current="page">Consultas</a>
+          <a href="productos.html">Productos</a>
+          <a href="blog.html">Blog</a>
+          <a href="contactanos.html">Contáctanos</a>
+          <a href="quienes-somos.html">Quiénes somos</a>
+        </nav>
+
+        <a class="profile-link" href="#perfil">Perfil</a>
+        <a class="carrito-compras" href="#carrito">Carrito</a>
+      </div>
+    </header>
+
+    <!-- =====================================================
+          CONTENIDO PRINCIPAL
+    ====================================================== -->
+    <main>
+      <section class="services-section container" aria-labelledby="consultas-title">
+        <h1 id="consultas-title" class="titulo-consultas">Nuestras Consultas</h1>
+        <p class="consultas-descripcion">
+          Conoce nuestros servicios veterinarios, sus precios, duración y especies atendidas.
+        </p>
+
+        <!-- =================================================
+              CATEGORÍA: CONSULTAS
+        ================================================== -->
+        <section class="categoria-servicios-1" aria-labelledby="categoria-consultas">
+          <h2 id="categoria-consultas">🩺 Consultas</h2>
+
+          <div class="services-grid consultas-grid">
+            <!-- SV001 -->
+            <article class="service-card">
+              <img src="../img/consulta-general.jpg" alt="Consulta general veterinaria" class="service-image" />
+              <span class="service-code">SV001</span>
+              <h3>Consulta general</h3>
+              <p>Revisión médica completa para evaluar el estado de salud de tu mascota.</p>
+              <div class="service-details">
+                <span>🐶🐱 Perro / Gato</span>
+                <span>⏱️ 30 min</span>
+                <strong>$15.000</strong>
+              </div>
+              <p class="service-observation">Atención veterinaria general.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Consulta general">Agendar</button>
+            </article>
+
+            <!-- SV002 -->
+            <article class="service-card">
+              <img src="../img/consulta-urgencia.jpg" alt="Consulta de urgencia veterinaria" class="service-image" />
+              <span class="service-code">SV002</span>
+              <h3>Consulta de urgencia</h3>
+              <p>Atención veterinaria para situaciones que requieren atención inmediata.</p>
+              <div class="service-details">
+                <span>🐶🐱 Perro / Gato</span>
+                <span>⏱️ 30 min</span>
+                <strong>$25.000</strong>
+              </div>
+              <p class="service-observation">Fuera de horario +$10.000.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Consulta de urgencia">Agendar</button>
+            </article>
+
+            <!-- SV003 -->
+            <article class="service-card">
+              <img src="../img/Control-postoperatorio.jpg" alt="Control postoperatorio" class="service-image" />
+              <span class="service-code">SV003</span>
+              <h3>Control postoperatorio</h3>
+              <p>Seguimiento médico después de una intervención quirúrgica.</p>
+              <div class="service-details">
+                <span>🐶🐱 Perro / Gato</span>
+                <span>⏱️ 20 min</span>
+                <strong>$10.000</strong>
+              </div>
+              <p class="service-observation">Control y seguimiento de recuperación.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Control postoperatorio">Agendar</button>
+            </article>
+
+            <!-- SV004 -->
+            <article class="service-card">
+              <img src="../img/Consulta-conejo.jpg" alt="Consulta para aves y conejos" class="service-image" />
+              <span class="service-code">SV004</span>
+              <h3>Consulta ave / conejo</h3>
+              <p>Atención veterinaria especializada para aves y conejos.</p>
+              <div class="service-details">
+                <span>🐦🐰 Ave / Conejo</span>
+                <span>⏱️ 30 min</span>
+                <strong>$18.000</strong>
+              </div>
+              <p class="service-observation">Atención para animales pequeños.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Consulta ave / conejo">Agendar</button>
+            </article>
+
+            <!-- SV005 -->
+            <article class="service-card">
+              <img src="../img/evaluacion.jpg" alt="Segunda opinión médica" class="service-image" />
+              <span class="service-code">SV005</span>
+              <h3>Segunda opinión médica</h3>
+              <p>Evaluación adicional de un diagnóstico o tratamiento veterinario.</p>
+              <div class="service-details">
+                <span>🐾 Todas</span>
+                <span>⏱️ 40 min</span>
+                <strong>$20.000</strong>
+              </div>
+              <p class="service-observation">Requiere ficha previa.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Segunda opinión médica">Agendar</button>
+            </article>
+          </div>
+        </section>
+
+        <!-- =================================================
+              CATEGORÍA: VACUNACIÓN
+        ================================================== -->
+        <section class="categoria-servicios" aria-labelledby="categoria-vacunacion">
+          <h2 id="categoria-vacunacion">💉 Vacunación</h2>
+
+          <div class="services-grid consultas-grid">
+            <!-- VA001 -->
+            <article class="service-card">
+              <img src="../img/Vacuna-antirrábica.png" alt="Vacuna antirrábica canina" class="service-image" />
+              <span class="service-code">VA001</span>
+              <h3>Vacuna antirrábica canina</h3>
+              <p>Vacunación contra la rabia para perros.</p>
+              <div class="service-details">
+                <span>🐶 Perro</span>
+                <span>⏱️ 10 min</span>
+                <strong>$12.000</strong>
+              </div>
+              <p class="service-observation">Obligatoria por ley.</p>
+              <a href="agendar.html?consulta=antirrabica-canina" class="btn-agendar" target="_blank" rel="noopener">Agendar</a>
+            </article>
+
+            <!-- VA002 -->
+            <article class="service-card">
+              <img src="../img/Vacuna-séxtuple.jpg" alt="Vacuna séxtuple canina" class="service-image" />
+              <span class="service-code">VA002</span>
+              <h3>Vacuna séxtuple canina</h3>
+              <p>Protección preventiva contra diferentes enfermedades caninas.</p>
+              <div class="service-details">
+                <span>🐶 Perro</span>
+                <span>⏱️ 10 min</span>
+                <strong>$18.000</strong>
+              </div>
+              <p class="service-observation">Refuerzo anual.</p>
+              <a href="agendar.html?consulta=sextuple-canina" class="btn-agendar" target="_blank" rel="noopener">Agendar</a>
+            </article>
+
+            <!-- VA003 -->
+            <article class="service-card">
+              <img src="../img/Vacuna-bivalente.jpg" alt="Vacuna bivalente felina" class="service-image" />
+              <span class="service-code">VA003</span>
+              <h3>Vacuna bivalente felina</h3>
+              <p>Protección preventiva para gatos.</p>
+              <div class="service-details">
+                <span>🐱 Gato</span>
+                <span>⏱️ 10 min</span>
+                <strong>$15.000</strong>
+              </div>
+              <p class="service-observation">Refuerzo anual.</p>
+              <a href="agendar.html?consulta=bivalente-felina" class="btn-agendar" target="_blank" rel="noopener">Agendar</a>
+            </article>
+
+            <!-- VA004 -->
+            <article class="service-card">
+              <img src="../img/Vacuna-triple.jpg" alt="Vacuna triple felina" class="service-image" />
+              <span class="service-code">VA004</span>
+              <h3>Vacuna triple felina</h3>
+              <p>Protección preventiva mediante vacunación para gatos.</p>
+              <div class="service-details">
+                <span>🐱 Gato</span>
+                <span>⏱️ 10 min</span>
+                <strong>$17.000</strong>
+              </div>
+              <p class="service-observation">Refuerzo anual.</p>
+              <a href="agendar.html?consulta=triple-felina" class="btn-agendar" target="_blank" rel="noopener">Agendar</a>
+            </article>
+
+            <!-- VA005 -->
+            <article class="service-card">
+              <img src="../img/Vacuna-Bordetella.jpg" alt="Vacuna Bordetella canina" class="service-image" />
+              <span class="service-code">VA005</span>
+              <h3>Vacuna Bordetella canina</h3>
+              <p>Prevención de enfermedades respiratorias en perros.</p>
+              <div class="service-details">
+                <span>🐶 Perro</span>
+                <span>⏱️ 10 min</span>
+                <strong>$14.000</strong>
+              </div>
+              <p class="service-observation">Tos de las perreras.</p>
+              <a href="agendar.html?consulta=bordetella-canina" class="btn-agendar" target="_blank" rel="noopener">Agendar</a>
+            </article>
+
+            <!-- VA006 -->
+            <article class="service-card">
+              <img src="../img/antirrabica.png" alt="Vacuna antirrábica felina" class="service-image" />
+              <span class="service-code">VA006</span>
+              <h3>Vacuna antirrábica felina</h3>
+              <p>Vacunación contra la rabia para gatos.</p>
+              <div class="service-details">
+                <span>🐱 Gato</span>
+                <span>⏱️ 10 min</span>
+                <strong>$12.000</strong>
+              </div>
+              <p class="service-observation">Protección preventiva.</p>
+              <a href="agendar.html?consulta=antirrabica-felina" class="btn-agendar" target="_blank" rel="noopener">Agendar</a>
+            </article>
+          </div>
+        </section>
+
+        <!-- =================================================
+              CATEGORÍA: CIRUGÍAS
+        ================================================== -->
+        <section class="categoria-servicios" aria-labelledby="categoria-cirugia">
+          <h2 id="categoria-cirugia">🏥 Cirugías</h2>
+
+          <div class="services-grid consultas-grid">
+            <!-- CI001 -->
+            <article class="service-card">
+              <img src="../img/Esterilización-hembra.jpg" alt="Esterilización hembra canina" class="service-image" />
+              <span class="service-code">CI001</span>
+              <h3>Esterilización hembra canina</h3>
+              <p>Procedimiento de esterilización para hembras caninas.</p>
+              <div class="service-details">
+                <span>🐶 Perra</span>
+                <span>⏱️ 90 min</span>
+                <strong>$80.000</strong>
+              </div>
+              <p class="service-observation">Incluye anestesia y hospitalización 24h.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Esterilización hembra canina">Agendar</button>
+            </article>
+
+            <!-- CI002 -->
+            <article class="service-card">
+              <img src="../img/esterilizacion-perro.jpg" alt="Esterilización macho canino" class="service-image" />
+              <span class="service-code">CI002</span>
+              <h3>Esterilización macho canino</h3>
+              <p>Procedimiento de esterilización para perros machos.</p>
+              <div class="service-details">
+                <span>🐶 Perro</span>
+                <span>⏱️ 60 min</span>
+                <strong>$60.000</strong>
+              </div>
+              <p class="service-observation">Incluye anestesia.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Esterilización macho canino">Agendar</button>
+            </article>
+
+            <!-- CI003 -->
+            <article class="service-card">
+              <img src="../img/castracion-gato.jpg" alt="Esterilización hembra felina" class="service-image" />
+              <span class="service-code">CI003</span>
+              <h3>Esterilización hembra felina</h3>
+              <p>Procedimiento de esterilización para gatas.</p>
+              <div class="service-details">
+                <span>🐱 Gata</span>
+                <span>⏱️ 60 min</span>
+                <strong>$65.000</strong>
+              </div>
+              <p class="service-observation">Incluye anestesia y hospitalización 12h.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Esterilización hembra felina">Agendar</button>
+            </article>
+
+            <!-- CI004 -->
+            <article class="service-card">
+              <img src="../img/Esterilización-gatoHjpg.jpg" alt="Esterilización macho felino" class="service-image" />
+              <span class="service-code">CI004</span>
+              <h3>Esterilización macho felino</h3>
+              <p>Procedimiento de esterilización para gatos machos.</p>
+              <div class="service-details">
+                <span>🐱 Gato</span>
+                <span>⏱️ 45 min</span>
+                <strong>$50.000</strong>
+              </div>
+              <p class="service-observation">Incluye anestesia.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Esterilización macho felino">Agendar</button>
+            </article>
+
+            <!-- CI005 -->
+            <article class="service-card">
+              <img src="../img/extirpacion_cancer.jpg" alt="Extirpación de tumor cutáneo" class="service-image" />
+              <span class="service-code">CI005</span>
+              <h3>Extirpación de tumor cutáneo</h3>
+              <p>Procedimiento quirúrgico para retirar tumores cutáneos.</p>
+              <div class="service-details">
+                <span>🐶🐱 Perro / Gato</span>
+                <span>⏱️ 60 min</span>
+                <strong>$120.000</strong>
+              </div>
+              <p class="service-observation">Precio referencial; varía según tamaño.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Extirpación de tumor cutáneo">Agendar</button>
+            </article>
+
+            <!-- CI006 -->
+            <article class="service-card">
+              <img src="../img/cesarea.jpg" alt="Cesárea de urgencia" class="service-image" />
+              <span class="service-code">CI006</span>
+              <h3>Cesárea de urgencia</h3>
+              <p>Procedimiento quirúrgico de emergencia para hembras gestantes.</p>
+              <div class="service-details">
+                <span>🐶🐱 Perra / Gata</span>
+                <span>⏱️ 120 min</span>
+                <strong>$180.000</strong>
+              </div>
+              <p class="service-observation">Atención de urgencia.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Cesárea de urgencia">Agendar</button>
+            </article>
+          </div>
+        </section>
+
+        <!-- =================================================
+              CATEGORÍA: DESPARASITACIÓN
+        ================================================== -->
+        <section class="categoria-servicios" aria-labelledby="categoria-desparasitacion">
+          <h2 id="categoria-desparasitacion">🪱 Desparasitación</h2>
+
+          <div class="services-grid consultas-grid">
+            <!-- DE001 -->
+            <article class="service-card">
+              <img src="../img/DrontalPlus.jpg" alt="Desparasitación interna pequeños" class="service-image" />
+              <span class="service-code">DE001</span>
+              <h3>Desparasitación interna pequeños</h3>
+              <p>Tratamiento antiparasitario para perros pequeños de menos de 10 kg.</p>
+              <div class="service-details">
+                <span>🐶 Perro</span>
+                <span>⏱️ 5 min</span>
+                <strong>$8.000</strong>
+              </div>
+              <p class="service-observation">Menos de 10 kg.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Desparasitación interna pequeños">Agendar</button>
+            </article>
+
+            <!-- DE002 -->
+            <article class="service-card">
+              <img src="../img/DrontalPlus.jpg" alt="Desparasitación interna medianos" class="service-image" />
+              <span class="service-code">DE002</span>
+              <h3>Desparasitación interna medianos</h3>
+              <p>Tratamiento antiparasitario para perros de peso mediano.</p>
+              <div class="service-details">
+                <span>🐶 Perro</span>
+                <span>⏱️ 5 min</span>
+                <strong>$9.500</strong>
+              </div>
+              <p class="service-observation">Entre 10 y 25 kg.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Desparasitación interna medianos">Agendar</button>
+            </article>
+
+            <!-- DE003 -->
+            <article class="service-card">
+              <img src="../img/DrontalPlus.jpg" alt="Desparasitación interna grandes" class="service-image" />
+              <span class="service-code">DE003</span>
+              <h3>Desparasitación interna grandes</h3>
+              <p>Tratamiento antiparasitario para perros de gran tamaño.</p>
+              <div class="service-details">
+                <span>🐶 Perro</span>
+                <span>⏱️ 5 min</span>
+                <strong>$11.000</strong>
+              </div>
+              <p class="service-observation">Más de 25 kg.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Desparasitación interna grandes">Agendar</button>
+            </article>
+
+            <!-- DE004 -->
+            <article class="service-card">
+              <img src="../img/DrontalPlus.jpg" alt="Desparasitación interna felina" class="service-image" />
+              <span class="service-code">DE004</span>
+              <h3>Desparasitación interna felina</h3>
+              <p>Tratamiento antiparasitario interno para gatos.</p>
+              <div class="service-details">
+                <span>🐱 Gato</span>
+                <span>⏱️ 5 min</span>
+                <strong>$8.000</strong>
+              </div>
+              <p class="service-observation">Aplicación según peso.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Desparasitación interna felina">Agendar</button>
+            </article>
+
+            <!-- DE005 -->
+            <article class="service-card">
+              <img src="../img/Bravecto.jpg" alt="Antiparasitario externo" class="service-image" />
+              <span class="service-code">DE005</span>
+              <h3>Antiparasitario externo</h3>
+              <p>Aplicación de pipeta para el control de parásitos externos.</p>
+              <div class="service-details">
+                <span>🐶🐱 Perro / Gato</span>
+                <span>⏱️ 5 min</span>
+                <strong>$7.500</strong>
+              </div>
+              <p class="service-observation">Incluye aplicación.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Antiparasitario externo (pipeta)">Agendar</button>
+            </article>
+          </div>
+        </section>
+
+        <!-- =================================================
+              CATEGORÍA: EXÁMENES
+        ================================================== -->
+        <section class="categoria-servicios" aria-labelledby="categoria-examenes">
+          <h2 id="categoria-examenes">🔬 Exámenes</h2>
+
+          <div class="services-grid consultas-grid">
+            <!-- EX001 -->
+            <article class="service-card">
+              <img src="../img/hemograma.jpg" alt="Hemograma completo" class="service-image" />
+              <span class="service-code">EX001</span>
+              <h3>Hemograma completo</h3>
+              <p>Análisis de sangre para evaluar el estado general de salud.</p>
+              <div class="service-details">
+                <span>🐶🐱 Perro / Gato</span>
+                <span>⏱️ 30 min</span>
+                <strong>$22.000</strong>
+              </div>
+              <p class="service-observation">Resultado en 24-48 h.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Hemograma completo">Agendar</button>
+            </article>
+
+            <!-- EX002 -->
+            <article class="service-card">
+              <img src="../img/perfil-bioquimico.png" alt="Perfil bioquímico completo" class="service-image" />
+              <span class="service-code">EX002</span>
+              <h3>Perfil bioquímico completo</h3>
+              <p>Evaluación de parámetros bioquímicos importantes para la salud.</p>
+              <div class="service-details">
+                <span>🐶🐱 Perro / Gato</span>
+                <span>⏱️ 30 min</span>
+                <strong>$35.000</strong>
+              </div>
+              <p class="service-observation">Resultado en 24-48 h.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Perfil bioquímico completo">Agendar</button>
+            </article>
+
+            <!-- EX003 -->
+            <article class="service-card">
+              <img src="../img/consultas.jpg" alt="Radiografía" class="service-image" />
+              <span class="service-code">EX003</span>
+              <h3>Radiografía</h3>
+              <p>Estudio radiográfico para apoyar el diagnóstico veterinario.</p>
+              <div class="service-details">
+                <span>🐶🐱 Perro / Gato</span>
+                <span>⏱️ 20 min</span>
+                <strong>$28.000</strong>
+              </div>
+              <p class="service-observation">1 proyección.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Radiografía (1 proyección)">Agendar</button>
+            </article>
+
+            <!-- EX004 -->
+            <article class="service-card">
+              <img src="../img/consultas.jpg" alt="Ecografía abdominal" class="service-image" />
+              <span class="service-code">EX004</span>
+              <h3>Ecografía abdominal</h3>
+              <p>Evaluación mediante imagen de órganos y estructuras abdominales.</p>
+              <div class="service-details">
+                <span>🐶🐱 Perro / Gato</span>
+                <span>⏱️ 30 min</span>
+                <strong>$45.000</strong>
+              </div>
+              <p class="service-observation">Examen abdominal.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Ecografía abdominal">Agendar</button>
+            </article>
+
+            <!-- EX005 -->
+            <article class="service-card">
+              <img src="../img/consultas.jpg" alt="Test de leishmaniasis" class="service-image" />
+              <span class="service-code">EX005</span>
+              <h3>Test de leishmaniasis</h3>
+              <p>Prueba diagnóstica para detectar leishmaniasis en perros.</p>
+              <div class="service-details">
+                <span>🐶 Perro</span>
+                <span>⏱️ 15 min</span>
+                <strong>$18.000</strong>
+              </div>
+              <p class="service-observation">Prueba rápida.</p>
+              <button class="btn-agendar btn-abrir-modal" data-servicio="Test de leishmaniasis">Agendar</button>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+    <footer class="site-footer">
+
+      <div class="container footer-content">
+
+
+        <!-- INFORMACIÓN DE LA CLÍNICA -->
+
+        <div>
+
+          <h2>
+            Clínica NutriDifs
+          </h2>
+
+          <p>
+            Cuidamos la salud y bienestar de tus mascotas.
+          </p>
+
+          <p>
+            Teléfono: +56 9 4567 8910
+          </p>
+
+          <p>
+            <a href="mailto:contacto@nutridifs.cl">
+              contacto@nutridifs.cl
+            </a>
+          </p>
+
+        </div>
+
+
+        <!-- INTEGRANTES -->
+
+        <div>
+
+          <h2>
+            Integrantes
+          </h2>
+
+          <ul>
+
+            <li>
+              Francisco Arce
+            </li>
+
+            <li>
+              Bayron Mena
+            </li>
+
+            <li>
+              Carolina Quinan
+            </li>
+
+          </ul>
+
+        </div>
+
+
+        <!-- INFORMACIÓN DEL CURSO -->
+
+        <div>
+
+          <h2>
+            Sección
+          </h2>
+
+          <p>
+            DSY1104 – 2026
+          </p>
+
+        </div>
+
+
+      </div>
+
+
+      <!-- COPYRIGHT -->
+
+      <div class="container footer-bottom">
+
+        <p>
+          © 2026 Clínica NutriDifs. Todos los derechos reservados.
+        </p>
+
+      </div>
+
+    </footer>
+    <script src="../JS/app.js" defer></script>
+  </body>
+</html>

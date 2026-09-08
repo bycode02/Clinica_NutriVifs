@@ -1,0 +1,1649 @@
+
+
+const STORAGE_KEYS = {
+  CART: "carrito",
+  LEGACY_CART: "clinica-nutridifs-cart",
+  PROFILES: "clinica-nutridifs-profiles",
+  SESSION: "clinica-nutridifs-session",
+  ADMIN_PRODUCTS: "admin-products",
+  ADMIN_USERS: "admin-users",
+};
+
+const state = {
+  cartItems: [],
+  profiles: [],
+  activeProfile: null,
+};
+
+function formatCurrency(value) {
+  return `$${Number(value || 0).toLocaleString("es-CL")}`;
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function normalizeEmail(email) {
+  return String(email || "").trim().toLowerCase();
+}
+
+// =========================================================
+// VALIDACIONES
+// =========================================================
+
+function isValidEmail(email) {
+  if (!email || typeof email !== "string") return false;
+
+  const normalized = normalizeEmail(email);
+  const emailRegex =
+    /^[a-zA-Z0-9._%+-]+@(duoc\.cl|profesor\.duoc\.cl|gmail\.com)$/i;
+
+  return emailRegex.test(normalized);
+}
+
+function isValidName(name) {
+  const value = String(name || "").trim();
+  return value.length >= 1 && value.length <= 100;
+}
+
+function isValidComment(comment) {
+  const value = String(comment || "").trim();
+  return value.length >= 1 && value.length <= 500;
+}
+
+function isValidPassword(password) {
+  const value = String(password || "");
+  return value.length >= 4 && value.length <= 10;
+}
+
+function isValidRut(rut) {
+  rut = String(rut || "").trim().toUpperCase();
+
+  if (!/^\d{6,8}[0-9K]$/.test(rut)) return false;
+
+  const digits = rut.slice(0, -1).split("").reverse();
+  const verifier = rut.at(-1) === "K" ? -1 : Number(rut.at(-1));
+
+  let multiplier = 2;
+  let sum = 0;
+
+  digits.forEach((digit) => {
+    sum += Number(digit) * multiplier;
+    multiplier = multiplier === 7 ? 2 : multiplier + 1;
+  });
+
+  const expected = 11 - (sum % 11);
+  const calculated =
+    expected === 11 ? 0 : expected === 10 ? -1 : expected;
+
+  return calculated === verifier;
+}
+
+function isAdultBirthDate(birthDate) {
+  if (!birthDate) return false;
+
+  const birth = new Date(`${birthDate}T00:00:00`);
+  if (Number.isNaN(birth.getTime())) return false;
+
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+
+  const birthdayPending =
+    today.getMonth() < birth.getMonth() ||
+    (today.getMonth() === birth.getMonth() &&
+      today.getDate() < birth.getDate());
+
+  if (birthdayPending) age -= 1;
+
+  return age >= 18;
+}
+
+function validateContactForm(form) {
+  const nameInput = form.elements.name || form.elements.nombre;
+  const emailInput = form.elements.email || form.elements.correo;
+  const commentInput =
+    form.elements.comment ||
+    form.elements.comentario ||
+    form.elements.message;
+
+  const name = nameInput?.value.trim() || "";
+  const email = normalizeEmail(emailInput?.value || "");
+  const comment = commentInput?.value.trim() || "";
+
+  if (!isValidName(name)) {
+    nameInput?.setCustomValidity(
+      "El nombre es obligatorio y debe tener máximo 100 caracteres."
+    );
+    return false;
+  }
+  nameInput?.setCustomValidity("");
+
+  if (email && email.length > 100) {
+    emailInput?.setCustomValidity(
+      "El correo no puede superar los 100 caracteres."
+    );
+    return false;
+  }
+
+  if (email && !isValidEmail(email)) {
+    emailInput?.setCustomValidity(
+      "Solo se permiten correos @duoc.cl, @profesor.duoc.cl o @gmail.com."
+    );
+    return false;
+  }
+  emailInput?.setCustomValidity("");
+
+  if (!isValidComment(comment)) {
+    commentInput?.setCustomValidity(
+      "El comentario es obligatorio y debe tener máximo 500 caracteres."
+    );
+    return false;
+  }
+  commentInput?.setCustomValidity("");
+
+  return true;
+}
+
+// =========================================================
+// GESTIÓN DE DATOS (LOCALSTORAGE)
+// =========================================================
+
+function loadFromStorage(key, fallback = []) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key) || "null");
+    return Array.isArray(value) ? value : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function saveToStorage(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
+function loadCart() {
+  let saved =
+    localStorage.getItem(STORAGE_KEYS.CART) ||
+    localStorage.getItem(STORAGE_KEYS.LEGACY_CART);
+
+  if (!saved) return [];
+
+  try {
+    const cart = JSON.parse(saved);
+    if (!Array.isArray(cart)) return [];
+
+    return cart
+      .filter((item) => item && Number(item.quantity) > 0)
+      .map((item) => ({
+        code: String(item.code || item.id || ""),
+        name: item.name || "Producto",
+        price: Number(item.price) || 0,
+        image: item.image || "",
+        quantity: Number(item.quantity) || 1,
+      }))
+      .filter((item) => item.code);
+  } catch (error) {
+    console.error("Error cargando carrito:", error);
+    return [];
+  }
+}
+
+function loadProfiles() {
+  return loadFromStorage(STORAGE_KEYS.PROFILES);
+}
+
+function loadSession() {
+  try {
+    const session = JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.SESSION) || "null"
+    );
+    return session?.email ? session : null;
+  } catch {
+    return null;
+  }
+}
+
+// =========================================================
+// INICIALIZACIÓN
+// =========================================================
+
+function initializeState() {
+  state.cartItems = loadCart();
+  state.profiles = loadProfiles();
+  state.activeProfile = loadSession();
+}
+
+// =========================================================
+// CARRITO
+// =========================================================
+
+function saveCart() {
+  saveToStorage(STORAGE_KEYS.CART, state.cartItems);
+}
+
+function getCartQuantity() {
+  return state.cartItems.reduce(
+    (total, item) => total + Number(item.quantity || 0),
+    0
+  );
+}
+
+function getCartTotal() {
+  return state.cartItems.reduce(
+    (total, item) =>
+      total + Number(item.price || 0) * Number(item.quantity || 0),
+    0
+  );
+}
+
+function findCartProduct(code) {
+  return state.cartItems.find((item) => item.code === code);
+}
+
+function getProductStock(productCard) {
+  if (!productCard) return 0;
+
+  if (
+    productCard.dataset.stock !== undefined &&
+    productCard.dataset.stock !== ""
+  ) {
+    return Number(productCard.dataset.stock);
+  }
+
+  try {
+    const products = loadFromStorage(STORAGE_KEYS.ADMIN_PRODUCTS);
+    const product = products.find(
+      (item) => item.id === productCard.dataset.codigo
+    );
+    return product ? Number(product.stock) : getDefaultStock(productCard.dataset.codigo);
+  } catch {
+    return getDefaultStock(productCard.dataset.codigo);
+  }
+}
+
+const stockByCode = {
+  ME001: 12, ME002: 6, ME003: 18, ME004: 9, ME005: 25,
+  ME006: 7, ME007: 14, ME008: 4, ME009: 20, ME010: 8,
+  ME011: 16, ME012: 5, ME013: 11, ME014: 30, ME015: 3,
+  ME016: 22, ME017: 10, ME018: 13, ME019: 2, ME020: 17,
+  ME021: 8, ME022: 19,
+};
+
+function getDefaultStock(code) {
+  return Number(stockByCode[code] || 10);
+}
+
+function addProduct(product) {
+  if (!product || !product.code) return false;
+
+  const productCard = [...document.querySelectorAll(".product-card")].find(
+    (card) => card.dataset.codigo === String(product.code)
+  );
+
+  const stock = getProductStock(productCard);
+  const existing = findCartProduct(product.code);
+
+  if (existing && stock > 0 && existing.quantity >= stock) {
+    return false;
+  }
+
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    state.cartItems.push({
+      code: product.code,
+      name: product.name,
+      price: Number(product.price) || 0,
+      image: product.image || "",
+      quantity: 1,
+    });
+  }
+
+  saveCart();
+  renderCart();
+  updateCartCounter();
+  updateProductQuantities();
+
+  return true;
+}
+
+function getProductData(productCard) {
+  if (!productCard) return null;
+
+  const priceText =
+    productCard.querySelector(".product-price")?.textContent || "0";
+
+  return {
+    code: productCard.dataset.codigo,
+    name:
+      productCard.querySelector("h3")?.textContent.trim() || "Producto",
+    image: productCard.querySelector(".product-image")?.getAttribute("src") || "",
+    price: Number.parseInt(priceText.replace(/[^0-9]/g, ""), 10) || 0,
+  };
+}
+
+function addProductFromCard(card) {
+  const product = getProductData(card);
+  return addProduct(product);
+}
+
+function changeQuantity(code, amount) {
+  const item = findCartProduct(code);
+  if (!item) return;
+
+  if (amount > 0) {
+    const card = [...document.querySelectorAll(".product-card")].find(
+      (productCard) => productCard.dataset.codigo === String(code)
+    );
+    const stock = getProductStock(card);
+
+    if (stock > 0 && item.quantity >= stock) return;
+  }
+
+  item.quantity += amount;
+
+  if (item.quantity <= 0) {
+    state.cartItems = state.cartItems.filter(
+      (cartItem) => cartItem.code !== code
+    );
+  }
+
+  saveCart();
+  renderCart();
+  updateCartCounter();
+  updateProductQuantities();
+}
+
+function removeCartProduct(code) {
+  state.cartItems = state.cartItems.filter((item) => item.code !== code);
+  saveCart();
+  renderCart();
+  updateCartCounter();
+  updateProductQuantities();
+}
+
+function clearCart() {
+  state.cartItems = [];
+  saveCart();
+  renderCart();
+  updateCartCounter();
+  updateProductQuantities();
+}
+
+// =========================================================
+// RENDERIZADO DEL CARRITO
+// =========================================================
+
+function updateCartCounter() {
+  const totalQuantity = getCartQuantity();
+
+  document.querySelectorAll(".carrito-compras").forEach((link) => {
+    link.innerHTML = `Carrito <span class="cart-counter">${totalQuantity}</span>`;
+    link.setAttribute(
+      "aria-label",
+      `Carrito, ${totalQuantity} productos`
+    );
+  });
+
+  document.querySelectorAll(".cart-count").forEach((element) => {
+    element.textContent = totalQuantity;
+  });
+}
+
+function renderCart() {
+  const cartContent = document.querySelector("#cart-content");
+  const cartItemsContainer = document.querySelector("[data-cart-items]");
+  const contactMessage = document.querySelector(".cart-profile-message");
+
+  if (contactMessage) {
+    contactMessage.textContent = state.activeProfile
+      ? `Hola ${state.activeProfile.name}, la solicitud se enviará al correo ${state.activeProfile.email}.`
+      : "La solicitud se enviará con los datos de tu perfil.";
+  }
+
+  if (cartContent) {
+    if (state.cartItems.length === 0) {
+      cartContent.innerHTML =
+        '<p class="cart-empty-message">Tu carrito está vacío.</p>';
+    } else {
+      cartContent.innerHTML = `
+        <div class="cart-items">
+          ${state.cartItems
+            .map(
+              (item) => `
+                <article class="cart-item">
+                  ${item.image ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}">` : ""}
+                  <div class="cart-item-details">
+                    <h3>${escapeHtml(item.name)}</h3>
+                    <p>${formatCurrency(item.price)} cada uno</p>
+                    <strong>Subtotal: ${formatCurrency(item.price * item.quantity)}</strong>
+                    <div class="cart-quantity-controls" aria-label="Cantidad de ${escapeHtml(item.name)}">
+                      <button type="button" data-cart-minus="${escapeHtml(item.code)}" aria-label="Disminuir cantidad">-</button>
+                      <span>${item.quantity}</span>
+                      <button type="button" data-cart-plus="${escapeHtml(item.code)}" aria-label="Aumentar cantidad">+</button>
+                    </div>
+                    <button type="button" data-cart-remove="${escapeHtml(item.code)}">Eliminar</button>
+                  </div>
+                </article>
+              `
+            )
+            .join("")}
+        </div>
+        <button type="button" class="cart-clear-button" data-cart-clear>Vaciar carrito</button>
+        <div class="cart-total">
+          <span>Total</span>
+          <strong>${formatCurrency(getCartTotal())}</strong>
+        </div>
+      `;
+    }
+  }
+
+  if (cartItemsContainer) {
+    const emptyMessage = document.querySelector("[data-cart-empty]");
+    const totalElement = document.querySelector("[data-cart-total]");
+
+    cartItemsContainer.innerHTML = "";
+
+    if (state.cartItems.length === 0) {
+      if (emptyMessage) emptyMessage.hidden = false;
+      if (totalElement) totalElement.textContent = formatCurrency(0);
+      return;
+    }
+
+    if (emptyMessage) emptyMessage.hidden = true;
+
+    state.cartItems.forEach((product) => {
+      const item = document.createElement("article");
+      item.className = "cart-item";
+      item.innerHTML = `
+        ${product.image ? `<img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}">` : ""}
+        <div class="cart-item-info">
+          <h2>${escapeHtml(product.name)}</h2>
+          <strong>${formatCurrency(product.price)}</strong>
+          <div class="cart-item-actions">
+            <button type="button" data-action="decrease" data-code="${escapeHtml(product.code)}" aria-label="Disminuir cantidad">−</button>
+            <span>${product.quantity}</span>
+            <button type="button" data-action="increase" data-code="${escapeHtml(product.code)}" aria-label="Aumentar cantidad">+</button>
+            <button type="button" class="remove-cart-item" data-action="remove" data-code="${escapeHtml(product.code)}">Eliminar</button>
+          </div>
+        </div>
+      `;
+      cartItemsContainer.appendChild(item);
+    });
+
+    if (totalElement) {
+      totalElement.textContent = formatCurrency(getCartTotal());
+    }
+  }
+}
+
+// =========================================================
+// PANELES (CARRITO Y PERFIL)
+// =========================================================
+
+function openCart() {
+  const panel = document.querySelector("#cart-panel");
+  const overlay = document.querySelector(".cart-overlay");
+
+  panel?.classList.add("is-open");
+  panel?.setAttribute("aria-hidden", "false");
+  overlay?.classList.add("is-visible");
+  document.body.classList.add("cart-is-open");
+}
+
+function closeCart() {
+  const panel = document.querySelector("#cart-panel");
+  const overlay = document.querySelector(".cart-overlay");
+
+  panel?.classList.remove("is-open");
+  panel?.setAttribute("aria-hidden", "true");
+  overlay?.classList.remove("is-visible");
+  document.body.classList.remove("cart-is-open");
+}
+
+function openProfile() {
+  const panel = document.querySelector("#profile-panel");
+  const overlay = document.querySelector(".profile-overlay");
+
+  renderProfile();
+  panel?.classList.add("is-open");
+  panel?.setAttribute("aria-hidden", "false");
+  overlay?.classList.add("is-visible");
+  document.body.classList.add("profile-is-open");
+}
+
+function closeProfile() {
+  const panel = document.querySelector("#profile-panel");
+  const overlay = document.querySelector(".profile-overlay");
+
+  panel?.classList.remove("is-open");
+  panel?.setAttribute("aria-hidden", "true");
+  overlay?.classList.remove("is-visible");
+  document.body.classList.remove("profile-is-open");
+}
+
+function showProfileView(view) {
+  const loginView = document.querySelector("#login-view");
+  const registerView = document.querySelector("#register-view");
+
+  loginView?.toggleAttribute("hidden", view !== "login");
+  registerView?.toggleAttribute("hidden", view !== "register");
+}
+
+function renderProfile() {
+  const authView = document.querySelector("#profile-auth-view");
+  const sessionView = document.querySelector("#profile-session-view");
+  const profileName = document.querySelector("#profile-session-name");
+  const profileEmail = document.querySelector("#profile-session-email");
+  const profileLinks = document.querySelectorAll(".profile-link");
+
+  if (!authView || !sessionView) return;
+
+  authView.toggleAttribute("hidden", Boolean(state.activeProfile));
+  sessionView.toggleAttribute("hidden", !state.activeProfile);
+
+  if (!state.activeProfile) {
+    showProfileView("login");
+  } else {
+    if (profileName) profileName.textContent = state.activeProfile.name;
+    if (profileEmail) profileEmail.textContent = state.activeProfile.email;
+  }
+
+  profileLinks.forEach((link) => {
+    link.textContent = state.activeProfile
+      ? `Perfil (${state.activeProfile.name})`
+      : "Perfil";
+  });
+}
+
+function startSession(profile) {
+  state.activeProfile = {
+    name: profile.name,
+    email: profile.email,
+    birthDate: profile.birthDate || "",
+    phone: profile.phone || "",
+  };
+
+  saveToStorage(STORAGE_KEYS.SESSION, state.activeProfile);
+  renderProfile();
+  renderCart();
+}
+
+function logoutProfile() {
+  state.activeProfile = null;
+  localStorage.removeItem(STORAGE_KEYS.SESSION);
+  showProfileView("login");
+  renderProfile();
+  renderCart();
+}
+
+// =========================================================
+// LOGIN Y REGISTRO
+// =========================================================
+
+function handleLoginSubmit(event) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const email = normalizeEmail(form.elements.email.value);
+  const password = form.elements.password.value;
+  const message = document.querySelector("#login-message");
+
+  if (email.length > 100 || !isValidEmail(email)) {
+    if (message) {
+      message.textContent =
+        "El correo es obligatorio, debe tener máximo 100 caracteres " +
+        "y terminar en @duoc.cl, @profesor.duoc.cl o @gmail.com.";
+    }
+    return;
+  }
+
+  if (!isValidPassword(password)) {
+    if (message) {
+      message.textContent = "La contraseña debe tener entre 4 y 10 caracteres.";
+    }
+    return;
+  }
+
+  const profile = state.profiles.find((item) => item.email === email);
+
+  if (!profile || profile.password !== password) {
+    if (message) {
+      message.textContent = "La cuenta no existe o las credenciales son incorrectas.";
+    }
+    return;
+  }
+
+  startSession(profile);
+
+  if (message) {
+    message.textContent = "Sesión iniciada correctamente.";
+  }
+
+  form.reset();
+}
+
+function handleRegisterSubmit(event) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const name = form.elements.name.value.trim();
+  const email = normalizeEmail(form.elements.email.value);
+  const birthDate = form.elements.birthDate.value.trim();
+  const password = form.elements.password.value;
+  const message = document.querySelector("#register-message");
+
+  if (
+    !isValidName(name) ||
+    email.length > 100 ||
+    !isValidEmail(email) ||
+    !isAdultBirthDate(birthDate) ||
+    !isValidPassword(password)
+  ) {
+    if (message) {
+      message.textContent =
+        "Revisa el nombre, correo, fecha de nacimiento y contraseña. " +
+        "El nombre admite hasta 100 caracteres, el correo hasta 100 caracteres " +
+        "y la contraseña entre 4 y 10 caracteres.";
+    }
+    return;
+  }
+
+  const emailAlreadyUsed = state.profiles.some((item) => item.email === email);
+  const passwordAlreadyUsed = state.profiles.some(
+    (item) => item.password === password
+  );
+
+  if (emailAlreadyUsed || passwordAlreadyUsed) {
+    if (message) {
+      message.textContent = "El correo y/o la contraseña ya están en uso.";
+    }
+    return;
+  }
+
+  const profile = { name, email, birthDate, password };
+  state.profiles.push(profile);
+  saveToStorage(STORAGE_KEYS.PROFILES, state.profiles);
+  startSession(profile);
+
+  if (message) {
+    message.textContent = "Cuenta creada y sesión iniciada correctamente.";
+  }
+
+  form.reset();
+}
+
+// =========================================================
+// FORMULARIO DE CONTACTO
+// =========================================================
+
+function handleContactSubmit(event) {
+  event.preventDefault();
+
+  const form = event.currentTarget;
+  const message = document.querySelector("#cart-form-message");
+
+  if (!state.activeProfile) {
+    if (message) {
+      message.textContent = "Necesitas iniciar sesión para enviar la solicitud.";
+    }
+    openProfile();
+    return;
+  }
+
+  if (!validateContactForm(form)) {
+    form.reportValidity();
+    return;
+  }
+
+  if (message) {
+    message.textContent =
+      "Solicitud enviada correctamente. Nos pondremos en contacto contigo.";
+  }
+
+  form.reset();
+  clearCart();
+}
+
+// =========================================================
+// NOTIFICACIONES
+// =========================================================
+
+function showNotice(message, onConfirm = null) {
+  const notice = document.querySelector("[data-cart-notice]");
+  const messageElement = document.querySelector("[data-cart-notice-message]");
+  const confirmButton = document.querySelector("[data-notice-confirm]");
+  const cancelButton = document.querySelector("[data-notice-cancel]");
+
+  if (!notice || !messageElement) return;
+
+  messageElement.textContent = message;
+
+  if (confirmButton) {
+    confirmButton.hidden = !onConfirm;
+    confirmButton.onclick = onConfirm || null;
+  }
+
+  if (cancelButton) {
+    cancelButton.hidden = !onConfirm;
+  }
+
+  notice.hidden = false;
+}
+
+// =========================================================
+// PRODUCTOS
+// =========================================================
+
+function createProductCard(product) {
+  const card = document.createElement("article");
+  card.className = "product-card";
+  card.dataset.codigo = product.id;
+  card.dataset.category = product.category;
+  card.dataset.stock = product.stock;
+
+  card.innerHTML = `
+    <img class="product-image" src="img/logo.jpg" alt="${escapeHtml(product.name)}">
+    <div class="product-content">
+      <span class="product-category">${escapeHtml(product.category)}</span>
+      <h3>${escapeHtml(product.name)}</h3>
+      <p>Producto veterinario administrado desde el catálogo de la clínica.</p>
+      <div class="product-footer">
+        <strong class="product-price">${formatCurrency(Number(product.price))}</strong>
+        <button type="button" class="add-cart-button">Agregar al carrito</button>
+      </div>
+    </div>
+  `;
+
+  return card;
+}
+
+function syncAdminProducts() {
+  let storedProducts;
+
+  try {
+    storedProducts = JSON.parse(
+      localStorage.getItem(STORAGE_KEYS.ADMIN_PRODUCTS) || "null"
+    );
+  } catch {
+    return;
+  }
+
+  if (!Array.isArray(storedProducts)) return;
+
+  const productsGrid = document.querySelector("#products-grid");
+  const existingCodes = new Set();
+
+  document.querySelectorAll(".product-card").forEach((card) => {
+    const product = storedProducts.find(
+      (item) => item.id === card.dataset.codigo
+    );
+
+    if (!product) return;
+
+    existingCodes.add(product.id);
+
+    const title = card.querySelector("h3");
+    const category = card.querySelector(".product-category");
+    const price = card.querySelector(".product-price");
+
+    if (title) title.textContent = product.name;
+    if (category) category.textContent = product.category;
+    if (price) price.textContent = formatCurrency(Number(product.price));
+
+    card.dataset.category = product.category;
+    card.dataset.stock = product.stock;
+  });
+
+  if (productsGrid) {
+    storedProducts
+      .filter((product) => !existingCodes.has(product.id))
+      .forEach((product) => {
+        productsGrid.appendChild(createProductCard(product));
+      });
+  }
+}
+
+function addStockLabel(card, quantity) {
+  if (!card) return;
+
+  const productContent = card.querySelector(".product-content");
+  if (!productContent) return;
+
+  let stockLabel = productContent.querySelector(".product-stock");
+
+  if (!stockLabel) {
+    stockLabel = document.createElement("p");
+    stockLabel.className = "product-stock";
+    const footer = productContent.querySelector(".product-footer");
+    footer?.before(stockLabel);
+  }
+
+  const stock = getProductStock(card);
+  stockLabel.textContent = `Stock disponible: ${stock} unidades`;
+  stockLabel.classList.toggle("out-of-stock", quantity >= stock);
+}
+
+function renderProductQuantities() {
+  document.querySelectorAll(".product-card").forEach((card) => {
+    const footer = card.querySelector(".product-footer");
+
+    if (!footer || footer.querySelector(".product-quantity-controls")) return;
+
+    const quantityControls = document.createElement("div");
+    quantityControls.className = "product-quantity-controls";
+    quantityControls.innerHTML = `
+      <button type="button" data-product-action="decrease" aria-label="Quitar una unidad">−</button>
+      <span data-product-quantity>0</span>
+      <button type="button" data-product-action="increase" aria-label="Agregar una unidad">+</button>
+    `;
+
+    footer.appendChild(quantityControls);
+  });
+}
+
+function updateProductQuantities() {
+  document.querySelectorAll(".product-card").forEach((card) => {
+    const code = card.dataset.codigo;
+    const product = findCartProduct(code);
+    const quantity = product?.quantity || 0;
+
+    const quantityElement = card.querySelector("[data-product-quantity]");
+    if (quantityElement) quantityElement.textContent = quantity;
+
+    addStockLabel(card, quantity);
+
+    const increaseButton = card.querySelector(
+      '[data-product-action="increase"]'
+    );
+    const addButton = card.querySelector(".add-cart-button");
+    const atStockLimit = quantity >= getProductStock(card);
+
+    if (increaseButton) increaseButton.disabled = atStockLimit;
+    if (addButton) addButton.disabled = atStockLimit;
+  });
+}
+
+// =========================================================
+// FILTROS DE PRODUCTOS
+// =========================================================
+
+function applyProductFilters() {
+  const selectedCategory =
+    document.querySelector(".filter-btn.active")?.dataset.category || "todos";
+  const selectedPrice =
+    document.querySelector("[data-price-filter]")?.value || "todos";
+
+  const cards = document.querySelectorAll(".product-card");
+  let visibleProducts = 0;
+
+  cards.forEach((card) => {
+    const cardCategory =
+      card.dataset.category ||
+      card.querySelector(".product-category")?.textContent.trim() ||
+      "";
+
+    const categoryMatches =
+      selectedCategory === "todos" ||
+      cardCategory.toLowerCase() === selectedCategory.toLowerCase();
+
+    const priceText =
+      card.querySelector(".product-price")?.textContent || "0";
+    const price = Number(priceText.replace(/[^0-9]/g, "")) || 0;
+
+    let priceMatches = true;
+
+    if (selectedPrice !== "todos") {
+      const parts = selectedPrice.split("-");
+      const minimum = Number(parts[0]) || 0;
+
+      if (selectedPrice.endsWith("-mas")) {
+        priceMatches = price >= minimum;
+      } else {
+        const maximum = Number(parts[1]) || 0;
+        priceMatches = price >= minimum && price <= maximum;
+      }
+    }
+
+    const isVisible = categoryMatches && priceMatches;
+    card.classList.toggle("is-filtered-out", !isVisible);
+    card.hidden = false;
+
+    if (isVisible) visibleProducts++;
+  });
+
+  const result = document.querySelector("[data-filter-result]");
+  if (result) {
+    result.textContent = `${visibleProducts} producto${
+      visibleProducts === 1 ? "" : "s"
+    } encontrado${visibleProducts === 1 ? "" : "s"}`;
+  }
+}
+
+function initializeProductFilters() {
+  const filterButtons = document.querySelectorAll(".filter-btn");
+  const priceFilter = document.querySelector("[data-price-filter]");
+
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      filterButtons.forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+      applyProductFilters();
+    });
+  });
+
+  priceFilter?.addEventListener("change", () => {
+    applyProductFilters();
+  });
+
+  applyProductFilters();
+}
+
+// =========================================================
+// CONSULTAS Y AGENDAMIENTO
+// =========================================================
+
+function initializeConsultas() {
+  const modalAgendamiento = document.getElementById("modal-agendamiento");
+  const botonesAgendar = document.querySelectorAll(".btn-abrir-modal");
+  const botonCerrarModal = document.querySelector(".cerrar-modal");
+  const textoServicio = document.getElementById("texto-servicio-seleccionado");
+  const formAgendar = document.getElementById("form-agendar");
+
+  if (botonesAgendar.length > 0 && modalAgendamiento) {
+    botonesAgendar.forEach((boton) => {
+      boton.addEventListener("click", () => {
+        const servicio = boton.dataset.servicio || "Consulta General";
+        if (textoServicio) {
+          textoServicio.textContent = `Servicio: ${servicio}`;
+        }
+        modalAgendamiento.style.display = "block";
+      });
+    });
+  } else if (botonesAgendar.length > 0) {
+    botonesAgendar.forEach((boton) => {
+      boton.addEventListener("click", () => {
+        const consulta = encodeURIComponent(
+          boton.dataset.servicio || "general"
+        );
+        window.open(
+          `agendar.html?consulta=${consulta}`,
+          "_blank",
+          "noopener"
+        );
+      });
+    });
+  }
+
+  if (botonCerrarModal) {
+    botonCerrarModal.addEventListener("click", () => {
+      if (modalAgendamiento) {
+        modalAgendamiento.style.display = "none";
+      }
+    });
+  }
+
+  if (modalAgendamiento) {
+    window.addEventListener("click", (event) => {
+      if (event.target === modalAgendamiento) {
+        modalAgendamiento.style.display = "none";
+      }
+    });
+  }
+
+  if (formAgendar) {
+    formAgendar.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const fecha = document.getElementById("fecha-cita")?.value;
+      const hora = document.getElementById("hora-cita")?.value;
+      const appointmentMessage = document.getElementById("appointment-message");
+
+      if (appointmentMessage) {
+        appointmentMessage.textContent = `Cita solicitada para el ${fecha} a las ${hora}.`;
+      }
+
+      if (modalAgendamiento) {
+        modalAgendamiento.style.display = "none";
+      }
+
+      formAgendar.reset();
+    });
+  }
+}
+
+function initializeAppointment() {
+  const formulario = document.getElementById("appointment-form");
+  const mensaje = document.getElementById("appointment-message");
+  const tipoConsulta = document.getElementById("tipo-consulta");
+  const especie = document.getElementById("especie");
+  const otraEspecieContenedor = document.getElementById("otra-especie-contenedor");
+  const otraEspecie = document.getElementById("otra-especie");
+
+  if (
+    !formulario ||
+    !mensaje ||
+    !tipoConsulta ||
+    !especie ||
+    !otraEspecieContenedor ||
+    !otraEspecie
+  ) {
+    return;
+  }
+
+  const actualizarOtraEspecie = () => {
+    const mostrar = especie.value === "otro";
+    otraEspecieContenedor.hidden = !mostrar;
+    otraEspecie.required = mostrar;
+    if (!mostrar) otraEspecie.value = "";
+  };
+
+  especie.addEventListener("change", actualizarOtraEspecie);
+  actualizarOtraEspecie();
+
+  const consultaNormalizada = (
+    new URLSearchParams(window.location.search).get("consulta") || ""
+  ).toLowerCase();
+
+  if (consultaNormalizada.includes("urgencia")) {
+    tipoConsulta.value = "urgencia";
+  } else if (
+    consultaNormalizada.includes("vacuna") ||
+    consultaNormalizada.includes("antirrabica") ||
+    consultaNormalizada.includes("felina") ||
+    consultaNormalizada.includes("canina")
+  ) {
+    tipoConsulta.value = "vacunacion";
+  } else if (consultaNormalizada.includes("desparas")) {
+    tipoConsulta.value = "desparasitacion";
+  } else if (consultaNormalizada.includes("general")) {
+    tipoConsulta.value = "general";
+  }
+
+  formulario.addEventListener("submit", (event) => {
+    event.preventDefault();
+    mensaje.textContent =
+      "Solicitud enviada. Nos pondremos en contacto contigo para confirmar.";
+    formulario.reset();
+    actualizarOtraEspecie();
+  });
+}
+
+// =========================================================
+// MÓDULO ADMINISTRATIVO
+// =========================================================
+
+function initializeAdminModule() {
+  const productForm = document.querySelector("[data-admin-product-form]");
+  const userForm = document.querySelector("[data-admin-user-form]");
+  const productTable = document.querySelector("[data-admin-products]");
+  const userTable = document.querySelector("[data-admin-users]");
+
+  const readList = (key) => loadFromStorage(key);
+  const saveList = (key, list) => saveToStorage(key, list);
+
+  const params = new URLSearchParams(window.location.search);
+
+  // PRODUCTOS INICIALES
+  if (readList(STORAGE_KEYS.ADMIN_PRODUCTS).length === 0) {
+    const initialProducts = [
+      ["Amoxibay 250mg", "Antibióticos", 4200, 12],
+      ["Enrox 50mg", "Antibióticos", 6800, 6],
+      ["Metrobay 250mg", "Antibióticos", 3900, 18],
+      ["Nexgard", "Antiparasitarios", 9500, 9],
+      ["Bravecto", "Antiparasitarios", 18900, 25],
+      ["Revolution Plus", "Antiparasitarios", 14500, 7],
+      ["Drontal Plus", "Antiparasitarios", 3200, 14],
+      ["Milbemax Gato", "Antiparasitarios", 6800, 4],
+      ["Meloxicam 1mg", "Antiinflamatorios", 4500, 20],
+      ["Carprofeno 50mg", "Antiinflamatorios", 9800, 8],
+      ["Clorhexidina shampoo", "Dermatología", 8900, 16],
+      ["Dermisol", "Dermatología", 7600, 10],
+      ["Panalog", "Dermatología", 12500, 5],
+      ["Enterex", "Digestivo", 6200, 11],
+      ["Proviable", "Digestivo", 15500, 8],
+      ["Cardial B", "Cardíaco", 22000, 6],
+      ["Vetmedin", "Cardíaco", 35000, 4],
+      ["Tramadol", "Analgésicos", 7200, 9],
+      ["Gabapentina", "Analgésicos", 6400, 12],
+      ["Vacuna antirrábica", "Vacunas", 12000, 15],
+      ["Vacuna séxtuple", "Vacunas", 18000, 10],
+      ["Omega 3", "Suplementos", 11500, 13],
+    ].map(([name, category, price, stock], index) => ({
+      id: `ME${String(index + 1).padStart(3, "0")}`,
+      name,
+      category,
+      price,
+      stock,
+    }));
+
+    saveList(STORAGE_KEYS.ADMIN_PRODUCTS, initialProducts);
+  }
+
+  // USUARIOS INICIALES
+  if (readList(STORAGE_KEYS.ADMIN_USERS).length === 0) {
+    saveList(STORAGE_KEYS.ADMIN_USERS, [
+      {
+        id: "USR001",
+        name: "Carolina Quinan",
+        email: "carolina@gmail.com",
+        role: "Administrador",
+        status: "Activo",
+      },
+      {
+        id: "USR002",
+        name: "Francisco Arce",
+        email: "francisco@gmail.com",
+        role: "Administrador",
+        status: "Activo",
+      },
+      {
+        id: "USR003",
+        name: "Bayron Mena",
+        email: "bayron@gmail.com",
+        role: "Asistente",
+        status: "Activo",
+      },
+    ]);
+  }
+
+  // USUARIOS HOME
+  const homeUsers = document.querySelector("[data-home-users]");
+  if (homeUsers) {
+    const activeUsers = readList(STORAGE_KEYS.ADMIN_USERS).filter(
+      (user) => user.status !== "Inactivo"
+    );
+
+    homeUsers.innerHTML = activeUsers
+      .map((user) => {
+        const initials = user.name
+          .split(" ")
+          .map((part) => part[0])
+          .slice(0, 2)
+          .join("")
+          .toUpperCase();
+
+        return `
+          <article class="team-card">
+            <div class="avatar" aria-hidden="true">${escapeHtml(initials)}</div>
+            <h3>${escapeHtml(user.name)}</h3>
+            <p class="role">${escapeHtml(user.role || "Equipo clínico")}</p>
+            <p class="email">${escapeHtml(user.email)}</p>
+          </article>
+        `;
+      })
+      .join("");
+  }
+
+  // CONTADORES
+  const productCount = document.querySelector("[data-admin-product-count]");
+  const userCount = document.querySelector("[data-admin-user-count]");
+
+  if (productCount) {
+    productCount.textContent = readList(STORAGE_KEYS.ADMIN_PRODUCTS).length;
+  }
+
+  if (userCount) {
+    userCount.textContent = readList(STORAGE_KEYS.ADMIN_USERS).filter(
+      (item) => item.status === "Activo"
+    ).length;
+  }
+
+  // LLENAR FORMULARIO
+  const fillForm = (form, key) => {
+    if (!form) return;
+
+    const item = readList(key).find(
+      (entry) => entry.id === params.get("id")
+    );
+
+    if (!item) return;
+
+    Object.entries(item).forEach(([name, value]) => {
+      if (form.elements[name]) {
+        form.elements[name].value = value;
+      }
+    });
+  };
+
+  // FORMULARIO PRODUCTO
+  if (productForm) {
+    fillForm(productForm, STORAGE_KEYS.ADMIN_PRODUCTS);
+
+    productForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const data = Object.fromEntries(new FormData(productForm));
+      const products = readList(STORAGE_KEYS.ADMIN_PRODUCTS);
+
+      const product = {
+        ...data,
+        id: data.id || `ADM-${Date.now()}`,
+        price: Number(data.price),
+        stock: Number(data.stock),
+      };
+
+      const index = products.findIndex((item) => item.id === product.id);
+
+      if (index >= 0) {
+        products[index] = product;
+      } else {
+        products.push(product);
+      }
+
+      saveList(STORAGE_KEYS.ADMIN_PRODUCTS, products);
+      window.location.href = "productos.html";
+    });
+  }
+
+  // FORMULARIO USUARIO
+  if (userForm) {
+    fillForm(userForm, STORAGE_KEYS.ADMIN_USERS);
+
+    userForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const data = Object.fromEntries(new FormData(userForm));
+
+      if (
+        !userForm.checkValidity() ||
+        !isValidEmail(data.email) ||
+        !isValidRut(data.rut)
+      ) {
+        userForm.reportValidity();
+        return;
+      }
+
+      const users = readList(STORAGE_KEYS.ADMIN_USERS);
+
+      const user = {
+        ...data,
+        id: data.id || `USR-${Date.now()}`,
+      };
+
+      const index = users.findIndex((item) => item.id === user.id);
+
+      if (index >= 0) {
+        users[index] = user;
+      } else {
+        users.push(user);
+      }
+
+      saveList(STORAGE_KEYS.ADMIN_USERS, users);
+      window.location.href = "usuarios.html";
+    });
+  }
+
+  // TABLAS ADMINISTRATIVAS
+  const renderTable = (table, key, editPage, columns) => {
+    if (!table) return;
+
+    const list = readList(key);
+
+    table.innerHTML =
+      list.length > 0
+        ? list
+            .map(
+              (item) => `
+                <tr>
+                  ${columns
+                    .map(
+                      (column) => `
+                        <td>
+                          ${
+                            column === "price"
+                              ? formatCurrency(Number(item[column]))
+                              : escapeHtml(item[column] || "")
+                          }
+                        </td>
+                      `
+                    )
+                    .join("")}
+                  <td>
+                    <a class="admin-edit-button" href="${editPage}?id=${encodeURIComponent(item.id)}">Editar</a>
+                    <button class="admin-delete-button" type="button" data-admin-delete="${escapeHtml(key)}" data-id="${escapeHtml(item.id)}">Eliminar</button>
+                  </td>
+                </tr>
+              `
+            )
+            .join("")
+        : `
+            <tr>
+              <td colspan="${columns.length + 1}">No hay registros todavía.</td>
+            </tr>
+          `;
+  };
+
+  renderTable(
+    productTable,
+    STORAGE_KEYS.ADMIN_PRODUCTS,
+    "formulario-producto.html",
+    ["id", "name", "category", "price", "stock"]
+  );
+
+  renderTable(
+    userTable,
+    STORAGE_KEYS.ADMIN_USERS,
+    "formulario-usuario.html",
+    ["id", "name", "email", "role", "status"]
+  );
+
+  // ELIMINAR REGISTROS
+  document.querySelectorAll("[data-admin-delete]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const key = button.dataset.adminDelete;
+      const id = button.dataset.id;
+
+      const updated = readList(key).filter((item) => item.id !== id);
+      saveList(key, updated);
+      button.closest("tr")?.remove();
+    });
+  });
+}
+
+// =========================================================
+// LOGIN / REGISTRO INDEPENDIENTE
+// =========================================================
+
+function initializeStandaloneAuth() {
+  const loginForm = document.querySelector("[data-standalone-login]");
+  const registerForm = document.querySelector("[data-standalone-register]");
+
+  loginForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const email = normalizeEmail(form.elements.email.value);
+    const password = form.elements.password.value;
+
+    const message = document.querySelector("#standalone-login-message");
+    const emailError = document.querySelector("#email-error");
+    const passwordError = document.querySelector("#password-error");
+
+    if (emailError) emailError.textContent = "";
+    if (passwordError) passwordError.textContent = "";
+    if (message) message.textContent = "";
+
+    if (email.length > 100 || !isValidEmail(email)) {
+      if (emailError) {
+        emailError.textContent =
+          "El correo debe terminar en @duoc.cl, @profesor.duoc.cl o @gmail.com.";
+      }
+      return;
+    }
+
+    const profile = state.profiles.find((item) => item.email === email);
+
+    if (!profile) {
+      if (emailError) {
+        emailError.textContent =
+          "No existe una cuenta registrada con este correo.";
+      }
+      return;
+    }
+
+    if (profile.password !== password) {
+      if (passwordError) {
+        passwordError.textContent =
+          "La contraseña no coincide con esta cuenta.";
+      }
+      return;
+    }
+
+    startSession(profile);
+
+    if (message) {
+      message.textContent = "Sesión iniciada correctamente.";
+    }
+
+    window.location.href = "index.html";
+  });
+
+  registerForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const data = Object.fromEntries(new FormData(form));
+    const message = document.querySelector("#standalone-register-message");
+    const email = normalizeEmail(data.email);
+
+    if (
+      !form.checkValidity() ||
+      !isValidName(data.name) ||
+      email.length > 100 ||
+      !isValidEmail(email) ||
+      !isAdultBirthDate(data.birthDate) ||
+      !isValidPassword(data.password)
+    ) {
+      if (message) {
+        message.textContent =
+          "Debes ser mayor de edad y revisar tus datos de registro.";
+      }
+      return;
+    }
+
+    if (state.profiles.some((item) => item.email === email)) {
+      if (message) {
+        message.textContent = "Ese correo ya está registrado.";
+      }
+      return;
+    }
+
+    const profile = {
+      name: String(data.name || "").trim(),
+      email,
+      birthDate: data.birthDate,
+      phone: String(data.phone || "").trim(),
+      password: data.password,
+    };
+
+    state.profiles.push(profile);
+    saveToStorage(STORAGE_KEYS.PROFILES, state.profiles);
+    startSession(profile);
+    window.location.href = "index.html";
+  });
+}
+
+// =========================================================
+// EVENTOS GENERALES
+// =========================================================
+
+function bindSiteEvents() {
+  document.addEventListener("click", (event) => {
+    const cartLink = event.target.closest(".carrito-compras");
+    const profileLink = event.target.closest(".profile-link");
+    const addButton = event.target.closest(".add-cart-button");
+    const plusButton = event.target.closest("[data-cart-plus]");
+    const minusButton = event.target.closest("[data-cart-minus]");
+    const removeButton = event.target.closest("[data-cart-remove]");
+    const clearButton = event.target.closest("[data-cart-clear]");
+    const productAction = event.target.closest("[data-product-action]");
+    const cartAction = event.target.closest("[data-action]");
+    const closeButton = event.target.closest("[data-cart-close]");
+    const profileCloseButton = event.target.closest("[data-profile-close]");
+    const registerButton = event.target.closest("[data-profile-view='register']");
+    const loginButton = event.target.closest("[data-profile-view='login']");
+    const logoutButton = event.target.closest("[data-profile-logout]");
+
+    if (profileLink) {
+      event.preventDefault();
+      openProfile();
+      return;
+    }
+
+    if (cartLink) {
+      event.preventDefault();
+      openCart();
+      return;
+    }
+
+    if (addButton) {
+      const card = addButton.closest(".product-card");
+      if (card) {
+        const added = addProductFromCard(card);
+        if (added) {
+          addButton.textContent = "Agregado";
+          setTimeout(() => {
+            if (document.body.contains(addButton)) {
+              addButton.textContent = "Agregar al carrito";
+            }
+          }, 1200);
+          openCart();
+        }
+      }
+      return;
+    }
+
+    if (plusButton) {
+      changeQuantity(plusButton.dataset.cartPlus, 1);
+      return;
+    }
+
+    if (minusButton) {
+      changeQuantity(minusButton.dataset.cartMinus, -1);
+      return;
+    }
+
+    if (removeButton) {
+      removeCartProduct(removeButton.dataset.cartRemove);
+      return;
+    }
+
+    if (clearButton) {
+      clearCart();
+      return;
+    }
+
+    if (productAction) {
+      const card = productAction.closest(".product-card");
+      if (!card) return;
+
+      const action = productAction.dataset.productAction;
+      const code = card.dataset.codigo;
+
+      if (action === "increase") {
+        addProductFromCard(card);
+      } else if (action === "decrease") {
+        changeQuantity(code, -1);
+      }
+      return;
+    }
+
+    if (cartAction) {
+      const code = cartAction.dataset.code;
+      const action = cartAction.dataset.action;
+
+      if (action === "remove") {
+        removeCartProduct(code);
+      } else if (action === "increase") {
+        changeQuantity(code, 1);
+      } else if (action === "decrease") {
+        changeQuantity(code, -1);
+      }
+      return;
+    }
+
+    if (closeButton) {
+      closeCart();
+      return;
+    }
+
+    if (profileCloseButton) {
+      closeProfile();
+      return;
+    }
+
+    if (registerButton) {
+      showProfileView("register");
+      return;
+    }
+
+    if (loginButton) {
+      showProfileView("login");
+      return;
+    }
+
+    if (logoutButton) {
+      logoutProfile();
+      return;
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeCart();
+      closeProfile();
+    }
+  });
+
+  document.querySelector("#cart-contact-form")?.addEventListener(
+    "submit",
+    handleContactSubmit
+  );
+
+  document.querySelector("#login-form")?.addEventListener(
+    "submit",
+    handleLoginSubmit
+  );
+
+  document.querySelector("#register-form")?.addEventListener(
+    "submit",
+    handleRegisterSubmit
+  );
+
+  const hideNotice = () => {
+    const notice = document.querySelector("[data-cart-notice]");
+    if (notice) notice.hidden = true;
+  };
+
+  document.querySelector("[data-notice-close]")?.addEventListener("click", hideNotice);
+  document.querySelector("[data-notice-cancel]")?.addEventListener("click", hideNotice);
+  document.querySelector("[data-clear-cart]")?.addEventListener("click", () => clearCart());
+
+  document.querySelector("[data-pay-cart]")?.addEventListener("click", () => {
+    if (state.cartItems.length === 0) {
+      showNotice("Agrega al menos un producto antes de pagar.");
+      return;
+    }
+
+    const total = getCartTotal();
+    showNotice(
+      `El total de tu compra es ${formatCurrency(total)}. ¿Deseas continuar con el pago?`,
+      () => {
+        clearCart();
+        showNotice("Pago iniciado correctamente. ¡Gracias por tu compra!");
+      }
+    );
+  });
+}
+
+function initializeProducts() {
+  syncAdminProducts();
+  renderProductQuantities();
+  updateProductQuantities();
+  updateCartCounter();
+  renderCart();
+  initializeProductFilters();
+}
+
+// =========================================================
+// INICIALIZACIÓN GENERAL
+// =========================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+  initializeState();
+  renderCart();
+  updateCartCounter();
+  renderProfile();
+  bindSiteEvents();
+  initializeConsultas();
+  initializeAppointment();
+  initializeAdminModule();
+  initializeStandaloneAuth();
+  initializeProducts();
+});
