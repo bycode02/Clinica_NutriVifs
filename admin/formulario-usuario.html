@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nuevo usuario | Panel administrador</title>
+  <link rel="stylesheet" href="../CSS/app.css">
+</head>
+<body class="admin-body" data-admin-page>
+  <aside class="admin-sidebar">
+    <a class="brand" href="../HTML/index.html">Clínica NutriDifs</a>
+    <p class="admin-sidebar-subtitle">Panel administrador</p>
+    <nav>
+      <a href="index.html">Inicio</a>
+      <a href="productos.html">Productos</a>
+      <a href="usuarios.html" class="active">Usuarios</a>
+    </nav>
+    <p class="admin-sidebar-footer">
+      Sesión: <span id="admin-session-name">—</span><br>
+      <button type="button" data-profile-logout>Cerrar sesión</button>
+    </p>
+  </aside>
+  <main class="admin-main">
+    <span class="admin-eyebrow">EQUIPO Y CLIENTES</span>
+    <h1>Nuevo / editar usuario</h1>
+    <p class="admin-lead">Si llegaste desde "Editar" en el listado, los datos del usuario se cargan automáticamente.</p>
+
+    <form class="admin-form" data-admin-user-form novalidate>
+      <input type="hidden" name="id">
+      <label>RUN (sin puntos ni guion)
+        <input type="text" name="rut" minlength="7" maxlength="9" required placeholder="19011022K">
+      </label>
+      <label>Nombre
+        <input type="text" name="name" maxlength="50" required>
+      </label>
+      <label>Apellidos
+        <input type="text" name="apellidos" maxlength="100" required>
+      </label>
+      <label>Correo (@duoc.cl, @profesor.duoc.cl o @gmail.com)
+        <input type="email" name="email" maxlength="100" data-allowed-email required>
+      </label>
+      <label>Fecha de nacimiento (opcional)
+        <input type="date" name="birthDate">
+      </label>
+      <label>Tipo de usuario
+        <select name="role" required>
+          <option value="">-- Selecciona el tipo --</option>
+          <option>Administrador</option>
+          <option>Vendedor</option>
+          <option>Cliente</option>
+        </select>
+      </label>
+      <label>Región
+        <select name="region" data-region-select required></select>
+      </label>
+      <label>Comuna
+        <select name="comuna" data-comuna-select required></select>
+      </label>
+      <label>Dirección
+        <input type="text" name="address" maxlength="300" required>
+      </label>
+      <label>Estado
+        <select name="status" required>
+          <option>Activo</option>
+          <option>Inactivo</option>
+        </select>
+      </label>
+      <button class="btn-primary" type="submit">Guardar usuario</button>
+      <a class="btn-secondary" href="usuarios.html">Cancelar</a>
+    </form>
+  </main>
+  <script src="../JS/app.js" defer></script>
+</body>
+</html>

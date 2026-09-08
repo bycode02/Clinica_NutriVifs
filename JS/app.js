@@ -1159,15 +1159,12 @@ function initializeAppointment() {
 // =========================================================
 
 function initializeAdminModule() {
-  const productForm = document.querySelector("[data-admin-product-form]");
-  const userForm = document.querySelector("[data-admin-user-form]");
-  const productTable = document.querySelector("[data-admin-products]");
-  const userTable = document.querySelector("[data-admin-users]");
-
+  // Nota: el panel administrador (mantenedor de productos/usuarios) no se
+  // construye en esta entrega. Esta función solo deja sembrados los datos
+  // que sí usan las vistas públicas: el catálogo de productos y la sección
+  // "El equipo" de la home.
   const readList = (key) => loadFromStorage(key);
   const saveList = (key, list) => saveToStorage(key, list);
-
-  const params = new URLSearchParams(window.location.search);
 
   // PRODUCTOS INICIALES
   if (readList(STORAGE_KEYS.ADMIN_PRODUCTS).length === 0) {
@@ -1260,170 +1257,6 @@ function initializeAdminModule() {
       .join("");
   }
 
-  // CONTADORES
-  const productCount = document.querySelector("[data-admin-product-count]");
-  const userCount = document.querySelector("[data-admin-user-count]");
-
-  if (productCount) {
-    productCount.textContent = readList(STORAGE_KEYS.ADMIN_PRODUCTS).length;
-  }
-
-  if (userCount) {
-    userCount.textContent = readList(STORAGE_KEYS.ADMIN_USERS).filter(
-      (item) => item.status === "Activo"
-    ).length;
-  }
-
-  // LLENAR FORMULARIO
-  const fillForm = (form, key) => {
-    if (!form) return;
-
-    const item = readList(key).find(
-      (entry) => entry.id === params.get("id")
-    );
-
-    if (!item) return;
-
-    Object.entries(item).forEach(([name, value]) => {
-      if (form.elements[name]) {
-        form.elements[name].value = value;
-      }
-    });
-  };
-
-  // FORMULARIO PRODUCTO
-  if (productForm) {
-    fillForm(productForm, STORAGE_KEYS.ADMIN_PRODUCTS);
-
-    productForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-
-      const data = Object.fromEntries(new FormData(productForm));
-      const products = readList(STORAGE_KEYS.ADMIN_PRODUCTS);
-
-      const product = {
-        ...data,
-        id: data.id || `ADM-${Date.now()}`,
-        price: Number(data.price),
-        stock: Number(data.stock),
-      };
-
-      const index = products.findIndex((item) => item.id === product.id);
-
-      if (index >= 0) {
-        products[index] = product;
-      } else {
-        products.push(product);
-      }
-
-      saveList(STORAGE_KEYS.ADMIN_PRODUCTS, products);
-      window.location.href = "productos.html";
-    });
-  }
-
-  // FORMULARIO USUARIO
-  if (userForm) {
-    fillForm(userForm, STORAGE_KEYS.ADMIN_USERS);
-
-    userForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-
-      const data = Object.fromEntries(new FormData(userForm));
-
-      if (
-        !userForm.checkValidity() ||
-        !isValidEmail(data.email) ||
-        !isValidRut(data.rut)
-      ) {
-        userForm.reportValidity();
-        return;
-      }
-
-      const users = readList(STORAGE_KEYS.ADMIN_USERS);
-
-      const user = {
-        ...data,
-        id: data.id || `USR-${Date.now()}`,
-      };
-
-      const index = users.findIndex((item) => item.id === user.id);
-
-      if (index >= 0) {
-        users[index] = user;
-      } else {
-        users.push(user);
-      }
-
-      saveList(STORAGE_KEYS.ADMIN_USERS, users);
-      window.location.href = "usuarios.html";
-    });
-  }
-
-  // TABLAS ADMINISTRATIVAS
-  const renderTable = (table, key, editPage, columns) => {
-    if (!table) return;
-
-    const list = readList(key);
-
-    table.innerHTML =
-      list.length > 0
-        ? list
-            .map(
-              (item) => `
-                <tr>
-                  ${columns
-                    .map(
-                      (column) => `
-                        <td>
-                          ${
-                            column === "price"
-                              ? formatCurrency(Number(item[column]))
-                              : escapeHtml(item[column] || "")
-                          }
-                        </td>
-                      `
-                    )
-                    .join("")}
-                  <td>
-                    <a class="admin-edit-button" href="${editPage}?id=${encodeURIComponent(item.id)}">Editar</a>
-                    <button class="admin-delete-button" type="button" data-admin-delete="${escapeHtml(key)}" data-id="${escapeHtml(item.id)}">Eliminar</button>
-                  </td>
-                </tr>
-              `
-            )
-            .join("")
-        : `
-            <tr>
-              <td colspan="${columns.length + 1}">No hay registros todavía.</td>
-            </tr>
-          `;
-  };
-
-  renderTable(
-    productTable,
-    STORAGE_KEYS.ADMIN_PRODUCTS,
-    "formulario-producto.html",
-    ["id", "name", "category", "price", "stock"]
-  );
-
-  renderTable(
-    userTable,
-    STORAGE_KEYS.ADMIN_USERS,
-    "formulario-usuario.html",
-    ["id", "name", "email", "role", "status"]
-  );
-
-  // ELIMINAR REGISTROS
-  document.querySelectorAll("[data-admin-delete]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const key = button.dataset.adminDelete;
-      const id = button.dataset.id;
-
-      const updated = readList(key).filter((item) => item.id !== id);
-      saveList(key, updated);
-      button.closest("tr")?.remove();
-    });
-  });
 }
 
 // =========================================================
