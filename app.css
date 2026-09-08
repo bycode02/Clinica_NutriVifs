@@ -1081,7 +1081,7 @@ body.cart-is-open {
   .location-section {
     padding: 3rem 0;
   }
-  /*VISTA: CONSULTAS (Bayron)*/
+  /*VISTA: CONSULTAS (BAyron)*/
   .titulo-consultas {
     text-align: center;
     color: #176b58;
@@ -1138,4 +1138,111 @@ body.cart-is-open {
     font-size: 1.1rem;
     line-height: 1.8;
   }
+
+/* MODAL DE AGENDAMIENTO (Bayron) */
+.modal-oculto {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(24, 59, 57, 0.5); 
+}
+
+.modal-contenido {
+  background-color: #ffffff;
+  margin: 10% auto;
+  padding: 2rem;
+  border: 1px solid #dce8df;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.cerrar-modal {
+  color: #6b8178;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.cerrar-modal:hover {
+  color: #d26945;
+}
+
+.campo-formulario {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.campo-formulario input {
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border: 1px solid #dce8df;
+  border-radius: 4px;
+}
+
+/*VISTA: CONTACTANOS*/
+.contacto-section {
+  padding: 3rem 0;
+}
+
+.contacto-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  background: #ffffff;
+  padding: 2rem;
+  border: 1px solid #dce8df;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(24, 59, 57, 0.05);
+}
+
+@media (min-width: 801px) {
+  .contacto-grid {
+    grid-template-columns: 1fr 1fr; /* Formulario y mapa en dos columnas en PC */
+  }
+}
+
+.contacto-formulario select,
+.contacto-formulario textarea {
+  width: 100%;
+  padding: 0.7rem;
+  margin-top: 0.5rem;
+  border: 1px solid #dce8df;
+  border-radius: 6px;
+  font-family: inherit;
+}
+
+.contacto-mapa h3 {
+  color: #176b58;
+  margin-bottom: 0.5rem;
+  margin-top: 0;
+}
+
+.contacto-mapa p {
+  margin-bottom: 1rem;
+  color: #6b8178;
+}
+
+.mapa-placeholder {
+  width: 100%;
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  background: #eef4ed;
+  color: #6b8178;
+  border: 2px dashed #9eb5a7;
+  border-radius: 8px;
+  font-weight: bold;
+  text-align: center;
+  padding: 1rem;
+}
+
 }

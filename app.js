@@ -255,4 +255,55 @@ function initializeCart() {
   bindCartEvents();
 }
 
-document.addEventListener("DOMContentLoaded", initializeCart);
+// bayron (Consultas y quienes somos)
+function initializeConsultas() {
+  const modalAgendamiento = document.getElementById("modal-agendamiento");
+  const botonesAgendar = document.querySelectorAll(".btn-abrir-modal");
+  const botonCerrarModal = document.querySelector(".cerrar-modal");
+  const textoServicio = document.getElementById("texto-servicio-seleccionado");
+  const formAgendar = document.getElementById("form-agendar");
+
+  // Mostrar modal al hacer clic en "Agendar"
+  if (botonesAgendar.length > 0 && modalAgendamiento) {
+      botonesAgendar.forEach(boton => {
+          boton.addEventListener("click", (e) => {
+              const servicio = e.target.getAttribute("data-servicio");
+              textoServicio.textContent = `Servicio: ${servicio}`;
+              modalAgendamiento.style.display = "block";
+          });
+      });
+  }
+
+  // Cerrar modal con la "X"
+  if (botonCerrarModal) {
+      botonCerrarModal.addEventListener("click", () => {
+          modalAgendamiento.style.display = "none";
+      });
+  }
+
+  // Cerrar modal al hacer clic fuera de él
+  window.addEventListener("click", (e) => {
+      if (e.target === modalAgendamiento) {
+          modalAgendamiento.style.display = "none";
+      }
+  });
+
+  // Manejar el envío del formulario
+  if (formAgendar) {
+      formAgendar.addEventListener("submit", (e) => {
+          e.preventDefault(); // Evita que la página recargue
+          const fecha = document.getElementById("fecha-cita").value;
+          const hora = document.getElementById("hora-cita").value;
+          
+          alert(`¡Cita agendada exitosamente!\nFecha: ${fecha}\nHora: ${hora}`);
+          modalAgendamiento.style.display = "none";
+          formAgendar.reset(); // Limpia los campos
+      });
+  }
+}
+
+// Evento principal: Ejecuta las funciones de todos cuando la página carga
+document.addEventListener("DOMContentLoaded", () => {
+  initializeCart();
+  initializeConsultas();
+});

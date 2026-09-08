@@ -48,7 +48,8 @@
               Revisión médica completa para evaluar el estado de salud de tu
               mascota.
             </p>
-            <a href="#" class="btn-agendar">Agendar</a>
+            <!-- MODIFICACIÓN BAYRON: Clases y data-servicio añadidos -->
+            <button class="btn-agendar btn-abrir-modal" data-servicio="Consulta General">Agendar</button>
           </article>
 
           <article class="service-card">
@@ -63,7 +64,8 @@
             <p>
               Aplicación de calendario de vacunación para prevenir enfermedades.
             </p>
-            <a href="#" class="btn-agendar">Agendar</a>
+            <!-- MODIFICACIÓN BAYRON: Clases y data-servicio añadidos -->
+            <button class="btn-agendar btn-abrir-modal" data-servicio="Vacunas">Agendar</button>
           </article>
 
           <article class="service-card">
@@ -79,10 +81,33 @@
               Atención médica detallada con especialistas (pendientes de
               definir).
             </p>
-            <a href="#" class="btn-agendar">Agendar</a>
+            <!-- MODIFICACIÓN BAYRON: Clases y data-servicio añadidos -->
+            <button class="btn-agendar btn-abrir-modal" data-servicio="Especializaciones">Agendar</button>
           </article>
         </div>
       </section>
+
+      <!-- MODIFICACIÓN BAYRON: Agregado de estructura modal de agendamiento -->
+      <div id="modal-agendamiento" class="modal-oculto">
+        <div class="modal-contenido">
+          <span class="cerrar-modal">&times;</span>
+          <h2>Agendar Hora</h2>
+          <p id="texto-servicio-seleccionado">Servicio: </p>
+          <form id="form-agendar">
+            <div class="campo-formulario">
+              <label for="fecha-cita">Fecha:</label>
+              <input type="date" id="fecha-cita" required>
+            </div>
+            <div class="campo-formulario">
+              <label for="hora-cita">Hora:</label>
+              <input type="time" id="hora-cita" required>
+            </div>
+            <button type="submit" class="btn-agendar" style="width: 100%;">Confirmar Cita</button>
+          </form>
+        </div>
+      </div>
+      <!-- FIN MODIFICACIÓN BAYRON -->
+
     </main>
 
     <footer class="site-footer">

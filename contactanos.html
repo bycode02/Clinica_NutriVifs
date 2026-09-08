@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clinica NutriDifs | Contáctanos</title>
+    <meta name="description" content="Ponte en contacto con Clinica NutriDifs o encuéntranos en nuestro mapa." />
+    <link rel="stylesheet" href="app.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-content">
+        <a class="brand" href="index.html">Clinica NutriDifs</a>
+        <nav aria-label="Navegación principal">
+          <a href="index.html">Inicio</a>
+          <a href="consultas.html">Consultas</a>
+          <a href="productos.html">Productos</a>
+          <a href="contactanos.html" aria-current="page">Contáctanos</a>
+          <a href="quienes-somos.html">Quiénes somos</a>
+        </nav>
+        <a class="profile-link" href="#perfil">Perfil</a>
+        <a class="carrito-compras" href="#carrito">Carrito</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="contacto-section container" aria-labelledby="contacto-title">
+        <h1 id="contacto-title" class="titulo-consultas">Contáctanos</h1>
+        
+        <div class="contacto-grid">
+          <!-- Columna Izquierda: Formulario -->
+          <div class="contacto-formulario">
+            <form id="form-contacto">
+              <div class="campo-formulario">
+                <label for="contacto-identificacion">Correo o Teléfono:</label>
+                <input type="text" id="contacto-identificacion" placeholder="Ej: +569... o correo@mail.com" required>
+              </div>
+
+              <div class="campo-formulario">
+                <label for="contacto-motivo">Motivo de contacto:</label>
+                <select id="contacto-motivo" required>
+                  <option value="" disabled selected>Selecciona un motivo...</option>
+                  <option value="reclamo">Reclamo / Devolución</option>
+                  <option value="consulta">Consulta por información</option>
+                  <option value="sugerencia">Sugerencias</option>
+                </select>
+              </div>
+
+              <div class="campo-formulario">
+                <label for="contacto-detalle">Detalle (Máx 200 caracteres):</label>
+                <!-- Se agregó el atributo maxlength=200 como pide la rúbrica -->
+                <textarea id="contacto-detalle" rows="4" maxlength="200" placeholder="Escribe tu mensaje aquí..." required></textarea>
+              </div>
+
+              <button type="submit" class="btn-agendar">Enviar Mensaje</button>
+            </form>
+          </div>
+
+          <!-- Columna Derecha: Mapa Provisorio -->
+          <div class="contacto-mapa">
+            <h3>Nuestra Ubicación</h3>
+            <p>Encuéntranos en Rancagua, Región del Libertador General Bernardo O'Higgins.</p>
+            <div class="mapa-placeholder" role="img" aria-label="Mapa interactivo provisorio">
+               Mapa de ubicación (Leaflet / Google Maps)
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <div>
+          <h2>Clinica NutriDifs</h2>
+          <p>Teléfono: +56 9 4567 8910</p>
+          <p><a href="mailto:ClinicVEtDifs@gmail.com">ClinicVEtDifs@gmail.com</a></p>
+        </div>
+        <div>
+          <h2>Integrantes</h2>
+          <ul>
+            <li>Francisco Arce</li>
+            <li>Bayron Mena</li>
+            <li>Carolina Quinan</li>
+          </ul>
+        </div>
+        <div>
+          <h2>Sección</h2>
+          <p>DSY1104 – 2026</p>
+        </div>
+      </div>
+    </footer>
+    <script src="app.js"></script>
+  </body>
+</html>
