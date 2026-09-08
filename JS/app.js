@@ -46,6 +46,12 @@ function isValidEmail(email) {
   return emailRegex.test(normalized);
 }
 
+// Regla de negocio EP1: solo correos institucionales @duoc.cl pueden registrarse.
+function isValidDuocEmail(email) {
+  if (!email || typeof email !== "string") return false;
+  return /^[a-zA-Z0-9._%+-]+@duoc\.cl$/i.test(normalizeEmail(email));
+}
+
 function isValidName(name) {
   const value = String(name || "").trim();
   return value.length >= 1 && value.length <= 100;
@@ -58,7 +64,7 @@ function isValidComment(comment) {
 
 function isValidPassword(password) {
   const value = String(password || "");
-  return value.length >= 4 && value.length <= 10;
+  return value.length >= 4 && value.length <= 13 && /[A-Z]/.test(value);
 }
 
 function isValidRut(rut) {
@@ -186,7 +192,8 @@ function isAdultBirthDate(birthDate) {
 
   if (birthdayPending) age -= 1;
 
-  return age >= 18;
+  // Regla de negocio EP1: edad mínima de registro es 14 años.
+  return age >= 14;
 }
 
 function validateContactForm(form) {
@@ -613,6 +620,62 @@ function closeProfile() {
   document.body.classList.remove("profile-is-open");
 }
 
+// =========================================================
+// DETALLE DE PRODUCTO
+// =========================================================
+
+let currentDetailProduct = null;
+
+function openProductDetail(card) {
+  if (!card) return;
+
+  const data = getProductData(card);
+  const category = card.dataset.category || "";
+  const description = card.querySelector(".product-content p")?.innerHTML || "";
+  const stock = getProductStock(card);
+  const quantity = findCartProduct(data.code)?.quantity || 0;
+  const atLimit = stock > 0 && quantity >= stock;
+  const outOfStock = stock <= 0;
+
+  currentDetailProduct = data;
+
+  const content = document.querySelector("#detail-content");
+  if (content) {
+    content.innerHTML = `
+      <img src="${data.image}" alt="${escapeHtml(data.name)}" />
+      <span class="detail-category">${escapeHtml(category)}</span>
+      <h3>${escapeHtml(data.name)}</h3>
+      <strong class="detail-price">${formatCurrency(data.price)}</strong>
+      <p class="detail-description">${description}</p>
+      <p class="detail-stock ${outOfStock ? "out-of-stock" : ""}">
+        ${outOfStock ? "Sin stock disponible" : `Stock disponible: ${stock} unidades`}
+      </p>
+      <button type="button" class="add-cart-button" data-detail-add ${atLimit || outOfStock ? "disabled" : ""}>
+        Agregar al carrito
+      </button>
+    `;
+  }
+
+  const panel = document.querySelector("#detail-panel");
+  const overlay = document.querySelector(".detail-overlay");
+
+  panel?.classList.add("is-open");
+  panel?.setAttribute("aria-hidden", "false");
+  overlay?.classList.add("is-visible");
+  document.body.classList.add("detail-is-open");
+}
+
+function closeProductDetail() {
+  const panel = document.querySelector("#detail-panel");
+  const overlay = document.querySelector(".detail-overlay");
+
+  panel?.classList.remove("is-open");
+  panel?.setAttribute("aria-hidden", "true");
+  overlay?.classList.remove("is-visible");
+  document.body.classList.remove("detail-is-open");
+  currentDetailProduct = null;
+}
+
 function showProfileView(view) {
   const loginView = document.querySelector("#login-view");
   const registerView = document.querySelector("#register-view");
@@ -698,13 +761,36 @@ function handleLoginSubmit(event) {
 
   const profile = state.profiles.find((item) => item.email === email);
 
-  if (!profile || profile.password !== password) {
+  if (!profile) {
     if (message) {
       message.textContent = "La cuenta no existe o las credenciales son incorrectas.";
     }
     return;
   }
 
+  if (profile.locked) {
+    if (message) {
+      message.textContent =
+        "Cuenta bloqueada por 3 intentos fallidos. Contacta a soporte para restablecerla.";
+    }
+    return;
+  }
+
+  if (profile.password !== password) {
+    profile.failedAttempts = (profile.failedAttempts || 0) + 1;
+    if (profile.failedAttempts >= 3) profile.locked = true;
+    saveToStorage(STORAGE_KEYS.PROFILES, state.profiles);
+
+    if (message) {
+      message.textContent = profile.locked
+        ? "Cuenta bloqueada por 3 intentos fallidos. Contacta a soporte para restablecerla."
+        : "La cuenta no existe o las credenciales son incorrectas.";
+    }
+    return;
+  }
+
+  profile.failedAttempts = 0;
+  saveToStorage(STORAGE_KEYS.PROFILES, state.profiles);
   startSession(profile);
 
   if (message) {
@@ -719,27 +805,34 @@ function handleRegisterSubmit(event) {
 
   const form = event.currentTarget;
   const name = form.elements.name.value.trim();
+  const apellido = form.elements.apellido.value.trim();
   const email = normalizeEmail(form.elements.email.value);
   const birthDate = form.elements.birthDate.value.trim();
+  const direccion = form.elements.direccion.value.trim();
+  const genero = form.elements.genero.value;
   const password = form.elements.password.value;
   const confirmPassword = form.elements.confirmPassword.value;
   const phone = form.elements.phone.value.trim();
   const region = form.elements.region.value;
   const comuna = form.elements.comuna.value;
+  const aceptaTerminos = form.elements.aceptaTerminos.checked;
   const message = document.querySelector("#register-message");
 
   if (
     !isValidName(name) ||
+    !isValidName(apellido) ||
     email.length > 100 ||
-    !isValidEmail(email) ||
+    !isValidDuocEmail(email) ||
     !isAdultBirthDate(birthDate) ||
-    !isValidPassword(password)
+    !isValidPassword(password) ||
+    !direccion ||
+    !genero
   ) {
     if (message) {
       message.textContent =
-        "Revisa el nombre, correo, fecha de nacimiento y contraseña. " +
-        "El nombre admite hasta 100 caracteres, el correo hasta 100 caracteres " +
-        "y la contraseña entre 4 y 10 caracteres.";
+        "Revisa nombre, apellido, correo institucional (@duoc.cl), fecha de nacimiento " +
+        "(mínimo 14 años), dirección, género y contraseña (4 a 13 caracteres con al " +
+        "menos una mayúscula).";
     }
     return;
   }
@@ -758,6 +851,13 @@ function handleRegisterSubmit(event) {
     return;
   }
 
+  if (!aceptaTerminos) {
+    if (message) {
+      message.textContent = "Debes aceptar las condiciones de registro.";
+    }
+    return;
+  }
+
   const emailAlreadyUsed = state.profiles.some((item) => item.email === email);
   const passwordAlreadyUsed = state.profiles.some(
     (item) => item.password === password
@@ -770,7 +870,20 @@ function handleRegisterSubmit(event) {
     return;
   }
 
-  const profile = { name, email, birthDate, phone, region, comuna, password };
+  const profile = {
+    name,
+    apellido,
+    email,
+    birthDate,
+    direccion,
+    genero,
+    phone,
+    region,
+    comuna,
+    password,
+    failedAttempts: 0,
+    locked: false,
+  };
   state.profiles.push(profile);
   saveToStorage(STORAGE_KEYS.PROFILES, state.profiles);
   startSession(profile);
@@ -800,18 +913,50 @@ function handleContactSubmit(event) {
     return;
   }
 
+  if (!state.cartItems.length) {
+    if (message) {
+      message.textContent = "Tu carrito está vacío.";
+    }
+    return;
+  }
+
   if (!validateContactForm(form)) {
     form.reportValidity();
     return;
   }
 
+  applyStockDeduction(state.cartItems);
+
   if (message) {
     message.textContent =
-      "Solicitud enviada correctamente. Nos pondremos en contacto contigo.";
+      "Compra realizada con éxito. Nos pondremos en contacto contigo.";
   }
 
   form.reset();
   clearCart();
+
+  setTimeout(() => {
+    window.location.href = "index.html";
+  }, 1500);
+}
+
+// Descuenta el stock comprado y lo persiste en ADMIN_PRODUCTS (localStorage).
+function applyStockDeduction(cartItems) {
+  const products = loadFromStorage(STORAGE_KEYS.ADMIN_PRODUCTS);
+  let changed = false;
+
+  cartItems.forEach((item) => {
+    const product = products.find((entry) => entry.id === item.code);
+    if (product) {
+      product.stock = Math.max(0, Number(product.stock) - item.quantity);
+      changed = true;
+    }
+  });
+
+  if (changed) {
+    saveToStorage(STORAGE_KEYS.ADMIN_PRODUCTS, products);
+    syncAdminProducts();
+  }
 }
 
 // =========================================================
@@ -1429,14 +1574,29 @@ function initializeStandaloneAuth() {
       return;
     }
 
-    if (profile.password !== password) {
+    if (profile.locked) {
       if (passwordError) {
         passwordError.textContent =
-          "La contraseña no coincide con esta cuenta.";
+          "Cuenta bloqueada por 3 intentos fallidos. Contacta a soporte para restablecerla.";
       }
       return;
     }
 
+    if (profile.password !== password) {
+      profile.failedAttempts = (profile.failedAttempts || 0) + 1;
+      if (profile.failedAttempts >= 3) profile.locked = true;
+      saveToStorage(STORAGE_KEYS.PROFILES, state.profiles);
+
+      if (passwordError) {
+        passwordError.textContent = profile.locked
+          ? "Cuenta bloqueada por 3 intentos fallidos. Contacta a soporte para restablecerla."
+          : "La contraseña no coincide con esta cuenta.";
+      }
+      return;
+    }
+
+    profile.failedAttempts = 0;
+    saveToStorage(STORAGE_KEYS.PROFILES, state.profiles);
     startSession(profile);
 
     if (message) {
@@ -1457,14 +1617,19 @@ function initializeStandaloneAuth() {
     if (
       !form.checkValidity() ||
       !isValidName(data.name) ||
+      !isValidName(data.apellido) ||
       email.length > 100 ||
-      !isValidEmail(email) ||
+      !isValidDuocEmail(email) ||
       !isAdultBirthDate(data.birthDate) ||
-      !isValidPassword(data.password)
+      !isValidPassword(data.password) ||
+      !String(data.direccion || "").trim() ||
+      !data.genero
     ) {
       if (message) {
         message.textContent =
-          "Debes ser mayor de edad y revisar tus datos de registro.";
+          "Revisa nombre, apellido, correo institucional (@duoc.cl), fecha de " +
+          "nacimiento (mínimo 14 años), dirección, género y contraseña (4 a 13 " +
+          "caracteres con al menos una mayúscula).";
       }
       return;
     }
@@ -1483,6 +1648,13 @@ function initializeStandaloneAuth() {
       return;
     }
 
+    if (!data.aceptaTerminos) {
+      if (message) {
+        message.textContent = "Debes aceptar las condiciones de registro.";
+      }
+      return;
+    }
+
     if (state.profiles.some((item) => item.email === email)) {
       if (message) {
         message.textContent = "Ese correo ya está registrado.";
@@ -1492,12 +1664,17 @@ function initializeStandaloneAuth() {
 
     const profile = {
       name: String(data.name || "").trim(),
+      apellido: String(data.apellido || "").trim(),
       email,
       birthDate: data.birthDate,
+      direccion: String(data.direccion || "").trim(),
+      genero: data.genero,
       phone: String(data.phone || "").trim(),
       region: data.region,
       comuna: data.comuna,
       password: data.password,
+      failedAttempts: 0,
+      locked: false,
     };
 
     state.profiles.push(profile);
@@ -1527,6 +1704,9 @@ function bindSiteEvents() {
     const registerButton = event.target.closest("[data-profile-view='register']");
     const loginButton = event.target.closest("[data-profile-view='login']");
     const logoutButton = event.target.closest("[data-profile-logout]");
+    const viewDetailButton = event.target.closest("[data-view-detail]");
+    const detailCloseButton = event.target.closest("[data-detail-close]");
+    const detailAddButton = event.target.closest("[data-detail-add]");
 
     if (profileLink) {
       event.preventDefault();
@@ -1630,12 +1810,38 @@ function bindSiteEvents() {
       logoutProfile();
       return;
     }
+
+    if (viewDetailButton) {
+      const card = viewDetailButton.closest(".product-card");
+      if (card) openProductDetail(card);
+      return;
+    }
+
+    if (detailAddButton) {
+      if (currentDetailProduct) {
+        const added = addProduct(currentDetailProduct);
+        if (added) {
+          const card = [...document.querySelectorAll(".product-card")].find(
+            (item) => item.dataset.codigo === currentDetailProduct.code
+          );
+          openProductDetail(card);
+          openCart();
+        }
+      }
+      return;
+    }
+
+    if (detailCloseButton) {
+      closeProductDetail();
+      return;
+    }
   });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       closeCart();
       closeProfile();
+      closeProductDetail();
     }
   });
 

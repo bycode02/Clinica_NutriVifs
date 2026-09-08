@@ -652,18 +652,39 @@
               placeholder="Clinica Vet Difs"
               required
             />
-            <label for="register-email">Correo Permitido</label>
+            <label for="register-apellido">Apellido</label>
+            <input
+              id="register-apellido"
+              name="apellido"
+              type="text"
+              required
+            />
+            <label for="register-email">Correo institucional</label>
             <input
               id="register-email"
               name="email"
               type="email"
               data-allowed-email
-              placeholder="clinicVetDef@gmail.com"
+              placeholder="usuario@duoc.cl"
               required
             />
             <label for="register-birth-date">Fecha de nacimiento</label>
-            <!-- Calendario limitado a personas mayores de 18 años. -->
+            <!-- Edad mínima de registro: 14 años. -->
             <input id="register-birth-date" name="birthDate" type="date" data-adult-birth required />
+            <label for="register-direccion">Dirección</label>
+            <input id="register-direccion" name="direccion" type="text" required />
+            <label for="register-region">Región</label>
+            <select id="register-region" name="region" data-region-select required></select>
+            <label for="register-comuna">Comuna</label>
+            <select id="register-comuna" name="comuna" data-comuna-select required></select>
+            <label for="register-genero">Género</label>
+            <select id="register-genero" name="genero" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option value="femenino">Femenino</option>
+              <option value="masculino">Masculino</option>
+              <option value="otro">Otro</option>
+              <option value="prefiero-no-decir">Prefiero no decir</option>
+            </select>
             <label for="register-password">Contraseña</label>
             <input
               id="register-password"
@@ -687,13 +708,13 @@
               type="tel"
               placeholder="+56 9 1234 5678"
             />
-            <label for="register-region">Región</label>
-            <select id="register-region" name="region" data-region-select required></select>
-            <label for="register-comuna">Comuna</label>
-            <select id="register-comuna" name="comuna" data-comuna-select required></select>
             <small>
               Debe tener entre 4 y 13 caracteres y al menos una mayúscula.
             </small>
+            <label class="auth-checkbox">
+              <input type="checkbox" id="register-terminos" name="aceptaTerminos" required />
+              Acepto los términos y condiciones de registro.
+            </label>
             <button class="profile-submit-button" type="submit">
               Registrar
             </button>
