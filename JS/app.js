@@ -1198,6 +1198,13 @@ function initializeConsultas() {
   const botonCerrarModal = document.querySelector(".cerrar-modal");
   const textoServicio = document.getElementById("texto-servicio-seleccionado");
   const formAgendar = document.getElementById("form-agendar");
+  const inputFecha = document.getElementById("fecha-cita");
+
+  //Bloquear fechas pasadas dinámicamente
+  if (inputFecha) {
+    const hoy = new Date().toISOString().split('T')[0];
+    inputFecha.setAttribute('min', hoy);
+  }
 
   if (botonesAgendar.length > 0 && modalAgendamiento) {
     botonesAgendar.forEach((boton) => {
