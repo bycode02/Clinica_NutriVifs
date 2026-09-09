@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Clinica NutriDifs | Contáctanos</title>
-    <meta name="description" content="Ponte en contacto con Clinica NutriDifs o encuéntranos en nuestro mapa." />
+    <meta
+      name="description"
+      content="Ponte en contacto con Clinica NutriDifs o encuéntranos en nuestro mapa."
+    />
     <link rel="stylesheet" href="../CSS/app.css" />
   </head>
   <body>
@@ -25,22 +28,33 @@
     </header>
 
     <main>
-      <section class="contacto-section container" aria-labelledby="contacto-title">
+      <section
+        class="contacto-section container"
+        aria-labelledby="contacto-title"
+      >
         <h1 id="contacto-title" class="titulo-consultas">Contáctanos</h1>
-        
+
         <div class="contacto-grid">
           <!-- Columna Izquierda: Formulario -->
           <div class="contacto-formulario">
             <form id="form-contacto" novalidate>
               <div class="campo-formulario">
                 <label for="contacto-identificacion">Correo o Teléfono:</label>
-                <input type="text" id="contacto-identificacion" name="identificacion" placeholder="Ej: +569... o correo@mail.com" required>
+                <input
+                  type="text"
+                  id="contacto-identificacion"
+                  name="identificacion"
+                  placeholder="Ej: +569... o correo@mail.com"
+                  required
+                />
               </div>
 
               <div class="campo-formulario">
                 <label for="contacto-motivo">Motivo de contacto:</label>
                 <select id="contacto-motivo" name="motivo" required>
-                  <option value="" disabled selected>Selecciona un motivo...</option>
+                  <option value="" disabled selected>
+                    Selecciona un motivo...
+                  </option>
                   <option value="reclamo">Reclamo / Devolución</option>
                   <option value="consulta">Consulta por información</option>
                   <option value="sugerencia">Sugerencias</option>
@@ -50,20 +64,33 @@
               <div class="campo-formulario">
                 <label for="mensaje">Mensaje:</label>
                 <!-- La pauta exige un máximo de 500 caracteres. -->
-                <textarea id="mensaje" name="mensaje" maxlength="500" required placeholder="Escribe tu consulta (máximo 500 caracteres)..."></textarea>
+                <textarea
+                  id="mensaje"
+                  name="mensaje"
+                  maxlength="500"
+                  required
+                  placeholder="Escribe tu consulta (máximo 500 caracteres)..."
+                ></textarea>
               </div>
 
               <button type="submit" class="btn-agendar">Enviar Mensaje</button>
-              <p id="form-contacto-message" role="status" aria-live="polite"></p>
+              <p
+                id="form-contacto-message"
+                role="status"
+                aria-live="polite"
+              ></p>
             </form>
           </div>
 
           <!-- Columna Derecha: Mapa de ubicación -->
           <div class="contacto-mapa">
             <h3>Nuestra Ubicación</h3>
-            <p>Encuéntranos en Rancagua, Región del Libertador General Bernardo O'Higgins.</p>
+            <p>
+              Encuéntranos en Rancagua, Región del Libertador General Bernardo
+              O'Higgins.
+            </p>
             <div class="mapa-placeholder">
-                 <iframe
+              <iframe
                 title="Ubicación de Clinica NutriDifs en Google Maps"
                 src="https://www.google.com/maps?q=Clinica+NutriDifs+Chile&output=embed"
                 loading="lazy"
@@ -81,7 +108,9 @@
         <div>
           <h2>Clinica NutriDifs</h2>
           <p>Teléfono: +56 9 4567 8910</p>
-          <p><a href="mailto:ClinicVEtDifs@gmail.com">ClinicVEtDifs@gmail.com</a></p>
+          <p>
+            <a href="mailto:ClinicVEtDifs@gmail.com">ClinicVEtDifs@gmail.com</a>
+          </p>
         </div>
         <div>
           <h2>Integrantes</h2>
@@ -99,25 +128,53 @@
     </footer>
 
     <div class="cart-overlay" data-cart-close></div>
-    <aside class="cart-panel" id="cart-panel" aria-labelledby="cart-title" aria-hidden="true">
+    <aside
+      class="cart-panel"
+      id="cart-panel"
+      aria-labelledby="cart-title"
+      aria-hidden="true"
+    >
       <div class="cart-panel-header">
         <h2 id="cart-title">Tu carrito</h2>
-        <button class="cart-close-button" type="button" aria-label="Cerrar carrito" data-cart-close>&times;</button>
+        <button
+          class="cart-close-button"
+          type="button"
+          aria-label="Cerrar carrito"
+          data-cart-close
+        >
+          &times;
+        </button>
       </div>
       <div class="cart-content" id="cart-content"></div>
       <form class="cart-contact-form" id="cart-contact-form" novalidate>
         <h3>Solicitar pedido</h3>
-        <p class="cart-profile-message">La solicitud se enviará con los datos de tu perfil.</p>
-        <button type="submit" class="cart-submit-button">Enviar solicitud</button>
+        <p class="cart-profile-message">
+          La solicitud se enviará con los datos de tu perfil.
+        </p>
+        <button type="submit" class="cart-submit-button">
+          Enviar solicitud
+        </button>
         <p class="cart-form-message" id="cart-form-message" role="status"></p>
       </form>
     </aside>
 
     <div class="profile-overlay" data-profile-close></div>
-    <aside class="profile-panel" id="profile-panel" aria-labelledby="profile-title" aria-hidden="true">
+    <aside
+      class="profile-panel"
+      id="profile-panel"
+      aria-labelledby="profile-title"
+      aria-hidden="true"
+    >
       <div class="profile-panel-header">
         <h2 id="profile-title">Perfil</h2>
-        <button class="profile-close-button" type="button" aria-label="Cerrar perfil" data-profile-close>&times;</button>
+        <button
+          class="profile-close-button"
+          type="button"
+          aria-label="Cerrar perfil"
+          data-profile-close
+        >
+          &times;
+        </button>
       </div>
       <div id="profile-auth-view">
         <div id="login-view" class="profile-view">
@@ -125,7 +182,8 @@
           <form id="login-form" class="profile-form" novalidate>
             <label for="login-email">Correo electrónico</label>
             <input
-              id="login-email" autocomplete="email"
+              id="login-email"
+              autocomplete="email"
               name="email"
               type="email"
               data-allowed-email
@@ -134,7 +192,8 @@
             />
             <label for="login-password">Contraseña</label>
             <input
-              id="login-password" autocomplete="current-password"
+              id="login-password"
+              autocomplete="current-password"
               name="password"
               type="password"
               placeholder="Ilovecats"
@@ -143,14 +202,21 @@
             <button class="profile-submit-button" type="submit">Log in</button>
             <p id="login-message" class="profile-message" role="status"></p>
           </form>
-          <button class="profile-switch-button" type="button" data-profile-view="register">Crear cuenta</button>
+          <button
+            class="profile-switch-button"
+            type="button"
+            data-profile-view="register"
+          >
+            Crear cuenta
+          </button>
         </div>
         <div id="register-view" class="profile-view" hidden>
           <h3>Crear cuenta</h3>
           <form id="register-form" class="profile-form" novalidate>
             <label for="register-name">Nombre</label>
             <input
-              id="register-name" autocomplete="given-name"
+              id="register-name"
+              autocomplete="given-name"
               name="name"
               type="text"
               placeholder="Clinica Vet Difs"
@@ -158,14 +224,16 @@
             />
             <label for="register-apellido">Apellido</label>
             <input
-              id="register-apellido" autocomplete="family-name"
+              id="register-apellido"
+              autocomplete="family-name"
               name="apellido"
               type="text"
               required
             />
             <label for="register-email">Correo institucional</label>
             <input
-              id="register-email" autocomplete="email"
+              id="register-email"
+              autocomplete="email"
               name="email"
               type="email"
               data-allowed-email
@@ -174,13 +242,38 @@
             />
             <label for="register-birth-date">Fecha de nacimiento</label>
             <!-- Edad mínima de registro: 14 años. -->
-            <input id="register-birth-date" autocomplete="bday" name="birthDate" type="date" data-adult-birth required />
+            <input
+              id="register-birth-date"
+              autocomplete="bday"
+              name="birthDate"
+              type="date"
+              data-adult-birth
+              required
+            />
             <label for="register-direccion">Dirección</label>
-            <input id="register-direccion" autocomplete="street-address" name="direccion" type="text" required />
+            <input
+              id="register-direccion"
+              autocomplete="street-address"
+              name="direccion"
+              type="text"
+              required
+            />
             <label for="register-region">Región</label>
-            <select id="register-region" autocomplete="address-level1" name="region" data-region-select required></select>
+            <select
+              id="register-region"
+              autocomplete="address-level1"
+              name="region"
+              data-region-select
+              required
+            ></select>
             <label for="register-comuna">Comuna</label>
-            <select id="register-comuna" autocomplete="address-level2" name="comuna" data-comuna-select required></select>
+            <select
+              id="register-comuna"
+              autocomplete="address-level2"
+              name="comuna"
+              data-comuna-select
+              required
+            ></select>
             <label for="register-genero">Género</label>
             <select id="register-genero" name="genero" required>
               <option value="" disabled selected>Selecciona una opción</option>
@@ -191,7 +284,8 @@
             </select>
             <label for="register-password">Contraseña</label>
             <input
-              id="register-password" autocomplete="new-password"
+              id="register-password"
+              autocomplete="new-password"
               name="password"
               type="password"
               placeholder="Ilovecats"
@@ -199,7 +293,8 @@
             />
             <label for="register-confirm-password">Confirmar contraseña</label>
             <input
-              id="register-confirm-password" autocomplete="new-password"
+              id="register-confirm-password"
+              autocomplete="new-password"
               name="confirmPassword"
               type="password"
               placeholder="Ilovecats"
@@ -207,7 +302,8 @@
             />
             <label for="register-phone">Teléfono (opcional)</label>
             <input
-              id="register-phone" autocomplete="tel"
+              id="register-phone"
+              autocomplete="tel"
               name="phone"
               type="tel"
               placeholder="+56 9 1234 5678"
@@ -216,7 +312,12 @@
               Debe tener entre 4 y 13 caracteres y al menos una mayúscula.
             </small>
             <label class="auth-checkbox">
-              <input type="checkbox" id="register-terminos" name="aceptaTerminos" required />
+              <input
+                type="checkbox"
+                id="register-terminos"
+                name="aceptaTerminos"
+                required
+              />
               Acepto los términos y condiciones de registro.
             </label>
             <button class="profile-submit-button" type="submit">
@@ -224,17 +325,31 @@
             </button>
             <p id="register-message" class="profile-message" role="status"></p>
           </form>
-          <button class="profile-switch-button" type="button" data-profile-view="login">Volver</button>
+          <button
+            class="profile-switch-button"
+            type="button"
+            data-profile-view="login"
+          >
+            Volver
+          </button>
         </div>
       </div>
       <div id="profile-session-view" hidden>
         <h3>Sesión activa</h3>
         <p id="profile-session-name"></p>
         <p id="profile-session-email"></p>
-        <p id="profile-session-message" class="profile-message" role="status"></p>
-        <button class="profile-submit-button" type="button" data-profile-logout>Cerrar sesión</button>
+        <p
+          id="profile-session-message"
+          class="profile-message"
+          role="status"
+        ></p>
+        <button class="profile-submit-button" type="button" data-profile-logout>
+          Cerrar sesión
+        </button>
       </div>
     </aside>
     <script src="../JS/app.js" defer></script>
+    <script src="../JS/auth.js" defer></script>
+    <script src="../JS/agenda.js" defer></script>
   </body>
 </html>

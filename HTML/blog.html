@@ -62,9 +62,8 @@
           <span class="post-tag">Video recomendado</span>
           <h2>Guía de nutrición esencial para perros y gatos</h2>
           <p>
-            Un repaso en video sobre los principios básicos de una
-            alimentación correcta para tu mascota, a cargo de especialistas
-            en salud animal.
+            Un repaso en video sobre los principios básicos de una alimentación
+            correcta para tu mascota, a cargo de especialistas en salud animal.
           </p>
           <div class="video-wrapper">
             <iframe
@@ -72,7 +71,14 @@
               title="Alimentación Correcta para Mascotas: Guía de Nutrición Esencial para Perros y Gatos"
               loading="lazy"
               referrerpolicy="strict-origin-when-cross-origin"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allow="
+                accelerometer;
+                autoplay;
+                clipboard-write;
+                encrypted-media;
+                gyroscope;
+                picture-in-picture;
+              "
               allowfullscreen
             ></iframe>
           </div>
@@ -229,7 +235,8 @@
           <form id="login-form" class="profile-form" novalidate>
             <label for="login-email">Correo electrónico</label>
             <input
-              id="login-email" autocomplete="email"
+              id="login-email"
+              autocomplete="email"
               name="email"
               type="email"
               data-allowed-email
@@ -238,7 +245,8 @@
             />
             <label for="login-password">Contraseña</label>
             <input
-              id="login-password" autocomplete="current-password"
+              id="login-password"
+              autocomplete="current-password"
               name="password"
               type="password"
               placeholder="Ilovecats"
@@ -260,7 +268,8 @@
           <form id="register-form" class="profile-form" novalidate>
             <label for="register-name">Nombre</label>
             <input
-              id="register-name" autocomplete="given-name"
+              id="register-name"
+              autocomplete="given-name"
               name="name"
               type="text"
               placeholder="Clinica Vet Difs"
@@ -268,14 +277,16 @@
             />
             <label for="register-apellido">Apellido</label>
             <input
-              id="register-apellido" autocomplete="family-name"
+              id="register-apellido"
+              autocomplete="family-name"
               name="apellido"
               type="text"
               required
             />
             <label for="register-email">Correo institucional</label>
             <input
-              id="register-email" autocomplete="email"
+              id="register-email"
+              autocomplete="email"
               name="email"
               type="email"
               data-allowed-email
@@ -284,13 +295,38 @@
             />
             <label for="register-birth-date">Fecha de nacimiento</label>
             <!-- Edad mínima de registro: 14 años. -->
-            <input id="register-birth-date" autocomplete="bday" name="birthDate" type="date" data-adult-birth required />
+            <input
+              id="register-birth-date"
+              autocomplete="bday"
+              name="birthDate"
+              type="date"
+              data-adult-birth
+              required
+            />
             <label for="register-direccion">Dirección</label>
-            <input id="register-direccion" autocomplete="street-address" name="direccion" type="text" required />
+            <input
+              id="register-direccion"
+              autocomplete="street-address"
+              name="direccion"
+              type="text"
+              required
+            />
             <label for="register-region">Región</label>
-            <select id="register-region" autocomplete="address-level1" name="region" data-region-select required></select>
+            <select
+              id="register-region"
+              autocomplete="address-level1"
+              name="region"
+              data-region-select
+              required
+            ></select>
             <label for="register-comuna">Comuna</label>
-            <select id="register-comuna" autocomplete="address-level2" name="comuna" data-comuna-select required></select>
+            <select
+              id="register-comuna"
+              autocomplete="address-level2"
+              name="comuna"
+              data-comuna-select
+              required
+            ></select>
             <label for="register-genero">Género</label>
             <select id="register-genero" name="genero" required>
               <option value="" disabled selected>Selecciona una opción</option>
@@ -301,7 +337,8 @@
             </select>
             <label for="register-password">Contraseña</label>
             <input
-              id="register-password" autocomplete="new-password"
+              id="register-password"
+              autocomplete="new-password"
               name="password"
               type="password"
               placeholder="Ilovecats"
@@ -309,7 +346,8 @@
             />
             <label for="register-confirm-password">Confirmar contraseña</label>
             <input
-              id="register-confirm-password" autocomplete="new-password"
+              id="register-confirm-password"
+              autocomplete="new-password"
               name="confirmPassword"
               type="password"
               placeholder="Ilovecats"
@@ -317,7 +355,8 @@
             />
             <label for="register-phone">Teléfono (opcional)</label>
             <input
-              id="register-phone" autocomplete="tel"
+              id="register-phone"
+              autocomplete="tel"
               name="phone"
               type="tel"
               placeholder="+56 9 1234 5678"
@@ -326,7 +365,12 @@
               Debe tener entre 4 y 13 caracteres y al menos una mayúscula.
             </small>
             <label class="auth-checkbox">
-              <input type="checkbox" id="register-terminos" name="aceptaTerminos" required />
+              <input
+                type="checkbox"
+                id="register-terminos"
+                name="aceptaTerminos"
+                required
+              />
               Acepto los términos y condiciones de registro.
             </label>
             <button class="profile-submit-button" type="submit">
@@ -358,5 +402,7 @@
       </div>
     </aside>
     <script src="../JS/app.js" defer></script>
+    <script src="../JS/auth.js" defer></script>
+    <script src="../JS/agenda.js" defer></script>
   </body>
 </html>

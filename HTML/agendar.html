@@ -1,10 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agendar consulta | Clinica NutriDifs</title>
-    <meta name="description" content="Agenda una consulta veterinaria en Clinica NutriDifs." />
+    <meta
+      name="description"
+      content="Agenda una consulta veterinaria en Clinica NutriDifs."
+    />
     <link rel="stylesheet" href="../CSS/app.css" />
   </head>
 
@@ -27,13 +30,17 @@
         <span class="hero-subtitle">ATENCION VETERINARIA</span>
         <h1 class="titulo-consultas">Agenda tu consulta</h1>
         <p class="consultas-descripcion">
-          Completa tus datos y nos pondremos en contacto contigo para confirmar la hora.
+          Completa tus datos y nos pondremos en contacto contigo para confirmar
+          la hora.
         </p>
 
         <div class="appointment-layout">
           <aside class="appointment-info">
             <h2>Elige la atencion que necesitas</h2>
-            <p>Atendemos perros, gatos y animales pequenos con atencion cercana y responsable.</p>
+            <p>
+              Atendemos perros, gatos y animales pequenos con atencion cercana y
+              responsable.
+            </p>
             <ul>
               <li>Consultas generales y de urgencia</li>
               <li>Vacunacion y desparasitacion</li>
@@ -45,27 +52,59 @@
           <form class="appointment-form" id="appointment-form">
             <div class="campo-formulario">
               <label for="nombre">Tu nombre</label>
-              <input id="nombre" autocomplete="name" name="nombre" type="text" required />
+              <input
+                id="nombre"
+                autocomplete="name"
+                name="nombre"
+                type="text"
+                required
+              />
             </div>
 
             <div class="campo-formulario">
               <label for="rut">RUT</label>
-              <input id="rut" name="rut" type="text" placeholder="12.345.678-5" required />
+              <input
+                id="rut"
+                name="rut"
+                type="text"
+                placeholder="12.345.678-5"
+                required
+              />
             </div>
 
             <div class="campo-formulario">
               <label for="fecha-nacimiento">Fecha de nacimiento</label>
-              <input id="fecha-nacimiento" autocomplete="bday" name="fecha-nacimiento" type="date" required />
+              <input
+                id="fecha-nacimiento"
+                autocomplete="bday"
+                name="fecha-nacimiento"
+                type="date"
+                required
+              />
             </div>
 
             <div class="campo-formulario">
               <label for="correo">Correo electronico</label>
-              <input id="correo" autocomplete="email" name="correo" type="email" data-allowed-email required />
+              <input
+                id="correo"
+                autocomplete="email"
+                name="correo"
+                type="email"
+                data-allowed-email
+                required
+              />
             </div>
 
             <div class="campo-formulario">
               <label for="telefono">Telefono</label>
-              <input id="telefono" autocomplete="tel" name="telefono" type="tel" placeholder="+56912345678" required />
+              <input
+                id="telefono"
+                autocomplete="tel"
+                name="telefono"
+                type="tel"
+                placeholder="+56912345678"
+                required
+              />
             </div>
 
             <div class="campo-formulario">
@@ -76,7 +115,9 @@
             <div class="campo-formulario">
               <label for="especie">Especie</label>
               <select id="especie" name="especie" required>
-                <option value="" selected disabled>Selecciona una opcion</option>
+                <option value="" selected disabled>
+                  Selecciona una opcion
+                </option>
                 <option>Perro</option>
                 <option>Gato</option>
                 <option>Ave</option>
@@ -85,15 +126,26 @@
               </select>
             </div>
 
-            <div class="campo-formulario campo-completo" id="otra-especie-contenedor" hidden>
+            <div
+              class="campo-formulario campo-completo"
+              id="otra-especie-contenedor"
+              hidden
+            >
               <label for="otra-especie">Escribe la especie</label>
-              <input id="otra-especie" name="otra-especie" type="text" placeholder="Ej: Hurón" />
+              <input
+                id="otra-especie"
+                name="otra-especie"
+                type="text"
+                placeholder="Ej: Hurón"
+              />
             </div>
 
             <div class="campo-formulario">
               <label for="tipo-consulta">Tipo de consulta</label>
               <select id="tipo-consulta" name="tipo-consulta" required>
-                <option value="" selected disabled>Selecciona una opcion</option>
+                <option value="" selected disabled>
+                  Selecciona una opcion
+                </option>
                 <option value="general">Consulta general</option>
                 <option value="urgencia">Consulta de urgencia</option>
                 <option value="vacunacion">Vacunacion</option>
@@ -107,12 +159,29 @@
             </div>
 
             <div class="campo-formulario campo-completo">
-              <label for="motivo">Motivo de la consulta (minimo 20 caracteres)</label>
-              <textarea id="motivo" name="motivo" rows="5" minlength="20" maxlength="500" placeholder="Describe con detalle lo que le ocurre a tu mascota" required></textarea>
+              <label for="motivo"
+                >Motivo de la consulta (minimo 20 caracteres)</label
+              >
+              <textarea
+                id="motivo"
+                name="motivo"
+                rows="5"
+                minlength="20"
+                maxlength="500"
+                placeholder="Describe con detalle lo que le ocurre a tu mascota"
+                required
+              ></textarea>
             </div>
 
-            <button type="submit" class="btn-agendar campo-completo">Solicitar consulta</button>
-            <p id="appointment-message" class="campo-completo" role="status" aria-live="polite"></p>
+            <button type="submit" class="btn-agendar campo-completo">
+              Solicitar consulta
+            </button>
+            <p
+              id="appointment-message"
+              class="campo-completo"
+              role="status"
+              aria-live="polite"
+            ></p>
           </form>
         </div>
       </section>
@@ -123,7 +192,9 @@
         <div>
           <h2>Clinica NutriDifs</h2>
           <p>Teléfono: +56 9 4567 8910</p>
-          <p><a href="mailto:ClinicVEtDifs@gmail.com">ClinicVEtDifs@gmail.com</a></p>
+          <p>
+            <a href="mailto:ClinicVEtDifs@gmail.com">ClinicVEtDifs@gmail.com</a>
+          </p>
         </div>
         <div>
           <h2>Integrantes</h2>
@@ -141,5 +212,7 @@
     </footer>
 
     <script src="../JS/app.js" defer></script>
+    <script src="../JS/auth.js" defer></script>
+    <script src="../JS/agenda.js" defer></script>
   </body>
 </html>

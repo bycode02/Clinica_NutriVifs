@@ -1,83 +1,167 @@
 <!doctype html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro | Clínica NutriDifs</title>
-  <link rel="stylesheet" href="../CSS/app.css">
-</head>
-<body class="auth-page">
-  <main class="auth-card">
-    <a class="auth-brand" href="index.html">Clínica NutriDifs</a>
-    <span class="auth-eyebrow">NUEVO CLIENTE</span>
-    <h1>Crear cuenta</h1>
-    <p class="auth-description">Regístrate para gestionar tus datos y solicitar atención veterinaria.</p>
-    <form id="standalone-register-form" class="auth-form" data-standalone-register>
-      <label for="reg-standalone-name">Nombre</label>
-      <input type="text" id="reg-standalone-name" autocomplete="given-name" name="name" required>
-      <label for="reg-standalone-apellido">Apellido</label>
-      <input type="text" id="reg-standalone-apellido" autocomplete="family-name" name="apellido" required>
-      <label for="reg-standalone-email">Correo institucional</label>
-      <input type="email" id="reg-standalone-email" autocomplete="email" name="email" data-allowed-email placeholder="usuario@duoc.cl" required>
-      <label for="reg-standalone-phone">Teléfono (opcional)</label>
-      <input type="tel" id="reg-standalone-phone" autocomplete="tel" name="phone" placeholder="+56 9 1234 5678">
-      <label for="reg-standalone-birth">Fecha de nacimiento</label>
-      <!-- Edad mínima de registro: 14 años. -->
-      <input type="date" id="reg-standalone-birth" autocomplete="bday" name="birthDate" data-adult-birth required>
-      <label for="reg-standalone-direccion">Dirección</label>
-      <input type="text" id="reg-standalone-direccion" autocomplete="street-address" name="direccion" required>
-      <label for="reg-standalone-region">Región</label>
-      <select id="reg-standalone-region" autocomplete="address-level1" name="region" data-region-select required></select>
-      <label for="reg-standalone-comuna">Comuna</label>
-      <select id="reg-standalone-comuna" autocomplete="address-level2" name="comuna" data-comuna-select required></select>
-      <label for="reg-standalone-genero">Género</label>
-      <select id="reg-standalone-genero" name="genero" required>
-        <option value="" disabled selected>Selecciona una opción</option>
-        <option value="femenino">Femenino</option>
-        <option value="masculino">Masculino</option>
-        <option value="otro">Otro</option>
-        <option value="prefiero-no-decir">Prefiero no decir</option>
-      </select>
-      <label for="reg-standalone-pass">Contraseña</label>
-      <input type="password" id="reg-standalone-pass" autocomplete="new-password" name="password" required>
-      <label for="reg-standalone-confirm-pass">Confirmar contraseña</label>
-      <input type="password" id="reg-standalone-confirm-pass" autocomplete="new-password" name="confirmPassword" required>
-      <small>Debe tener entre 4 y 13 caracteres y al menos una mayúscula.</small>
-      <label class="auth-checkbox">
-        <input type="checkbox" id="reg-standalone-terminos" name="aceptaTerminos" required>
-        Acepto los términos y condiciones de registro.
-      </label>
-      <button type="submit" class="btn-primary">Registrarme</button>
-      <p id="standalone-register-message" class="profile-message" role="status"></p>
-    </form>
-    <nav class="auth-links" aria-label="Opciones de cuenta">
-      <a href="login.html">Ya tengo una cuenta</a>
-      <a href="index.html">Volver al inicio</a>
-    </nav>
-  </main>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro | Clínica NutriDifs</title>
+    <link rel="stylesheet" href="../CSS/app.css" />
+  </head>
+  <body class="auth-page">
+    <main class="auth-card">
+      <a class="auth-brand" href="index.html">Clínica NutriDifs</a>
+      <span class="auth-eyebrow">NUEVO CLIENTE</span>
+      <h1>Crear cuenta</h1>
+      <p class="auth-description">
+        Regístrate para gestionar tus datos y solicitar atención veterinaria.
+      </p>
+      <form
+        id="standalone-register-form"
+        class="auth-form"
+        data-standalone-register
+      >
+        <label for="reg-standalone-name">Nombre</label>
+        <input
+          type="text"
+          id="reg-standalone-name"
+          autocomplete="given-name"
+          name="name"
+          required
+        />
+        <label for="reg-standalone-apellido">Apellido</label>
+        <input
+          type="text"
+          id="reg-standalone-apellido"
+          autocomplete="family-name"
+          name="apellido"
+          required
+        />
+        <label for="reg-standalone-email">Correo institucional</label>
+        <input
+          type="email"
+          id="reg-standalone-email"
+          autocomplete="email"
+          name="email"
+          data-allowed-email
+          placeholder="usuario@duoc.cl"
+          required
+        />
+        <label for="reg-standalone-phone">Teléfono (opcional)</label>
+        <input
+          type="tel"
+          id="reg-standalone-phone"
+          autocomplete="tel"
+          name="phone"
+          placeholder="+56 9 1234 5678"
+        />
+        <label for="reg-standalone-birth">Fecha de nacimiento</label>
+        <!-- Edad mínima de registro: 14 años. -->
+        <input
+          type="date"
+          id="reg-standalone-birth"
+          autocomplete="bday"
+          name="birthDate"
+          data-adult-birth
+          required
+        />
+        <label for="reg-standalone-direccion">Dirección</label>
+        <input
+          type="text"
+          id="reg-standalone-direccion"
+          autocomplete="street-address"
+          name="direccion"
+          required
+        />
+        <label for="reg-standalone-region">Región</label>
+        <select
+          id="reg-standalone-region"
+          autocomplete="address-level1"
+          name="region"
+          data-region-select
+          required
+        ></select>
+        <label for="reg-standalone-comuna">Comuna</label>
+        <select
+          id="reg-standalone-comuna"
+          autocomplete="address-level2"
+          name="comuna"
+          data-comuna-select
+          required
+        ></select>
+        <label for="reg-standalone-genero">Género</label>
+        <select id="reg-standalone-genero" name="genero" required>
+          <option value="" disabled selected>Selecciona una opción</option>
+          <option value="femenino">Femenino</option>
+          <option value="masculino">Masculino</option>
+          <option value="otro">Otro</option>
+          <option value="prefiero-no-decir">Prefiero no decir</option>
+        </select>
+        <label for="reg-standalone-pass">Contraseña</label>
+        <input
+          type="password"
+          id="reg-standalone-pass"
+          autocomplete="new-password"
+          name="password"
+          required
+        />
+        <label for="reg-standalone-confirm-pass">Confirmar contraseña</label>
+        <input
+          type="password"
+          id="reg-standalone-confirm-pass"
+          autocomplete="new-password"
+          name="confirmPassword"
+          required
+        />
+        <small
+          >Debe tener entre 4 y 13 caracteres y al menos una mayúscula.</small
+        >
+        <label class="auth-checkbox">
+          <input
+            type="checkbox"
+            id="reg-standalone-terminos"
+            name="aceptaTerminos"
+            required
+          />
+          Acepto los términos y condiciones de registro.
+        </label>
+        <button type="submit" class="btn-primary">Registrarme</button>
+        <p
+          id="standalone-register-message"
+          class="profile-message"
+          role="status"
+        ></p>
+      </form>
+      <nav class="auth-links" aria-label="Opciones de cuenta">
+        <a href="login.html">Ya tengo una cuenta</a>
+        <a href="index.html">Volver al inicio</a>
+      </nav>
+    </main>
 
-  <footer class="site-footer">
-    <div class="container footer-content">
-      <div>
-        <h2>Clinica NutriDifs</h2>
-        <p>Teléfono: +56 9 4567 8910</p>
-        <p><a href="mailto:ClinicVEtDifs@gmail.com">ClinicVEtDifs@gmail.com</a></p>
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <div>
+          <h2>Clinica NutriDifs</h2>
+          <p>Teléfono: +56 9 4567 8910</p>
+          <p>
+            <a href="mailto:ClinicVEtDifs@gmail.com">ClinicVEtDifs@gmail.com</a>
+          </p>
+        </div>
+        <div>
+          <h2>Integrantes</h2>
+          <ul>
+            <li>Francisco Arce</li>
+            <li>Bayron Mena</li>
+            <li>Carolina Quinan</li>
+          </ul>
+        </div>
+        <div>
+          <h2>Sección</h2>
+          <p>DSY1104 – 2026</p>
+        </div>
       </div>
-      <div>
-        <h2>Integrantes</h2>
-        <ul>
-          <li>Francisco Arce</li>
-          <li>Bayron Mena</li>
-          <li>Carolina Quinan</li>
-        </ul>
-      </div>
-      <div>
-        <h2>Sección</h2>
-        <p>DSY1104 – 2026</p>
-      </div>
-    </div>
-  </footer>
+    </footer>
 
-  <script src="../JS/app.js" defer></script>
-</body>
+    <script src="../JS/app.js" defer></script>
+    <script src="../JS/auth.js" defer></script>
+    <script src="../JS/agenda.js" defer></script>
+  </body>
 </html>
