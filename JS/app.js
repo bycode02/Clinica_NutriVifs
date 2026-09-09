@@ -31,11 +31,6 @@ function isValidComment(comment) {
   return value.length >= 1 && value.length <= 500;
 }
 
-function isValidPhone(phone) {
-  const digits = String(phone || "").replace(/[\s()-]/g, "");
-  return /^(\+?56)?9?\d{8}$/.test(digits);
-}
-
 // =========================================================
 // REGIONES Y COMUNAS (selects encadenados)
 // =========================================================

@@ -12,15 +12,16 @@ function isValidEmail(email) {
   if (!email || typeof email !== "string") return false;
 
   const normalized = normalizeEmail(email);
+  // Estos son los dominios aceptados por los formularios de la clínica.
   const emailRegex =
-    /^[a-zA-Z0-9._%+-]+@(duoc\.cl|profesor\.duoc\.cl|gmail\.com)$/i;
+    /^[a-zA-Z0-9._%+-]+@(duocuc\.cl|profesor\.duocuc\.cl|gmail\.com)$/i;
 
   return emailRegex.test(normalized);
 }
 
 function isValidDuocEmail(email) {
   if (!email || typeof email !== "string") return false;
-  return /^[a-zA-Z0-9._%+-]+@duoc\.cl$/i.test(normalizeEmail(email));
+  return /^[a-zA-Z0-9._%+-]+@duocuc\.cl$/i.test(normalizeEmail(email));
 }
 
 function isValidName(name) {
@@ -31,6 +32,11 @@ function isValidName(name) {
 function isValidPassword(password) {
   const value = String(password || "");
   return value.length >= 4 && value.length <= 13 && /[A-Z]/.test(value);
+}
+
+function isValidPhone(phone) {
+  const digits = String(phone || "").replace(/[\s()-]/g, "");
+  return /^(\+?56)?9?\d{8}$/.test(digits);
 }
 
 function isAdultBirthDate(birthDate) {
@@ -49,6 +55,7 @@ function isAdultBirthDate(birthDate) {
 
   if (birthdayPending) age -= 1;
 
+  // El registro está habilitado para personas de 14 años o más.
   return age >= 14;
 }
 
@@ -152,6 +159,7 @@ function handleLoginSubmit(event) {
 
   if (profile.password !== password) {
     profile.failedAttempts = (profile.failedAttempts || 0) + 1;
+    // Después del tercer intento fallido la cuenta queda bloqueada.
     if (profile.failedAttempts >= 3) profile.locked = true;
     saveToStorage(STORAGE_KEYS.PROFILES, state.profiles);
 
@@ -192,6 +200,7 @@ function handleRegisterSubmit(event) {
   const aceptaTerminos = form.elements.aceptaTerminos.checked;
   const message = document.querySelector("#register-message");
 
+  // El teléfono no es obligatorio, pero si se informa debe ser válido.
   if (
     !isValidName(name) ||
     !isValidName(apellido) ||
@@ -200,13 +209,14 @@ function handleRegisterSubmit(event) {
     !isAdultBirthDate(birthDate) ||
     !isValidPassword(password) ||
     !direccion ||
-    !genero
+    !genero ||
+    (phone && !isValidPhone(phone))
   ) {
     if (message) {
       message.textContent =
         "Revisa nombre, apellido, correo institucional (@duoc.cl), fecha de nacimiento " +
-        "(mínimo 14 años), dirección, género y contraseña (4 a 13 caracteres con al " +
-        "menos una mayúscula).";
+        "(mínimo 14 años), dirección, género, teléfono y contraseña (4 a 13 " +
+        "caracteres con al menos una mayúscula).";
     }
     return;
   }
@@ -344,24 +354,45 @@ function initializeStandaloneAuth() {
     const data = Object.fromEntries(new FormData(form));
     const message = document.querySelector("#standalone-register-message");
     const email = normalizeEmail(data.email);
+    const phone = String(data.phone || "").trim();
 
-    if (
-      !form.checkValidity() ||
-      !isValidName(data.name) ||
-      !isValidName(data.apellido) ||
-      email.length > 100 ||
-      !isValidDuocEmail(email) ||
-      !isAdultBirthDate(data.birthDate) ||
-      !isValidPassword(data.password) ||
-      !String(data.direccion || "").trim() ||
-      !data.genero
-    ) {
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      if (message) message.textContent = "Completa los campos obligatorios.";
+      return;
+    }
+
+    if (!isValidName(data.name) || !isValidName(data.apellido)) {
+      if (message)
+        message.textContent =
+          "El nombre y el apellido son obligatorios y deben tener máximo 100 caracteres.";
+      return;
+    }
+
+    if (email.length > 100 || !isValidDuocEmail(email)) {
+      if (message)
+        message.textContent =
+          "Usa un correo institucional válido que termine en @duoc.cl.";
+      return;
+    }
+
+    if (!isAdultBirthDate(data.birthDate)) {
+      if (message) message.textContent = "Debes tener al menos 14 años.";
+      return;
+    }
+
+    if (!isValidPassword(data.password)) {
       if (message) {
         message.textContent =
-          "Revisa nombre, apellido, correo institucional (@duoc.cl), fecha de " +
-          "nacimiento (mínimo 14 años), dirección, género y contraseña (4 a 13 " +
-          "caracteres con al menos una mayúscula).";
+          "La contraseña debe tener entre 4 y 13 caracteres y al menos una mayúscula.";
       }
+      return;
+    }
+
+    if (phone && !isValidPhone(phone)) {
+      if (message)
+        message.textContent =
+          "Ingresa un teléfono chileno válido o deja el campo vacío.";
       return;
     }
 
@@ -405,7 +436,7 @@ function initializeStandaloneAuth() {
       birthDate: data.birthDate,
       direccion: String(data.direccion || "").trim(),
       genero: data.genero,
-      phone: String(data.phone || "").trim(),
+      phone,
       region: data.region,
       comuna: data.comuna,
       password: data.password,
