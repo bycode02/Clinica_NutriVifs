@@ -14,22 +14,22 @@
     <p class="auth-description">Regístrate para gestionar tus datos y solicitar atención veterinaria.</p>
     <form id="standalone-register-form" class="auth-form" data-standalone-register>
       <label for="reg-standalone-name">Nombre</label>
-      <input type="text" id="reg-standalone-name" name="name" required>
+      <input type="text" id="reg-standalone-name" autocomplete="given-name" name="name" required>
       <label for="reg-standalone-apellido">Apellido</label>
-      <input type="text" id="reg-standalone-apellido" name="apellido" required>
+      <input type="text" id="reg-standalone-apellido" autocomplete="family-name" name="apellido" required>
       <label for="reg-standalone-email">Correo institucional</label>
-      <input type="email" id="reg-standalone-email" name="email" data-allowed-email placeholder="usuario@duoc.cl" required>
+      <input type="email" id="reg-standalone-email" autocomplete="email" name="email" data-allowed-email placeholder="usuario@duoc.cl" required>
       <label for="reg-standalone-phone">Teléfono (opcional)</label>
-      <input type="tel" id="reg-standalone-phone" name="phone" placeholder="+56 9 1234 5678">
+      <input type="tel" id="reg-standalone-phone" autocomplete="tel" name="phone" placeholder="+56 9 1234 5678">
       <label for="reg-standalone-birth">Fecha de nacimiento</label>
       <!-- Edad mínima de registro: 14 años. -->
-      <input type="date" id="reg-standalone-birth" name="birthDate" data-adult-birth required>
+      <input type="date" id="reg-standalone-birth" autocomplete="bday" name="birthDate" data-adult-birth required>
       <label for="reg-standalone-direccion">Dirección</label>
-      <input type="text" id="reg-standalone-direccion" name="direccion" required>
+      <input type="text" id="reg-standalone-direccion" autocomplete="street-address" name="direccion" required>
       <label for="reg-standalone-region">Región</label>
-      <select id="reg-standalone-region" name="region" data-region-select required></select>
+      <select id="reg-standalone-region" autocomplete="address-level1" name="region" data-region-select required></select>
       <label for="reg-standalone-comuna">Comuna</label>
-      <select id="reg-standalone-comuna" name="comuna" data-comuna-select required></select>
+      <select id="reg-standalone-comuna" autocomplete="address-level2" name="comuna" data-comuna-select required></select>
       <label for="reg-standalone-genero">Género</label>
       <select id="reg-standalone-genero" name="genero" required>
         <option value="" disabled selected>Selecciona una opción</option>
@@ -39,9 +39,9 @@
         <option value="prefiero-no-decir">Prefiero no decir</option>
       </select>
       <label for="reg-standalone-pass">Contraseña</label>
-      <input type="password" id="reg-standalone-pass" name="password" required>
+      <input type="password" id="reg-standalone-pass" autocomplete="new-password" name="password" required>
       <label for="reg-standalone-confirm-pass">Confirmar contraseña</label>
-      <input type="password" id="reg-standalone-confirm-pass" name="confirmPassword" required>
+      <input type="password" id="reg-standalone-confirm-pass" autocomplete="new-password" name="confirmPassword" required>
       <small>Debe tener entre 4 y 13 caracteres y al menos una mayúscula.</small>
       <label class="auth-checkbox">
         <input type="checkbox" id="reg-standalone-terminos" name="aceptaTerminos" required>

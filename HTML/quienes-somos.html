@@ -249,10 +249,23 @@
         <div id="login-view" class="profile-view">
           <h3>Sign in</h3>
           <form id="login-form" class="profile-form" novalidate>
-            <label for="login-email">Gmail</label>
-            <input id="login-email" name="email" type="email" data-allowed-email placeholder="clinicVetDef@gmail.com" required />
+            <label for="login-email">Correo electrónico</label>
+            <input
+              id="login-email" autocomplete="email"
+              name="email"
+              type="email"
+              data-allowed-email
+              placeholder="usuario@duoc.cl"
+              required
+            />
             <label for="login-password">Contraseña</label>
-            <input id="login-password" name="password" type="password" placeholder="Ilovecats" required />
+            <input
+              id="login-password" autocomplete="current-password"
+              name="password"
+              type="password"
+              placeholder="Ilovecats"
+              required
+            />
             <button class="profile-submit-button" type="submit">Log in</button>
             <p id="login-message" class="profile-message" role="status"></p>
           </form>
@@ -262,16 +275,79 @@
           <h3>Register</h3>
           <form id="register-form" class="profile-form" novalidate>
             <label for="register-name">Nombre</label>
-            <input id="register-name" name="name" type="text" placeholder="Clinica Vet Difs" required />
-            <label for="register-email">Gmail</label>
-            <input id="register-email" name="email" type="email" data-allowed-email placeholder="clinicVetDef@gmail.com" required />
+            <input
+              id="register-name" autocomplete="given-name"
+              name="name"
+              type="text"
+              placeholder="Clinica Vet Difs"
+              required
+            />
+            <label for="register-apellido">Apellido</label>
+            <input
+              id="register-apellido" autocomplete="family-name"
+              name="apellido"
+              type="text"
+              required
+            />
+            <label for="register-email">Correo institucional</label>
+            <input
+              id="register-email" autocomplete="email"
+              name="email"
+              type="email"
+              data-allowed-email
+              placeholder="usuario@duoc.cl"
+              required
+            />
             <label for="register-birth-date">Fecha de nacimiento</label>
-            <!-- Calendario limitado a personas mayores de 18 años. -->
-            <input id="register-birth-date" name="birthDate" type="date" data-adult-birth required />
+            <!-- Edad mínima de registro: 14 años. -->
+            <input id="register-birth-date" autocomplete="bday" name="birthDate" type="date" data-adult-birth required />
+            <label for="register-direccion">Dirección</label>
+            <input id="register-direccion" autocomplete="street-address" name="direccion" type="text" required />
+            <label for="register-region">Región</label>
+            <select id="register-region" autocomplete="address-level1" name="region" data-region-select required></select>
+            <label for="register-comuna">Comuna</label>
+            <select id="register-comuna" autocomplete="address-level2" name="comuna" data-comuna-select required></select>
+            <label for="register-genero">Género</label>
+            <select id="register-genero" name="genero" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option value="femenino">Femenino</option>
+              <option value="masculino">Masculino</option>
+              <option value="otro">Otro</option>
+              <option value="prefiero-no-decir">Prefiero no decir</option>
+            </select>
             <label for="register-password">Contraseña</label>
-            <input id="register-password" name="password" type="password" placeholder="Ilovecats" required />
-            <small>Debe tener entre 4 y 13 caracteres y al menos una mayúscula.</small>
-            <button class="profile-submit-button" type="submit">Registrar</button>
+            <input
+              id="register-password" autocomplete="new-password"
+              name="password"
+              type="password"
+              placeholder="Ilovecats"
+              required
+            />
+            <label for="register-confirm-password">Confirmar contraseña</label>
+            <input
+              id="register-confirm-password" autocomplete="new-password"
+              name="confirmPassword"
+              type="password"
+              placeholder="Ilovecats"
+              required
+            />
+            <label for="register-phone">Teléfono (opcional)</label>
+            <input
+              id="register-phone" autocomplete="tel"
+              name="phone"
+              type="tel"
+              placeholder="+56 9 1234 5678"
+            />
+            <small>
+              Debe tener entre 4 y 13 caracteres y al menos una mayúscula.
+            </small>
+            <label class="auth-checkbox">
+              <input type="checkbox" id="register-terminos" name="aceptaTerminos" required />
+              Acepto los términos y condiciones de registro.
+            </label>
+            <button class="profile-submit-button" type="submit">
+              Registrar
+            </button>
             <p id="register-message" class="profile-message" role="status"></p>
           </form>
           <button class="profile-switch-button" type="button" data-profile-view="login">Volver a Sign in</button>

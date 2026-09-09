@@ -920,11 +920,6 @@ function handleContactSubmit(event) {
     return;
   }
 
-  if (!validateContactForm(form)) {
-    form.reportValidity();
-    return;
-  }
-
   applyStockDeduction(state.cartItems);
 
   if (message) {
@@ -1720,6 +1715,20 @@ function bindSiteEvents() {
       return;
     }
 
+    if (detailAddButton) {
+      if (currentDetailProduct) {
+        const added = addProduct(currentDetailProduct);
+        if (added) {
+          const card = [...document.querySelectorAll(".product-card")].find(
+            (item) => item.dataset.codigo === currentDetailProduct.code
+          );
+          openProductDetail(card);
+          openCart();
+        }
+      }
+      return;
+    }
+
     if (addButton) {
       const card = addButton.closest(".product-card");
       if (card) {
@@ -1814,20 +1823,6 @@ function bindSiteEvents() {
     if (viewDetailButton) {
       const card = viewDetailButton.closest(".product-card");
       if (card) openProductDetail(card);
-      return;
-    }
-
-    if (detailAddButton) {
-      if (currentDetailProduct) {
-        const added = addProduct(currentDetailProduct);
-        if (added) {
-          const card = [...document.querySelectorAll(".product-card")].find(
-            (item) => item.dataset.codigo === currentDetailProduct.code
-          );
-          openProductDetail(card);
-          openCart();
-        }
-      }
       return;
     }
 
