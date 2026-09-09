@@ -14,14 +14,14 @@ function isValidEmail(email) {
   const normalized = normalizeEmail(email);
   // Estos son los dominios aceptados por los formularios de la clínica.
   const emailRegex =
-    /^[a-zA-Z0-9._%+-]+@(duocuc\.cl|profesor\.duocuc\.cl|gmail\.com)$/i;
+    /^[a-zA-Z0-9._%+-]+@(duoc\.cl|profesor\.duoc\.cl|gmail\.com)$/i;
 
   return emailRegex.test(normalized);
 }
 
 function isValidDuocEmail(email) {
   if (!email || typeof email !== "string") return false;
-  return /^[a-zA-Z0-9._%+-]+@duocuc\.cl$/i.test(normalizeEmail(email));
+  return /^[a-zA-Z0-9._%+-]+@duoc\.cl$/i.test(normalizeEmail(email));
 }
 
 function isValidName(name) {
