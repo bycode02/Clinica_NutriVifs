@@ -1277,11 +1277,55 @@ function initializeProducts() {
 }
 
 // =========================================================
+// CONTROL DE ROLES Y PERMISOS (Usuario 3)
+// =========================================================
+function aplicarPermisosDeRol() {
+  const user = state.activeProfile;
+  const currentPath = window.location.pathname.toLowerCase();
+  const currentPage = currentPath.split("/").pop() || "index.html";
+  
+  // Si el usuario no tiene rol definido en su registro, asume que es "Cliente"
+  const rolActual = user ? (user.role || "Cliente") : "Invitado";
+
+  // 1. Control de Rutas (Redirección forzada)
+  if (rolActual === "Vendedor") {
+    // El Vendedor solo puede estar en productos u órdenes
+    const paginasPermitidas = ["productos.html", "ordenes.html"];
+    
+    // Si intenta entrar a "contactanos.html" o "consultas.html", lo patea a productos
+    if (!paginasPermitidas.includes(currentPage) && currentPage !== "" && currentPage !== "index.html") {
+      window.location.replace("productos.html");
+      return;
+    }
+  }
+
+  // 2. Renderizado Condicional Automático (Sin modificar los HTML)
+  document.querySelectorAll(".site-header nav a").forEach(enlace => {
+    const destino = enlace.getAttribute("href") || "";
+    
+    if (rolActual === "Vendedor") {
+      // Oculta del menú cualquier link que no sea productos u órdenes
+      if (!destino.includes("productos.html") && !destino.includes("ordenes.html")) {
+        enlace.style.display = "none";
+      }
+    }
+    
+    if (rolActual === "Cliente") {
+      // Opcional: Si hubiera links de gestión en el menú público, se ocultan aquí
+      if (destino.includes("admin") || destino.includes("usuarios")) {
+        enlace.style.display = "none";
+      }
+    }
+  });
+}
+
+// =========================================================
 // INICIALIZACIÓN GENERAL
 // =========================================================
 
 document.addEventListener("DOMContentLoaded", () => {
   initializeState();
+  aplicarPermisosDeRol();
   initializeRegionComunaSelects();
   renderCart();
   updateCartCounter();
