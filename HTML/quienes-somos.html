@@ -32,16 +32,20 @@
     <main>
 
       <section class="quienes-somos-hero">
-        <div class="container quienes-somos-hero-content">
-          <span class="quienes-somos-kicker">Nuestra historia</span>
-          <h1>Quiénes somos</h1>
-          <p>
-            En Clinica NutriDifs cuidamos la salud, el bienestar y la calidad de
-            vida de tus mascotas con atención profesional, cercana y
-            responsable.
-          </p>
+        <div class="container quienes-somos-hero-layout">
+          <div class="quienes-somos-hero-content">
+            <span class="quienes-somos-kicker">Nuestra historia</span>
+            <h1>Quiénes somos</h1>
+            <p>
+              En Clinica NutriDifs cuidamos la salud, el bienestar y la calidad de
+              vida de tus mascotas con atención profesional, cercana y
+              responsable.
+            </p>
+          </div>
+          <div class="quienes-somos-hero-image">
+            <img src="../IMG/perro-gato.jpg" alt="Perro y gato en Clínica NutriDifs" />
+          </div>
         </div>
-      </section>
       </section>
 
 
@@ -62,8 +66,11 @@
             </p>
           </div>
 
-          <div class="about-visual" aria-label="Ilustración de la clínica">
-            <span>Clinica<br />NutriDifs</span>
+          <div class="about-visual">
+            <img
+              src="../img/cuidado.jpg"
+              alt="Equipo de Clinica NutriDifs cuidando con cariño a una mascota"
+            />
           </div>
         </div>
       </section>
@@ -179,7 +186,8 @@
             <a class="cta-button" href="consultas.html">Agenda tu consulta</a>
           </div>
         </div>
-        
+      </section>
+
       <section class="location-section" aria-labelledby="location-title">
         <div class="container">
           <div class="location-card">
@@ -275,31 +283,13 @@
           <h3>Register</h3>
           <form id="register-form" class="profile-form" novalidate>
             <label for="register-name">Nombre</label>
-            <input
-              id="register-name" autocomplete="given-name"
-              name="name"
-              type="text"
-              placeholder="Clinica Vet Difs"
-              required
-            />
+            <input id="register-name" autocomplete="given-name" name="name" type="text" placeholder="Clinica Vet Difs" required maxlength="100" />
             <label for="register-apellido">Apellido</label>
-            <input
-              id="register-apellido" autocomplete="family-name"
-              name="apellido"
-              type="text"
-              required
-            />
+            <input id="register-apellido" autocomplete="family-name" name="apellido" type="text" required maxlength="100" />
             <label for="register-email">Correo institucional</label>
-            <input
-              id="register-email" autocomplete="email"
-              name="email"
-              type="email"
-              data-allowed-email
-              placeholder="usuario@duoc.cl"
-              required
-            />
+            <input id="register-email" autocomplete="email" name="email" type="text" inputmode="email" data-allowed-email placeholder="usuario@duoc.cl" maxlength="42" required />
             <label for="register-birth-date">Fecha de nacimiento</label>
-            <!-- Edad mínima de registro: 14 años. -->
+            <!-- Nacimiento debe ser el año 2012 o antes (mínimo 14 años). -->
             <input id="register-birth-date" autocomplete="bday" name="birthDate" type="date" data-adult-birth required />
             <label for="register-direccion">Dirección</label>
             <input id="register-direccion" autocomplete="street-address" name="direccion" type="text" required />
@@ -316,13 +306,7 @@
               <option value="prefiero-no-decir">Prefiero no decir</option>
             </select>
             <label for="register-password">Contraseña</label>
-            <input
-              id="register-password" autocomplete="new-password"
-              name="password"
-              type="password"
-              placeholder="Ilovecats"
-              required
-            />
+            <input id="register-password" autocomplete="new-password" name="password" type="password" placeholder="Ilovecats" required />
             <label for="register-confirm-password">Confirmar contraseña</label>
             <input
               id="register-confirm-password" autocomplete="new-password"
@@ -332,12 +316,7 @@
               required
             />
             <label for="register-phone">Teléfono (opcional)</label>
-            <input
-              id="register-phone" autocomplete="tel"
-              name="phone"
-              type="tel"
-              placeholder="+56 9 1234 5678"
-            />
+            <input id="register-phone" autocomplete="tel" name="phone" type="tel" placeholder="+56934040042" maxlength="12" />
             <small>
               Debe tener entre 4 y 13 caracteres y al menos una mayúscula.
             </small>

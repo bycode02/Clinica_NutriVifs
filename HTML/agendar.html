@@ -51,23 +51,38 @@
 
           <form class="appointment-form" id="appointment-form">
             <div class="campo-formulario">
-              <label for="nombre">Tu nombre</label>
+              <label for="nombre">Nombre</label>
               <input
                 id="nombre"
-                autocomplete="name"
+                autocomplete="given-name"
                 name="nombre"
                 type="text"
+                maxlength="100"
                 required
               />
             </div>
 
             <div class="campo-formulario">
-              <label for="rut">RUT</label>
+              <label for="apellido">Apellido</label>
+              <input
+                id="apellido"
+                autocomplete="family-name"
+                name="apellido"
+                type="text"
+                maxlength="100"
+                required
+              />
+            </div>
+
+            <div class="campo-formulario">
+              <label for="rut">RUT (ej: 12.345.678-9)</label>
               <input
                 id="rut"
                 name="rut"
                 type="text"
-                placeholder="12.345.678-5"
+                inputmode="text"
+                placeholder="12.345.678-9"
+                maxlength="12"
                 required
               />
             </div>
@@ -81,28 +96,37 @@
                 type="date"
                 required
               />
+              <small class="campo-ayuda"
+                >Solo pueden agendar una consulta personas mayores de 14
+                años.</small
+              >
             </div>
 
             <div class="campo-formulario">
-              <label for="correo">Correo electronico</label>
+              <label for="correo">Correo (ej: usuario@gmail.com)</label>
               <input
                 id="correo"
                 autocomplete="email"
                 name="correo"
-                type="email"
+                type="text"
+                inputmode="email"
+                maxlength="42"
+                placeholder="usuario@duoc.cl"
                 data-allowed-email
                 required
               />
             </div>
 
             <div class="campo-formulario">
-              <label for="telefono">Telefono</label>
+              <label for="telefono">Telefono (ej: +56934020512)</label>
               <input
                 id="telefono"
                 autocomplete="tel"
                 name="telefono"
                 type="tel"
-                placeholder="+56912345678"
+                inputmode="tel"
+                placeholder="+56934020512"
+                maxlength="12"
                 required
               />
             </div>

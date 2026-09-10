@@ -19,45 +19,14 @@ function isValidEmail(email) {
   return emailRegex.test(normalized);
 }
 
-function isValidDuocEmail(email) {
-  if (!email || typeof email !== "string") return false;
-  return /^[a-zA-Z0-9._%+-]+@duoc\.cl$/i.test(normalizeEmail(email));
-}
-
-function isValidName(name) {
-  const value = String(name || "").trim();
-  return value.length >= 1 && value.length <= 100;
-}
-
 function isValidPassword(password) {
   const value = String(password || "");
   return value.length >= 4 && value.length <= 13 && /[A-Z]/.test(value);
 }
 
-function isValidPhone(phone) {
-  const digits = String(phone || "").replace(/[\s()-]/g, "");
-  return /^(\+?56)?9?\d{8}$/.test(digits);
-}
-
-function isAdultBirthDate(birthDate) {
-  if (!birthDate) return false;
-
-  const birth = new Date(`${birthDate}T00:00:00`);
-  if (Number.isNaN(birth.getTime())) return false;
-
-  const today = new Date();
-  let age = today.getFullYear() - birth.getFullYear();
-
-  const birthdayPending =
-    today.getMonth() < birth.getMonth() ||
-    (today.getMonth() === birth.getMonth() &&
-      today.getDate() < birth.getDate());
-
-  if (birthdayPending) age -= 1;
-
-  // El registro está habilitado para personas de 14 años o más.
-  return age >= 14;
-}
+// El registro reutiliza las mismas reglas de correo, teléfono y fecha de
+// nacimiento que "Agendar consulta" (validarRegistro(), en agenda.js,
+// valida todos esos campos junto con nombre/apellido/contraseña).
 
 function showProfileView(view) {
   const loginView = document.querySelector("#login-view");
@@ -194,36 +163,19 @@ function handleRegisterSubmit(event) {
   const genero = form.elements.genero.value;
   const password = form.elements.password.value;
   const confirmPassword = form.elements.confirmPassword.value;
-  const phone = form.elements.phone.value.trim();
+  let phone = form.elements.phone.value.trim();
+  if (phone === "+") phone = "";
   const region = form.elements.region.value;
   const comuna = form.elements.comuna.value;
   const aceptaTerminos = form.elements.aceptaTerminos.checked;
   const message = document.querySelector("#register-message");
 
-  // El teléfono no es obligatorio, pero si se informa debe ser válido.
-  if (
-    !isValidName(name) ||
-    !isValidName(apellido) ||
-    email.length > 100 ||
-    !isValidDuocEmail(email) ||
-    !isAdultBirthDate(birthDate) ||
-    !isValidPassword(password) ||
-    !direccion ||
-    !genero ||
-    (phone && !isValidPhone(phone))
-  ) {
-    if (message) {
-      message.textContent =
-        "Revisa nombre, apellido, correo institucional (@duoc.cl), fecha de nacimiento " +
-        "(mínimo 14 años), dirección, género, teléfono y contraseña (4 a 13 " +
-        "caracteres con al menos una mayúscula).";
-    }
-    return;
-  }
-
-  if (password !== confirmPassword) {
-    if (message)
-      message.textContent = "La confirmación de contraseña no coincide.";
+  // Deja el mensaje de error debajo del campo correspondiente (mismo
+  // criterio que "Agendar consulta"), en vez de un mensaje genérico.
+  const campoInvalido = validarRegistro(form);
+  if (campoInvalido || !form.checkValidity()) {
+    form.reportValidity();
+    if (message) message.textContent = "Revisa los campos marcados en rojo.";
     return;
   }
 
@@ -354,51 +306,15 @@ function initializeStandaloneAuth() {
     const data = Object.fromEntries(new FormData(form));
     const message = document.querySelector("#standalone-register-message");
     const email = normalizeEmail(data.email);
-    const phone = String(data.phone || "").trim();
+    let phone = String(data.phone || "").trim();
+    if (phone === "+") phone = "";
 
-    if (!form.checkValidity()) {
+    // Deja el mensaje de error debajo del campo correspondiente (mismo
+    // criterio que "Agendar consulta"), en vez de un mensaje genérico.
+    const campoInvalido = validarRegistro(form);
+    if (campoInvalido || !form.checkValidity()) {
       form.reportValidity();
-      if (message) message.textContent = "Completa los campos obligatorios.";
-      return;
-    }
-
-    if (!isValidName(data.name) || !isValidName(data.apellido)) {
-      if (message)
-        message.textContent =
-          "El nombre y el apellido son obligatorios y deben tener máximo 100 caracteres.";
-      return;
-    }
-
-    if (email.length > 100 || !isValidDuocEmail(email)) {
-      if (message)
-        message.textContent =
-          "Usa un correo institucional válido que termine en @duoc.cl.";
-      return;
-    }
-
-    if (!isAdultBirthDate(data.birthDate)) {
-      if (message) message.textContent = "Debes tener al menos 14 años.";
-      return;
-    }
-
-    if (!isValidPassword(data.password)) {
-      if (message) {
-        message.textContent =
-          "La contraseña debe tener entre 4 y 13 caracteres y al menos una mayúscula.";
-      }
-      return;
-    }
-
-    if (phone && !isValidPhone(phone)) {
-      if (message)
-        message.textContent =
-          "Ingresa un teléfono chileno válido o deja el campo vacío.";
-      return;
-    }
-
-    if (data.password !== data.confirmPassword) {
-      if (message)
-        message.textContent = "La confirmación de contraseña no coincide.";
+      if (message) message.textContent = "Revisa los campos marcados en rojo.";
       return;
     }
 

@@ -1119,12 +1119,28 @@
 
   .price-filter select {
     min-height: 34px;
-    padding: 0.35rem 0.55rem;
-    border: 1px solid #b9cec3;
+    padding: 0.35rem 1.8rem 0.35rem 0.55rem;
+    border: 1px solid #176b58;
     border-radius: 5px;
-    background: #ffffff;
-    color: #183b39;
+    background-color: #176b58;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23ffffff'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.6rem center;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    color: #ffffff;
     font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .price-filter select:hover,
+  .price-filter select:focus {
+    background-color: #14584d;
+    border-color: #14584d;
+    outline: none;
   }
 
   .filter-result {
@@ -1222,8 +1238,32 @@
     padding: 4rem 0 3rem;
   }
 
+  .quienes-somos-hero-layout {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
   .quienes-somos-hero-content {
     max-width: 760px;
+  }
+
+  .quienes-somos-hero-image {
+    justify-self: end;
+    max-width: 320px;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 18px;
+    box-shadow: 0 12px 28px rgba(24, 59, 57, 0.08);
+  }
+
+  .quienes-somos-hero-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 220px;
+    object-fit: cover;
   }
 
   .quienes-somos-kicker {
@@ -1578,6 +1618,31 @@
     margin-top: 0.5rem;
     border: 1px solid #dce8df;
     border-radius: 4px;
+  }
+
+  .campo-invalido {
+    border-color: #d24545 !important;
+  }
+
+  .campo-error {
+    display: block;
+    margin-top: 0.35rem;
+    color: #d24545;
+    font-size: 0.85rem;
+  }
+
+  .campo-ayuda {
+    display: block;
+    margin-top: 0.35rem;
+    color: #6b8178;
+    font-size: 0.85rem;
+  }
+
+  /* .campo-formulario define "display: flex", lo que pisa el
+     "display: none" nativo del atributo [hidden]. Sin esta regla,
+     "Escribe la especie" quedaba visible aunque estuviera hidden. */
+  .campo-formulario[hidden] {
+    display: none;
   }
 
 /* =========================================================
@@ -2205,7 +2270,31 @@
     font: inherit;
   }
 
+  .profile-form select {
+    width: 100%;
+    padding: 0.6rem 1.8rem 0.6rem 0.65rem;
+    border: 1px solid #b3c8bd;
+    border-radius: 5px;
+    background-color: #ffffff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23176b58'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.65rem center;
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    color: #183b39;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .profile-form select:disabled {
+    background-color: #f0f4f2;
+    color: #7f9791;
+    cursor: not-allowed;
+  }
+
   .profile-form input:focus,
+  .profile-form select:focus,
   .cart-contact-form input:focus {
     outline: 2px solid rgba(23, 107, 88, 0.25);
     border-color: #176b58;
@@ -2745,8 +2834,13 @@
     }
 
     .about-layout,
-    .home-care-content {
+    .home-care-content,
+    .quienes-somos-hero-layout {
       grid-template-columns: 1fr;
+    }
+
+    .quienes-somos-hero-image {
+      justify-self: center;
     }
 
     .products-showcase,

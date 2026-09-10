@@ -1163,34 +1163,13 @@
           <h3>Register</h3>
           <form id="register-form" class="profile-form" novalidate>
             <label for="register-name">Nombre</label>
-            <input
-              id="register-name"
-              autocomplete="given-name"
-              name="name"
-              type="text"
-              placeholder="Clinica Vet Difs"
-              required
-            />
+            <input id="register-name" autocomplete="given-name" name="name" type="text" placeholder="Clinica Vet Difs" required maxlength="100" />
             <label for="register-apellido">Apellido</label>
-            <input
-              id="register-apellido"
-              autocomplete="family-name"
-              name="apellido"
-              type="text"
-              required
-            />
+            <input id="register-apellido" autocomplete="family-name" name="apellido" type="text" required maxlength="100" />
             <label for="register-email">Correo institucional</label>
-            <input
-              id="register-email"
-              autocomplete="email"
-              name="email"
-              type="email"
-              data-allowed-email
-              placeholder="usuario@duoc.cl"
-              required
-            />
+            <input id="register-email" autocomplete="email" name="email" type="text" inputmode="email" data-allowed-email placeholder="usuario@duoc.cl" maxlength="42" required />
             <label for="register-birth-date">Fecha de nacimiento</label>
-            <!-- Edad mínima de registro: 14 años. -->
+            <!-- Nacimiento debe ser el año 2012 o antes (mínimo 14 años). -->
             <input
               id="register-birth-date"
               autocomplete="bday"
@@ -1200,13 +1179,7 @@
               required
             />
             <label for="register-direccion">Dirección</label>
-            <input
-              id="register-direccion"
-              autocomplete="street-address"
-              name="direccion"
-              type="text"
-              required
-            />
+            <input id="register-direccion" autocomplete="street-address" name="direccion" type="text" required />
             <label for="register-region">Región</label>
             <select
               id="register-region"
@@ -1232,14 +1205,7 @@
               <option value="prefiero-no-decir">Prefiero no decir</option>
             </select>
             <label for="register-password">Contraseña</label>
-            <input
-              id="register-password"
-              autocomplete="new-password"
-              name="password"
-              type="password"
-              placeholder="Ilovecats"
-              required
-            />
+            <input id="register-password" autocomplete="new-password" name="password" type="password" placeholder="Ilovecats" required />
             <label for="register-confirm-password">Confirmar contraseña</label>
             <input
               id="register-confirm-password"
@@ -1250,23 +1216,12 @@
               required
             />
             <label for="register-phone">Teléfono (opcional)</label>
-            <input
-              id="register-phone"
-              autocomplete="tel"
-              name="phone"
-              type="tel"
-              placeholder="+56 9 1234 5678"
-            />
+            <input id="register-phone" autocomplete="tel" name="phone" type="tel" placeholder="+56934040042" maxlength="12" />
             <small>
               Debe tener entre 4 y 13 caracteres y al menos una mayúscula.
             </small>
             <label class="auth-checkbox">
-              <input
-                type="checkbox"
-                id="register-terminos"
-                name="aceptaTerminos"
-                required
-              />
+              <input type="checkbox" id="register-terminos" name="aceptaTerminos" required />
               Acepto los términos y condiciones de registro.
             </label>
             <button class="profile-submit-button" type="submit">
