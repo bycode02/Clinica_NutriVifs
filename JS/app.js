@@ -1004,6 +1004,18 @@ function initializeAdminModule() {
   if (readList(STORAGE_KEYS.ADMIN_USERS).length === 0) {
     saveList(STORAGE_KEYS.ADMIN_USERS, [
       {
+        name: "Ana Pérez",
+        email: "ana@gmail.com",
+        role: "Veterinaria",
+        status: "Activo",
+      },
+      {
+        name: "Pedro Soto",
+        email: "pedro@gmail.com",
+        role: "Asistente",
+        status: "Activo",
+      },
+      {
         id: "USR001",
         name: "Carolina Quinan",
         email: "carolina@gmail.com",
@@ -1283,33 +1295,40 @@ function aplicarPermisosDeRol() {
   const user = state.activeProfile;
   const currentPath = window.location.pathname.toLowerCase();
   const currentPage = currentPath.split("/").pop() || "index.html";
-  
+
   // Si el usuario no tiene rol definido en su registro, asume que es "Cliente"
-  const rolActual = user ? (user.role || "Cliente") : "Invitado";
+  const rolActual = user ? user.role || "Cliente" : "Invitado";
 
   // 1. Control de Rutas (Redirección forzada)
   if (rolActual === "Vendedor") {
     // El Vendedor solo puede estar en productos u órdenes
     const paginasPermitidas = ["productos.html", "ordenes.html"];
-    
+
     // Si intenta entrar a "contactanos.html" o "consultas.html", lo patea a productos
-    if (!paginasPermitidas.includes(currentPage) && currentPage !== "" && currentPage !== "index.html") {
+    if (
+      !paginasPermitidas.includes(currentPage) &&
+      currentPage !== "" &&
+      currentPage !== "index.html"
+    ) {
       window.location.replace("productos.html");
       return;
     }
   }
 
   // 2. Renderizado Condicional Automático (Sin modificar los HTML)
-  document.querySelectorAll(".site-header nav a").forEach(enlace => {
+  document.querySelectorAll(".site-header nav a").forEach((enlace) => {
     const destino = enlace.getAttribute("href") || "";
-    
+
     if (rolActual === "Vendedor") {
       // Oculta del menú cualquier link que no sea productos u órdenes
-      if (!destino.includes("productos.html") && !destino.includes("ordenes.html")) {
+      if (
+        !destino.includes("productos.html") &&
+        !destino.includes("ordenes.html")
+      ) {
         enlace.style.display = "none";
       }
     }
-    
+
     if (rolActual === "Cliente") {
       // Opcional: Si hubiera links de gestión en el menú público, se ocultan aquí
       if (destino.includes("admin") || destino.includes("usuarios")) {
