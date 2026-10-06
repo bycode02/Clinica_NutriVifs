@@ -1094,15 +1094,7 @@ function bindSiteEvents() {
     const detailCloseButton = event.target.closest("[data-detail-close]");
     const detailAddButton = event.target.closest("[data-detail-add]");
 
-    if (profileLink) {
-      event.preventDefault();
-      openProfile();
-      return;
-    }
-
-    if (cartLink) {
-      event.preventDefault();
-      openCart();
+    if (profileLink || cartLink) {
       return;
     }
 

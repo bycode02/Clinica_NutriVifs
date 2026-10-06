@@ -42,17 +42,80 @@ function renderProfile() {
   const profileName = document.querySelector("#profile-session-name");
   const profileEmail = document.querySelector("#profile-session-email");
   const profileLinks = document.querySelectorAll(".profile-link");
+  const cardName = document.querySelector("#profile-card-name");
+  const cardEmail = document.querySelector("#profile-card-email");
+  const detailName = document.querySelector("#profile-detail-name");
+  const detailEmail = document.querySelector("#profile-detail-email");
+  const detailBirth = document.querySelector("#profile-detail-birth");
+  const detailPhone = document.querySelector("#profile-detail-phone");
+  const avatar = document.querySelector("#profile-avatar");
+  const logoutButton = document.querySelector("[data-profile-logout]");
+  const loginLink = document.querySelector("[data-profile-login]");
+  const isProfilePage = /perfil\.html$/i.test(window.location.pathname);
 
-  if (!authView || !sessionView) return;
-
-  authView.toggleAttribute("hidden", Boolean(state.activeProfile));
-  sessionView.toggleAttribute("hidden", !state.activeProfile);
+  if (authView && sessionView) {
+    authView.toggleAttribute("hidden", Boolean(state.activeProfile));
+    sessionView.toggleAttribute("hidden", !state.activeProfile);
+  }
 
   if (!state.activeProfile) {
-    showProfileView("login");
-  } else {
-    if (profileName) profileName.textContent = state.activeProfile.name;
-    if (profileEmail) profileEmail.textContent = state.activeProfile.email;
+    if (isProfilePage) {
+      if (cardName) cardName.textContent = "Invitado";
+      if (cardEmail) cardEmail.textContent = "Inicia sesión para ver tus datos";
+      if (detailName) detailName.textContent = "Sin iniciar sesión";
+      if (detailEmail) detailEmail.textContent = "Sin iniciar sesión";
+      if (detailBirth) detailBirth.textContent = "No disponible";
+      if (detailPhone) detailPhone.textContent = "No disponible";
+      if (avatar) avatar.textContent = "U";
+      if (logoutButton) logoutButton.hidden = true;
+      if (loginLink) loginLink.hidden = false;
+    } else {
+      showProfileView("login");
+    }
+    profileLinks.forEach((link) => {
+      link.textContent = "Perfil";
+    });
+    return;
+  }
+
+  const fullName =
+    [state.activeProfile.name, state.activeProfile.apellido]
+      .filter(Boolean)
+      .join(" ") || "Usuario";
+  const initials =
+    (state.activeProfile.name || "U").charAt(0).toUpperCase() +
+      (state.activeProfile.apellido || state.activeProfile.name || "U")
+        .charAt(0)
+        .toUpperCase() || "U";
+
+  if (profileName) profileName.textContent = fullName;
+  if (profileEmail) profileEmail.textContent = state.activeProfile.email;
+  if (cardName) cardName.textContent = fullName;
+  if (cardEmail)
+    cardEmail.textContent = state.activeProfile.email || "Sin correo";
+  if (detailName) detailName.textContent = fullName;
+  if (detailEmail)
+    detailEmail.textContent = state.activeProfile.email || "Sin correo";
+  if (detailBirth) {
+    detailBirth.textContent = state.activeProfile.birthDate
+      ? new Date(state.activeProfile.birthDate).toLocaleDateString("es-CL")
+      : "No especificada";
+  }
+  if (detailPhone) {
+    detailPhone.textContent = state.activeProfile.phone || "No especificado";
+  }
+  if (avatar) avatar.textContent = initials;
+  if (logoutButton) logoutButton.hidden = false;
+  if (loginLink) loginLink.hidden = true;
+
+  if (logoutButton) {
+    logoutButton.addEventListener(
+      "click",
+      () => {
+        logoutProfile();
+      },
+      { once: true },
+    );
   }
 
   profileLinks.forEach((link) => {
@@ -65,6 +128,7 @@ function renderProfile() {
 function startSession(profile) {
   state.activeProfile = {
     name: profile.name,
+    apellido: profile.apellido || "",
     email: profile.email,
     birthDate: profile.birthDate || "",
     phone: profile.phone || "",
@@ -81,6 +145,10 @@ function logoutProfile() {
   showProfileView("login");
   renderProfile();
   renderCart();
+
+  if (!window.location.pathname.endsWith("login.html")) {
+    window.location.href = "login.html";
+  }
 }
 
 function handleLoginSubmit(event) {
