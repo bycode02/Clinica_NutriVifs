@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agendar consulta | Clinica NutriDifs</title>
+    <meta
+      name="description"
+      content="Agenda una consulta veterinaria en Clinica NutriDifs."
+    />
+    <link rel="stylesheet" href="../CSS/app.css" />
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="container header-content">
+        <a class="brand" href="index.html">Clinica NutriDifs</a>
+        <nav aria-label="Navegacion principal">
+          <a href="index.html">Inicio</a>
+          <a href="consultas.html">Consultas</a>
+          <a href="productos.html">Productos</a>
+          <a href="contactanos.html">Contactanos</a>
+          <a href="quienes-somos.html">Quienes somos</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="services-section container appointment-page">
+        <span class="hero-subtitle">ATENCION VETERINARIA</span>
+        <h1 class="titulo-consultas">Agenda tu consulta</h1>
+        <p class="consultas-descripcion">
+          Completa tus datos y nos pondremos en contacto contigo para confirmar
+          la hora.
+        </p>
+
+        <div class="appointment-layout">
+          <div class="appointment-info">
+            <h2>Elige la atencion que necesitas</h2>
+            <p>
+              Atendemos perros, gatos y animales pequenos con atencion cercana y
+              responsable.
+            </p>
+            <ul>
+              <li>Consultas generales y de urgencia</li>
+              <li>Vacunacion y desparasitacion</li>
+              <li>Controles y seguimiento</li>
+              <li>Atencion para aves y conejos</li>
+            </ul>
+          </div>
+
+          <form class="appointment-form" id="appointment-form">
+            <div class="campo-formulario">
+              <label for="nombre">Nombre</label>
+              <input
+                id="nombre"
+                autocomplete="given-name"
+                name="nombre"
+                type="text"
+                maxlength="100"
+                required
+              />
+            </div>
+
+            <div class="campo-formulario">
+              <label for="apellido">Apellido</label>
+              <input
+                id="apellido"
+                autocomplete="family-name"
+                name="apellido"
+                type="text"
+                maxlength="100"
+                required
+              />
+            </div>
+
+            <div class="campo-formulario">
+              <label for="rut">RUT (ej: 12.345.678-9)</label>
+              <input
+                id="rut"
+                name="rut"
+                type="text"
+                inputmode="text"
+                placeholder="12.345.678-9"
+                maxlength="12"
+                required
+              />
+            </div>
+
+            <div class="campo-formulario">
+              <label for="fecha-nacimiento">Fecha de nacimiento</label>
+              <input
+                id="fecha-nacimiento"
+                autocomplete="bday"
+                name="fecha-nacimiento"
+                type="date"
+                required
+              />
+              <small class="campo-ayuda"
+                >Solo pueden agendar una consulta personas mayores de 14
+                años.</small
+              >
+            </div>
+
+            <div class="campo-formulario">
+              <label for="correo">Correo (ej: usuario@gmail.com)</label>
+              <input
+                id="correo"
+                autocomplete="email"
+                name="correo"
+                type="text"
+                inputmode="email"
+                maxlength="42"
+                placeholder="usuario@duoc.cl"
+                data-allowed-email
+                required
+              />
+            </div>
+
+            <div class="campo-formulario">
+              <label for="telefono">Telefono (ej: +56934020512)</label>
+              <input
+                id="telefono"
+                autocomplete="tel"
+                name="telefono"
+                type="tel"
+                inputmode="tel"
+                placeholder="+56934020512"
+                maxlength="12"
+                required
+              />
+            </div>
+
+            <div class="campo-formulario">
+              <label for="mascota">Nombre de tu mascota</label>
+              <input id="mascota" name="mascota" type="text" required />
+            </div>
+
+            <div class="campo-formulario">
+              <label for="especie">Especie</label>
+              <select id="especie" name="especie" required>
+                <option value="" selected disabled>
+                  Selecciona una opcion
+                </option>
+                <option>Perro</option>
+                <option>Gato</option>
+                <option>Ave</option>
+                <option>Conejo</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+
+            <div
+              class="campo-formulario campo-completo"
+              id="otra-especie-contenedor"
+              hidden
+            >
+              <label for="otra-especie">Escribe la especie</label>
+              <input
+                id="otra-especie"
+                name="otra-especie"
+                type="text"
+                placeholder="Ej: Hurón"
+              />
+            </div>
+
+            <div class="campo-formulario">
+              <label for="tipo-consulta">Tipo de consulta</label>
+              <select id="tipo-consulta" name="tipo-consulta" required>
+                <option value="" selected disabled>
+                  Selecciona una opcion
+                </option>
+                <option value="general">Consulta general</option>
+                <option value="urgencia">Consulta de urgencia</option>
+                <option value="vacunacion">Vacunacion</option>
+                <option value="desparasitacion">Desparasitacion</option>
+              </select>
+            </div>
+
+            <div class="campo-formulario">
+              <label for="fecha">Fecha preferida</label>
+              <input id="fecha" name="fecha" type="date" required />
+            </div>
+
+            <div class="campo-formulario campo-completo">
+              <label for="motivo"
+                >Motivo de la consulta (minimo 20 caracteres)</label
+              >
+              <textarea
+                id="motivo"
+                name="motivo"
+                rows="5"
+                minlength="20"
+                maxlength="500"
+                placeholder="Describe con detalle lo que le ocurre a tu mascota"
+                required
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn-agendar campo-completo">
+              Solicitar consulta
+            </button>
+            <p
+              id="appointment-message"
+              class="campo-completo"
+              role="status"
+              aria-live="polite"
+            ></p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <div>
+          <h2>Clinica NutriDifs</h2>
+          <p>Teléfono: +56 9 4567 8910</p>
+          <p>
+            <a href="mailto:ClinicVEtDifs@gmail.com">ClinicVEtDifs@gmail.com</a>
+          </p>
+        </div>
+        <div>
+          <h2>Integrantes</h2>
+          <ul>
+            <li>Francisco Arce</li>
+            <li>Bayron Mena</li>
+            <li>Carolina Quinan</li>
+          </ul>
+        </div>
+        <div>
+          <h2>Sección</h2>
+          <p>DSY1104 – 2026</p>
+        </div>
+      </div>
+    </footer>
+
+    <script src="../JS/app.js" defer></script>
+    <script src="../JS/auth.js" defer></script>
+    <script src="../JS/agenda.js" defer></script>
+  </body>
+</html>
