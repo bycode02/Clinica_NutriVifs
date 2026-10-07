@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clinica NutriDifs | Contáctanos</title>
+    <meta
+      name="description"
+      content="Ponte en contacto con Clinica NutriDifs o encuéntranos en nuestro mapa."
+    />
+    <link rel="stylesheet" href="../CSS/app.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-content">
+        <a class="brand" href="index.html">Clinica NutriDifs</a>
+        <nav aria-label="Navegación principal">
+          <a href="index.html">Inicio</a>
+          <a href="consultas.html">Consultas</a>
+          <a href="productos.html">Productos</a>
+          <a href="blog.html">Blog</a>
+          <a href="contactanos.html" aria-current="page">Contáctanos</a>
+          <a href="quienes-somos.html">Quiénes somos</a>
+        </nav>
+        <a class="profile-link" href="perfil.html">Perfil</a>
+        <a class="carrito-compras" href="carrito.html">Carrito</a>
+      </div>
+    </header>
+
+    <main>
+      <section
+        class="contacto-section container"
+        aria-labelledby="contacto-title"
+      >
+        <h1 id="contacto-title" class="titulo-consultas">Contáctanos</h1>
+
+        <div class="contacto-grid">
+          <!-- Columna Izquierda: Formulario -->
+          <div class="contacto-formulario">
+            <form id="form-contacto" novalidate>
+              <div class="campo-formulario">
+                <label for="contacto-identificacion">Correo o Teléfono:</label>
+                <input
+                  type="text"
+                  id="contacto-identificacion"
+                  name="identificacion"
+                  placeholder="Ej: +569... o correo@gmail.com"
+                  required
+                />
+              </div>
+
+              <div class="campo-formulario">
+                <label for="contacto-motivo">Motivo de contacto:</label>
+                <select id="contacto-motivo" name="motivo" required>
+                  <option value="" disabled selected>
+                    Selecciona un motivo...
+                  </option>
+                  <option value="reclamo">Reclamo / Devolución</option>
+                  <option value="consulta">Consulta por información</option>
+                  <option value="sugerencia">Sugerencias</option>
+                </select>
+              </div>
+
+              <div class="campo-formulario">
+                <label for="mensaje">Mensaje:</label>
+                <!-- La pauta exige un máximo de 500 caracteres. -->
+                <textarea
+                  id="mensaje"
+                  name="mensaje"
+                  maxlength="500"
+                  required
+                  placeholder="Escribe tu consulta (máximo 500 caracteres)..."
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn-agendar">Enviar Mensaje</button>
+              <p
+                id="form-contacto-message"
+                role="status"
+                aria-live="polite"
+              ></p>
+            </form>
+          </div>
+
+          <!-- Columna Derecha: Mapa de ubicación -->
+          <div class="contacto-mapa">
+            <h3>Nuestra Ubicación</h3>
+            <p>
+              Encuéntranos en Rancagua, Región del Libertador General Bernardo
+              O'Higgins.
+            </p>
+            <div class="mapa-placeholder">
+              <iframe
+                title="Ubicación de Clinica NutriDifs en Google Maps"
+                src="https://www.google.com/maps?q=Clinica+NutriDifs+Chile&output=embed"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-content">
+        <div>
+          <h2>Clinica NutriDifs</h2>
+          <p>Teléfono: +56 9 4567 8910</p>
+          <p>
+            <a href="mailto:ClinicVEtDifs@gmail.com">ClinicVEtDifs@gmail.com</a>
+          </p>
+        </div>
+        <div>
+          <h2>Integrantes</h2>
+          <ul>
+            <li>Francisco Arce</li>
+            <li>Bayron Mena</li>
+            <li>Carolina Quinan</li>
+          </ul>
+        </div>
+        <div>
+          <h2>Sección</h2>
+          <p>DSY1104 – 2026</p>
+        </div>
+      </div>
+    </footer>
+
+    
+
+    
+    <script src="../JS/app.js" defer></script>
+    <script src="../JS/auth.js" defer></script>
+    <script src="../JS/agenda.js" defer></script>
+  </body>
+</html>
