@@ -1,75 +1,58 @@
-# React + TypeScript + Vite
+# Clínica NutriDifs (React)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sitio de la clínica veterinaria migrado a **React + TypeScript + Vite**, con
+rutas de **React Router**.
 
-Currently, two official plugins are available:
+## Cómo ejecutarlo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Requiere Node.js 20 o superior.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Luego abre http://localhost:5173.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Comando           | Qué hace                                   |
+| ----------------- | ------------------------------------------ |
+| `npm run dev`     | Servidor de desarrollo con recarga en vivo |
+| `npm run build`   | Revisa tipos y genera la versión final en `dist/` |
+| `npm run preview` | Sirve la versión de `dist/`                |
+| `npm run lint`    | Revisa el código con ESLint                |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Estructura
 
 ```
+public/img/            Imágenes del sitio (se usan como /img/archivo.jpg)
+src/
+  main.tsx             Punto de entrada (router + estado global)
+  App.tsx              Rutas y layout (menú, pie de página)
+  components/          Navbar, Footer, ProductCard, ProductDetail, CampoError
+  context/             Estado global: carrito, sesión, perfiles y catálogo
+  data/                Productos, servicios, regiones/comunas y equipo
+  hooks/usePage.ts     Título de la pestaña y clase del <body> por página
+  pages/               Una página por ruta (Inicio, Productos, Carrito, ...)
+  utils/               Validaciones, formato de moneda y localStorage
+  styles/app.css       Estilos del sitio
+version-anterior/      Sitio original en HTML/CSS/JS (solo como referencia)
+```
+
+## Rutas
+
+| Ruta             | Página                                   |
+| ---------------- | ---------------------------------------- |
+| `/`              | Inicio                                   |
+| `/consultas`     | Servicios veterinarios                   |
+| `/agendar`       | Formulario para agendar (`?consulta=...`) |
+| `/productos`     | Catálogo con filtros, stock y detalle    |
+| `/carrito`       | Carrito y pago                           |
+| `/blog`          | Blog                                     |
+| `/contactanos`   | Formulario de contacto y mapa            |
+| `/quienes-somos` | Quiénes somos                            |
+| `/login`         | Iniciar sesión                           |
+| `/registro`      | Crear cuenta                             |
+| `/perfil`        | Datos del usuario y cerrar sesión        |
+
+Los datos (carrito, cuentas, sesión, stock y equipo) se guardan en
+`localStorage` con las mismas claves que usaba el sitio anterior.
