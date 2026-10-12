@@ -1,7 +1,8 @@
+import { Link, useNavigate } from "react-router";
+import { useApp } from "../context/AppContext";
+import { usePage } from "../hooks/usePage";
+
 export default function Perfil() {
-<<<<<<< Updated upstream
-  return <h1>Perfil</h1>
-=======
   usePage("Perfil | Clínica NutriDifs", "profile-page-body");
   const { session, logout } = useApp();
   const navigate = useNavigate();
@@ -87,5 +88,4 @@ export default function Perfil() {
       </section>
     </main>
   );
->>>>>>> Stashed changes
 }

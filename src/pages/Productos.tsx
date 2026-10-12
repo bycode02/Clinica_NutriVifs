@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-export default function Productos() {
-  return <h1>Productos</h1>
-=======
 import { useCallback, useState } from "react";
 import { ProductCard } from "../components/ProductCard";
 import { ProductDetail } from "../components/ProductDetail";
@@ -136,5 +132,4 @@ export default function Productos() {
       <ProductDetail product={detailProduct} onClose={closeDetail} />
     </>
   );
->>>>>>> Stashed changes
 }

@@ -1,13 +1,3 @@
-<<<<<<< Updated upstream
-export const Login = () => {
-  return (
-    <>
-      <h1>Login</h1>
-      <h2>Proximamente...</h2>
-    </>
-  )
-}
-=======
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { useApp, type Role } from "../context/AppContext";
@@ -112,4 +102,3 @@ export const Login = () => {
     </main>
   );
 };
->>>>>>> Stashed changes

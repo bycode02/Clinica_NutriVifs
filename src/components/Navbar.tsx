@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-export const Navbar = () => <nav />
-=======
 import { Link, NavLink } from "react-router";
 import { useApp } from "../context/AppContext";
 
@@ -47,4 +44,3 @@ export const Navbar = () => {
     </header>
   );
 };
->>>>>>> Stashed changes

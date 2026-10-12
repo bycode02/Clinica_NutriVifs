@@ -1,13 +1,3 @@
-<<<<<<< Updated upstream
-export const Registro = () => {
-  return (
-    <>
-      <h1>Registro</h1>
-      <h2>Proximamente...</h2>
-    </>
-  )
-}
-=======
 import { useState, type ChangeEvent, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router";
 import { CampoError } from "../components/CampoError";
@@ -300,4 +290,3 @@ export function UserForm({ managed = false, initial, onDone }: { managed?: boole
     </section>
   );
 };
->>>>>>> Stashed changes
