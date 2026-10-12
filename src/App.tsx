@@ -1,4 +1,10 @@
+<<<<<<< Updated upstream
 import { Route, Routes } from 'react-router'
+=======
+import { Administrar, Vendedor } from './pages/Administrar'
+import { useEffect } from 'react'
+import { Navigate, Route, Routes, useLocation } from 'react-router'
+>>>>>>> Stashed changes
 import { Footer } from './components/Footer'
 import { Navbar } from './components/Navbar'
 import Agendar from './pages/Agendar'
@@ -14,6 +20,15 @@ import { Registro } from './pages/Registro'
 import QuienesSomos from './pages/QuienesSomos'
 
 function App() {
+<<<<<<< Updated upstream
+=======
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+
+>>>>>>> Stashed changes
   return (
     <>
       <Navbar />
@@ -25,6 +40,8 @@ function App() {
         <Route path="/consultas" element={<Consultas />} />
         <Route path="/contactanos" element={<Contactanos />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/administrar" element={<Administrar />} />
+        <Route path="/vendedor" element={<Vendedor />} />
         <Route path="/perfil" element={<Perfil />} />
         <Route path="/productos" element={<Productos />} />
         <Route path="/registro" element={<Registro />} />
