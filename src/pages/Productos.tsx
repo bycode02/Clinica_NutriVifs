@@ -1,3 +1,4 @@
+import { matchesProductName } from "../utils/productSearch";
 import { useCallback, useState } from "react";
 import { ProductCard } from "../components/ProductCard";
 import { ProductDetail } from "../components/ProductDetail";
@@ -16,6 +17,7 @@ function matchesPrice(price: number, filter: string) {
 export default function Productos() {
   usePage("Clinica NutriDifs | Productos");
   const { products, categories } = useApp();
+  const [search, setSearch] = useState("");
   const [category, setCategory] = useState("todos");
   const [priceFilter, setPriceFilter] = useState("todos");
   const [detail, setDetail] = useState<ProductoCatalogo | null>(null);
@@ -24,7 +26,8 @@ export default function Productos() {
   const isVisible = (product: ProductoCatalogo) =>
     (category === "todos" ||
       product.category.toLowerCase() === category.toLowerCase()) &&
-    matchesPrice(product.price, priceFilter);
+    matchesPrice(product.price, priceFilter) &&
+    matchesProductName(product.name, search);
 
   const visibleCount = products.filter(isVisible).length;
   // Mantiene el detalle sincronizado con el stock actual del catálogo.
@@ -37,6 +40,10 @@ export default function Productos() {
       <main>
         <section className="products-page container" aria-labelledby="products-title">
           <div className="filter-section">
+            <div className="product-search">
+              <label htmlFor="product-search">Buscar por nombre</label>
+              <input id="product-search" type="search" placeholder="Escribe el nombre del producto" value={search} onChange={event => setSearch(event.target.value)} />
+            </div>
             <h2>Filtrar por Categoría</h2>
 
             <div className="filter-buttons">
@@ -115,6 +122,7 @@ export default function Productos() {
               </p>
             </div>
 
+            {visibleCount === 0 && <p role="status">No se encontraron productos. Prueba otro nombre o cambia los filtros.</p>}
             <div className="products-grid" id="products-grid">
               {products.map((product) => (
                 <ProductCard

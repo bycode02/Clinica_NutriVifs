@@ -78,8 +78,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     startSession(profile, role);
   };
   const manageUser = (profile: Profile, originalEmail?: string) => {
-    requireRole(session?.role, originalEmail ? ["Administrador"] : ["Administrador", "Vendedor"]);
-    if (session?.role === "Vendedor" && profile.role !== "Cliente") throw new Error("El vendedor solo puede crear clientes.");
+    requireRole(session?.role, ["Administrador"]);
     const next = { ...profile, email: normalizeEmail(profile.email), role: profile.role || "Cliente" as Role };
     if (originalEmail && !profiles.some(p => p.email === originalEmail)) throw new Error("El usuario ya no existe.");
     validateUser(next, profiles, originalEmail);
@@ -100,7 +99,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }));
   };
   const saveProduct = (product: ProductoCatalogo) => {
-    requireRole(session?.role, ["Administrador"]);
+    requireRole(session?.role, ["Administrador", "Vendedor"]);
     validateProduct(product, categories);
     const next = { ...product, name: product.name.trim(), distributor: product.distributor?.trim() };
     commitProducts(products.some(p => p.id === product.id) ? products.map(p => p.id === product.id ? next : p) : [...products, next]);

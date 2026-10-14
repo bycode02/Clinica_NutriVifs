@@ -23,29 +23,33 @@ export default function Perfil() {
   return (
     <main className="profile-page">
       <section className="profile-page-shell" aria-labelledby="profile-page-title">
-        <div className="profile-sidebar-card">
-          <div className="profile-avatar">{initials}</div>
-          <p className="profile-badge">{session ? session.role || "Cliente" : "Invitado"}</p>
-          {(session?.role === "Administrador" || session?.role === "Vendedor") && <Link className="profile-page-login" to={session.role === "Administrador" ? "/administrar" : "/vendedor"}>Administrar</Link>}
-          <h1>{session ? fullName : "Invitado"}</h1>
-          <p>
-            {session
-              ? session.email || "Sin correo"
-              : "Inicia sesión para ver tus datos"}
-          </p>
-          {session ? (
-            <button
-              type="button"
-              className="profile-page-logout"
-              onClick={handleLogout}
-            >
-              Cerrar sesión
-            </button>
-          ) : (
-            <Link className="profile-page-login" to="/login">
-              Iniciar sesión
-            </Link>
-          )}
+        <div className="profile-sidebar">
+          <div className="profile-sidebar-card">
+            <div className="profile-avatar">{initials}</div>
+            <p className="profile-badge">{session ? session.role || "Cliente" : "Invitado"}</p>
+            <h1>{session ? fullName : "Invitado"}</h1>
+            <p>
+              {session
+                ? session.email || "Sin correo"
+                : "Inicia sesión para ver tus datos"}
+            </p>
+            <div className="profile-page-actions">
+              {(session?.role === "Administrador" || session?.role === "Vendedor") && <Link className="profile-page-login" to={session.role === "Administrador" ? "/administrar" : "/vendedor"}>Administrar</Link>}
+              {session ? (
+                <button
+                  type="button"
+                  className="profile-page-logout"
+                  onClick={handleLogout}
+                >
+                  Cerrar sesión
+                </button>
+              ) : (
+                <Link className="profile-page-login" to="/login">
+                  Iniciar sesión
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
 
         <article className="profile-details-card">

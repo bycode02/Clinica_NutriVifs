@@ -1,3 +1,4 @@
+import { matchesProductName } from "../utils/productSearch";
 import { useState, type FormEvent } from "react";
 import { Link, Navigate } from "react-router";
 import { useApp, type Profile, type ProductoCatalogo } from "../context/AppContext";
@@ -23,6 +24,8 @@ export function Vendedor() { return <Access seller />; }
 
 function Management({ seller }: { seller: boolean }) {
   const app = useApp();
+  const [search, setSearch] = useState("");
+  const visibleProducts = app.products.filter(product => matchesProductName(product.name, search));
   const [section, setSection] = useState<Section>(seller ? "PRODUCTOS" : "USUARIOS");
   const [userForm, setUserForm] = useState<Profile | "new" | null>(null);
   const [productForm, setProductForm] = useState<ProductoCatalogo | "new" | null>(null);
@@ -35,16 +38,16 @@ function Management({ seller }: { seller: boolean }) {
   };
   const changeSection = (next: Section) => { setSection(next); setUserForm(null); setProductForm(null); setCategoryForm(null); setMessage(""); setPendingDelete(null); };
   return <main className="management container">
-    <header className="management-heading"><div><p className="profile-kicker">{seller ? "VENDEDOR" : "ADMINISTRADOR"}</p><h1>Administrar</h1><p>{seller ? "Consulta el catálogo, actualiza el stock y crea cuentas de clientes." : "Gestiona los usuarios y el catálogo de tu tienda."}</p></div><Link to="/perfil">Volver al perfil</Link></header>
+    <header className="management-heading"><div><p className="profile-kicker">{seller ? "VENDEDOR" : "ADMINISTRADOR"}</p><h1>Administrar</h1><p>{seller ? "Agrega y modifica productos, y actualiza su stock." : "Gestiona los usuarios y el catálogo de tu tienda."}</p></div><Link to="/perfil">Volver al perfil</Link></header>
     <div className="management-layout">
-      <aside className="management-sidebar"><nav aria-label="Secciones de administración">{(seller ? ["PRODUCTOS", "USUARIOS"] as Section[] : ["USUARIOS", "PRODUCTOS", "CATEGORIAS"] as Section[]).map(item => <button key={item} type="button" aria-pressed={section === item} onClick={() => changeSection(item)}>{seller && item === "USUARIOS" ? "CREAR CLIENTE" : item}</button>)}</nav><p>{seller ? "Puedes modificar el stock y registrar clientes." : "Los cambios se reflejan inmediatamente en la tienda."}</p></aside>
+      <aside className="management-sidebar"><nav aria-label="Secciones de administración">{(seller ? ["PRODUCTOS"] as Section[] : ["USUARIOS", "PRODUCTOS", "CATEGORIAS"] as Section[]).map(item => <button key={item} type="button" aria-pressed={section === item} onClick={() => changeSection(item)}>{item}</button>)}</nav><p>{seller ? "Puedes agregar y modificar productos y actualizar el stock." : "Los cambios se reflejan inmediatamente en la tienda."}</p></aside>
       <section className="management-panel" aria-label={section}>
-        <header className="management-panel-heading"><div><h2>{seller && section === "USUARIOS" ? "Crear cliente" : section.charAt(0) + section.slice(1).toLowerCase()}</h2><p>{section === "PRODUCTOS" ? `${app.products.length} productos` : section === "CATEGORIAS" ? `${app.categories.length} categorías` : seller ? "Las nuevas cuentas tendrán el rol USUARIO." : `${app.profiles.length} usuarios registrados`}</p></div>
-          {!(seller && section === "PRODUCTOS") && <button type="button" className="management-primary" onClick={() => { setMessage(""); if (section === "USUARIOS") setUserForm("new"); if (section === "PRODUCTOS") setProductForm("new"); if (section === "CATEGORIAS") { setCategoryForm(""); setCategoryName(""); } }}>add+</button>}
+        <header className="management-panel-heading"><div><h2>{section.charAt(0) + section.slice(1).toLowerCase()}</h2><p>{section === "PRODUCTOS" ? `${visibleProducts.length} productos` : section === "CATEGORIAS" ? `${app.categories.length} categorías` : `${app.profiles.length} usuarios registrados`}</p></div>
+          {(!seller || section === "PRODUCTOS") && <button type="button" className="management-primary" onClick={() => { setMessage(""); if (section === "USUARIOS") setUserForm("new"); if (section === "PRODUCTOS") setProductForm("new"); if (section === "CATEGORIAS") { setCategoryForm(""); setCategoryName(""); } }}>add+</button>}
         </header>
         <p className="management-message" role="status">{message}</p>
         {pendingDelete && <div className="management-confirm" role="alert"><p>{pendingDelete.label}</p><button type="button" className="management-danger" onClick={() => { perform(pendingDelete.run, "Eliminado correctamente."); setPendingDelete(null); }}>Confirmar eliminación</button><button type="button" onClick={() => setPendingDelete(null)}>Cancelar</button></div>}
-        {section === "USUARIOS" && <>
+        {section === "USUARIOS" && !seller && <>
           {userForm && <UserForm key={userForm === "new" ? "new" : userForm.email} managed initial={userForm === "new" ? undefined : userForm} onDone={() => setUserForm(null)} />}
           {!seller && app.profiles.map(user => <article className="management-row" key={user.email}>
             <svg className="management-avatar" role="img" aria-label={`Avatar de ${user.name}`} viewBox="0 0 80 80"><rect width="80" height="80" rx="40" fill="#e5f4ee"/><circle cx="40" cy="29" r="13" fill="#268365"/><path d="M16 67c0-25 48-25 48 0" fill="#268365"/></svg>
@@ -52,15 +55,16 @@ function Management({ seller }: { seller: boolean }) {
             <div className="management-actions"><button type="button" onClick={() => { setUserForm(user); setMessage(""); }}>Modificar</button>{user.locked && <button type="button" onClick={() => perform(() => app.manageUser({ ...user, locked: false, failedAttempts: 0 }, user.email), "Cuenta desbloqueada.")}>Desbloquear</button>}<button type="button" className="management-danger" onClick={() => setPendingDelete({ label: `¿Eliminar a ${user.name}?${user.email === app.session?.email ? " Se cerrará tu sesión." : ""}`, run: () => app.deleteUser(user.email) })}>Eliminar usuario</button></div>
           </article>)}
           {!seller && !app.profiles.length && <p className="management-empty">Aún no hay usuarios registrados.</p>}
-          {seller && !userForm && <p className="management-empty">Selecciona add+ para registrar un cliente.</p>}
         </>}
         {section === "PRODUCTOS" && <>
-          {productForm && !seller && <ProductForm key={productForm === "new" ? "new" : productForm.id} initial={productForm === "new" ? undefined : productForm} onClose={() => setProductForm(null)} />}
-          {app.products.map(product => <article className="management-row" key={product.id}>
+          {productForm && <ProductForm key={productForm === "new" ? "new" : productForm.id} initial={productForm === "new" ? undefined : productForm} onClose={() => setProductForm(null)} />}
+          <div className="product-search"><label htmlFor="management-product-search">Buscar por nombre</label><input id="management-product-search" type="search" placeholder="Escribe el nombre del producto" value={search} onChange={e => setSearch(e.target.value)} /></div>
+          {visibleProducts.map(product => <article className="management-row" key={product.id}>
             {product.image ? <img className="management-product-image" src={imagenProducto(product.image)} alt={product.name} /> : <div className="management-product-placeholder" aria-label="Producto sin imagen">NV</div>}
             <div className="management-row-info"><span className="management-badge">{product.category || "Sin categoría"}</span><h3>{product.name}</h3><p><ProductDescription product={product} /></p><strong>{formatCurrency(product.price)}</strong><p>Distribuidora: {product.distributor}</p><p>Stock: {product.stock} unidades</p></div>
-            <div className="management-actions"><StockForm key={`${product.id}-${product.stock}`} product={product} onSave={stock => perform(() => app.updateStock(product.id, stock), "Stock actualizado.")} />{!seller && <><button type="button" onClick={() => setProductForm(product)}>Modificar</button><button type="button" className="management-danger" onClick={() => setPendingDelete({ label: `¿Eliminar ${product.name}? También se quitará del carrito.`, run: () => app.deleteProduct(product.id) })}>Eliminar producto</button></>}</div>
+            <div className="management-actions"><StockForm key={`${product.id}-${product.stock}`} product={product} onSave={stock => perform(() => app.updateStock(product.id, stock), "Stock actualizado.")} /><button type="button" onClick={() => setProductForm(product)}>Modificar</button>{!seller && <><button type="button" className="management-danger" onClick={() => setPendingDelete({ label: `¿Eliminar ${product.name}? También se quitará del carrito.`, run: () => app.deleteProduct(product.id) })}>Eliminar producto</button></>}</div>
           </article>)}
+          {app.products.length > 0 && !visibleProducts.length && <p className="management-empty" role="status">No se encontraron productos con ese nombre.</p>}
           {!app.products.length && <p className="management-empty">No hay productos. Agrega uno para comenzar.</p>}
         </>}
         {section === "CATEGORIAS" && !seller && <>
