@@ -20,8 +20,8 @@ export const Registro = () => {
   return <UserForm />;
 };
 
-export function UserForm({ managed = false, initial, onDone }: { managed?: boolean; initial?: Profile; onDone?: () => void }) {
-  const { register, manageUser, session } = useApp();
+export function UserForm({ managed = false, editProfile = false, initial, onDone, onSaved }: { managed?: boolean; editProfile?: boolean; initial?: Profile; onDone?: () => void; onSaved?: () => void }) {
+  const { register, manageUser, updateProfile, session } = useApp();
   const [role, setRole] = useState<Role>(initial?.role || "Cliente");
   const navigate = useNavigate();
   const [datos, setDatos] = useState<Campos>(initial ? { ...INICIAL, ...initial, confirmPassword: initial.password, aceptaTerminos: true } : INICIAL);
@@ -49,7 +49,7 @@ export function UserForm({ managed = false, initial, onDone }: { managed?: boole
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
-    const nuevosErrores = validarRegistro(datos);
+    const nuevosErrores = validarRegistro(datos, editProfile);
     setErrores(nuevosErrores);
     if (Object.values(nuevosErrores).some(Boolean)) {
       setMessage("Revisa los campos marcados en rojo.");
@@ -74,14 +74,15 @@ export function UserForm({ managed = false, initial, onDone }: { managed?: boole
     };
 
     try {
-      if (managed) { manageUser(profile, initial?.email); onDone?.(); }
+      if (editProfile) { updateProfile(profile); onSaved?.(); }
+      else if (managed) { manageUser(profile, initial?.email); onDone?.(); }
       else { register(profile); navigate("/"); }
     } catch (error) { setMessage((error as Error).message); }
   };
 
   return (
-    <section className="auth-card user-form">
-      <Link className="auth-brand" to="/">
+    <section className={editProfile ? "user-form profile-edit-form" : "auth-card user-form"}>
+      {!editProfile && <><Link className="auth-brand" to="/">
         Clínica NutriDifs
       </Link>
       <span className="auth-eyebrow">{managed ? "GESTIÓN DE USUARIOS" : "NUEVO CLIENTE"}</span>
@@ -89,8 +90,9 @@ export function UserForm({ managed = false, initial, onDone }: { managed?: boole
       <p className="auth-description">
         Regístrate para gestionar tus datos y solicitar atención veterinaria.
       </p>
+      </>}
       <form className="auth-form" onSubmit={handleSubmit} noValidate>
-        {managed && <><label htmlFor="user-role">Rol</label><select id="user-role" value={role} onChange={e => setRole(e.target.value as Role)} disabled={session?.role !== "Administrador"}>
+        {managed && !editProfile && <><label htmlFor="user-role">Rol</label><select id="user-role" value={role} onChange={e => setRole(e.target.value as Role)} disabled={session?.role !== "Administrador"}>
           <option value="Cliente">USUARIO</option>
           {session?.role === "Administrador" && <><option value="Administrador">ADMINISTRADOR</option><option value="Vendedor">VENDEDOR</option></>}
         </select></>}
@@ -237,6 +239,7 @@ export function UserForm({ managed = false, initial, onDone }: { managed?: boole
         </select>
         <CampoError mensaje={errores.genero} />
 
+        {!editProfile && <>
         <label htmlFor="reg-standalone-pass">Contraseña</label>
         <input
           type="password"
@@ -276,14 +279,16 @@ export function UserForm({ managed = false, initial, onDone }: { managed?: boole
         </label>
         <CampoError mensaje={errores.aceptaTerminos} />
 
+        </>}
+
         <button type="submit" className="btn-primary">
-          {managed ? "Guardar usuario" : "Registrarme"}
+          {editProfile ? "Guardar cambios" : managed ? "Guardar usuario" : "Registrarme"}
         </button>
         <p className="profile-message" role="status">
           {message}
         </p>
       </form>
-      {managed ? <button type="button" onClick={onDone}>Cancelar</button> : <nav className="auth-links" aria-label="Opciones de cuenta">
+      {managed || editProfile ? <button type="button" onClick={onDone}>Cancelar</button> : <nav className="auth-links" aria-label="Opciones de cuenta">
         <Link to="/login">Ya tengo una cuenta</Link>
         <Link to="/">Volver al inicio</Link>
       </nav>}

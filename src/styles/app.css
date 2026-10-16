@@ -3627,3 +3627,35 @@
   .site-header .header-content { flex-wrap: wrap; gap: 1rem; padding-block: 1rem; }
   .site-header nav { order: 3; flex-basis: 100%; flex-wrap: wrap; gap: 1rem; }
 }
+
+.profile-edit-button {
+  margin-left: auto; align-self: flex-start; flex-shrink: 0;
+  border: 0; border-radius: 8px; padding: 0.75rem 1rem;
+  background: #176b58; color: #fff; font: inherit; font-weight: 600; cursor: pointer;
+}
+.profile-edit-button:hover { background: #105241; }
+.profile-edit-button:focus-visible { outline: 3px solid #176b58; outline-offset: 3px; }
+.profile-edit-form { width: 100%; min-width: 0; }
+.profile-edit-form .auth-form { margin-top: 1rem; }
+.profile-edit-form input, .profile-edit-form select { box-sizing: border-box; min-width: 0; max-width: 100%; }
+.profile-edit-form > button { margin-top: 0.75rem; padding: 0.65rem 1rem; cursor: pointer; }
+
+.profile-details-card > .profile-message:empty { display: none; }
+
+/* Tres datos visibles; el resto se consulta dentro de la tarjeta. */
+.profile-info-grid {
+  grid-auto-rows: minmax(5rem, max-content);
+  max-height: 17rem;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #176b58 #e7efe9;
+  padding-right: 0.4rem;
+}
+.profile-info-grid:focus-visible {
+  outline: 2px solid #176b58;
+  outline-offset: 3px;
+}
+.profile-info-item { box-sizing: border-box; align-content: center; min-width: 0; }
+.profile-info-item strong { overflow-wrap: anywhere; }

@@ -28,6 +28,8 @@ export type Profile = {
   role?: Role;
 };
 
+export type ProfileDetails = Pick<Profile, "name" | "apellido" | "email" | "birthDate" | "direccion" | "genero" | "phone" | "region" | "comuna">;
+
 export type Session = {
   name: string;
   apellido: string;
@@ -54,6 +56,7 @@ export type AppState = {
   profiles: Profile[];
   register: (profile: Profile) => void;
   authenticate: (email: string, password: string, role: Role) => void;
+  updateProfile: (details: ProfileDetails) => void;
   manageUser: (profile: Profile, originalEmail?: string) => void;
   deleteUser: (email: string) => void;
   categories: string[];

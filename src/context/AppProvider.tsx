@@ -2,9 +2,10 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { EQUIPO_INICIAL, type MiembroEquipo } from "../data/equipo";
 import { PRODUCTOS, CATEGORIAS, imagenProducto } from "../data/productos";
 import { STORAGE_KEYS, loadList, loadObject, remove, save } from "../utils/storage";
+import { validarRegistro, INICIAL } from "../utils/registro";
 import { normalizeEmail } from "../utils/validaciones";
 import { requireRole, validateUser, validateProduct, validateStock, normalizeCategory, ROLES } from "../utils/administracion";
-import { AppContext, type AppState, type CartItem, type Profile, type ProductoCatalogo, type Session, type Role } from "./AppContext";
+import { AppContext, type AppState, type CartItem, type Profile, type ProfileDetails, type ProductoCatalogo, type Session, type Role } from "./AppContext";
 
 const CATEGORY_KEY = "clinica-nutridifs-categories";
 function loadProducts(): ProductoCatalogo[] {
@@ -84,6 +85,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
     validateUser(next, profiles, originalEmail);
     saveProfiles(originalEmail ? profiles.map(p => p.email === originalEmail ? next : p) : [...profiles, next]);
     if (originalEmail === session?.email) startSession(next);
+  };
+  const updateProfile = (details: ProfileDetails) => {
+    const current = profiles.find(p => p.email === session?.email);
+    if (!session || !current || current.locked) throw new Error("Inicia sesión para editar tu perfil.");
+    // Solo se copian datos personales; la cuenta y sus permisos se conservan.
+    const next: Profile = { ...current,
+      name: details.name.trim(), apellido: details.apellido.trim(),
+      email: normalizeEmail(details.email), birthDate: details.birthDate,
+      direccion: details.direccion.trim(), genero: details.genero,
+      phone: details.phone === "+" ? "" : details.phone,
+      region: details.region, comuna: details.comuna,
+    };
+    const errors = validarRegistro({ ...INICIAL, ...next }, true);
+    const error = Object.values(errors).find(Boolean);
+    if (error) throw new Error(error);
+    if (profiles.some(p => p !== current && normalizeEmail(p.email) === next.email)) throw new Error("Ese correo ya está registrado.");
+    saveProfiles(profiles.map(p => p === current ? next : p));
+    startSession(next, session.role);
   };
   const deleteUser = (email: string) => {
     requireRole(session?.role, ["Administrador"]);
@@ -192,6 +211,6 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   const clearCart = useCallback(() => setCart([]), []);
 
-  const value: AppState = { products, categories, team, cart, cartQuantity: cart.reduce((n, p) => n + p.quantity, 0), cartTotal: cart.reduce((n, p) => n + p.price * p.quantity, 0), getQuantity, getStock, addToCart, changeQuantity, removeFromCart, clearCart, profiles, session, register, authenticate, manageUser, deleteUser, saveProduct, deleteProduct, updateStock, saveCategory, deleteCategory, logout };
+  const value: AppState = { products, categories, team, cart, cartQuantity: cart.reduce((n, p) => n + p.quantity, 0), cartTotal: cart.reduce((n, p) => n + p.price * p.quantity, 0), getQuantity, getStock, addToCart, changeQuantity, removeFromCart, clearCart, profiles, session, register, authenticate, updateProfile, manageUser, deleteUser, saveProduct, deleteProduct, updateStock, saveCategory, deleteCategory, logout };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

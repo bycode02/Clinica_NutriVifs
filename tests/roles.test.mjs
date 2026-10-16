@@ -89,3 +89,49 @@ test("búsqueda por nombre admite coincidencias parciales, tildes, mayúsculas y
   assert.equal(matchesProductName("Vacuna", ""), true);
   assert.equal(matchesProductName("Vacuna", "antibiotico"), false);
 });
+
+test("todos los roles editan su perfil, conservan credenciales y persisten el correo nuevo", () => {
+  const previous = Object.getOwnPropertyDescriptor(globalThis, "localStorage");
+  const storage = new Map();
+  Object.defineProperty(globalThis, "localStorage", { configurable: true, value: {
+    getItem: key => storage.get(key) ?? null,
+    setItem: (key, value) => storage.set(key, value),
+    removeItem: key => storage.delete(key),
+  } });
+  try {
+    let app;
+    function Probe() { app = useApp(); return null; }
+    const refresh = () => renderToStaticMarkup(createElement(AppProvider, null, createElement(Probe)));
+    for (const role of ["Cliente", "Vendedor", "Administrador"]) {
+      const other = { ...user, email: "otro@duoc.cl", password: "Otra123" };
+      storage.set("clinica-nutridifs-profiles", JSON.stringify([user, other]));
+      storage.set("clinica-nutridifs-session", JSON.stringify({ ...user, role }));
+      refresh();
+      for (const patch of [{ name: "" }, { apellido: "" }, { email: "a@example.com" }, { birthDate: "2020-01-01" }, { phone: "1234" }, { direccion: "" }, { region: "" }, { comuna: "" }, { genero: "" }]) {
+        assert.throws(() => app.updateProfile({ ...user, ...patch }));
+      }
+      assert.throws(() => app.updateProfile({ ...user, email: "OTRO@DUOC.CL" }), /registrado/);
+      app.updateProfile({ ...user, name: " Editado ", email: "NUEVO@DUOC.CL", direccion: "Nueva 123", password: "Cambiada123", role: "Administrador", locked: true });
+      refresh();
+      const updated = app.profiles.find(p => p.email === "nuevo@duoc.cl");
+      assert.equal(updated.name, "Editado");
+      assert.equal(updated.direccion, "Nueva 123");
+      assert.equal(updated.password, user.password);
+      assert.equal(updated.role, user.role);
+      assert.equal(updated.locked, false);
+      assert.equal(app.session.role, role);
+      assert.equal(app.session.email, "nuevo@duoc.cl");
+      assert.deepEqual(app.profiles.find(p => p.email === other.email), other);
+      app.logout();
+      refresh();
+      assert.throws(() => app.updateProfile(user), /sesión/);
+      assert.throws(() => app.authenticate(user.email, user.password, role), /No existe/);
+      app.authenticate("nuevo@duoc.cl", user.password, role);
+      refresh();
+      assert.equal(app.session.name, "Editado");
+    }
+  } finally {
+    if (previous) Object.defineProperty(globalThis, "localStorage", previous);
+    else delete globalThis.localStorage;
+  }
+});

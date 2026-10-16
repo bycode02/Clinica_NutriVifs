@@ -1,11 +1,18 @@
+import { useRef, useState } from "react";
+import { UserForm } from "./Registro";
 import { Link, useNavigate } from "react-router";
 import { useApp } from "../context/AppContext";
 import { usePage } from "../hooks/usePage";
 
 export default function Perfil() {
   usePage("Perfil | Clínica NutriDifs", "profile-page-body");
-  const { session, logout } = useApp();
+  const { session, profiles, logout } = useApp();
   const navigate = useNavigate();
+  const [editing, setEditing] = useState(false);
+  const [message, setMessage] = useState("");
+  const editButton = useRef<HTMLButtonElement>(null);
+  const profile = profiles.find(p => p.email === session?.email);
+  const finishEditing = () => { setEditing(false); editButton.current?.focus(); };
 
   const fullName = session
     ? [session.name, session.apellido].filter(Boolean).join(" ") || "Usuario"
@@ -58,9 +65,14 @@ export default function Perfil() {
               <p className="profile-kicker">Perfil</p>
               <h2 id="profile-page-title">Información del usuario</h2>
             </div>
+            {session && profile && <button ref={editButton} type="button" className="profile-edit-button" aria-expanded={editing} aria-controls="profile-editor" onClick={() => { setEditing(!editing); setMessage(""); }}>
+              {editing ? "Cancelar edición" : "Editar perfil"}
+            </button>}
           </div>
-
-          <div className="profile-info-grid">
+          <p role="status" className="profile-message">{message}</p>
+          {editing && profile ? <div id="profile-editor">
+            <UserForm editProfile initial={profile} onDone={finishEditing} onSaved={() => { finishEditing(); setMessage("Perfil actualizado correctamente."); }} />
+          </div> : <div className="profile-info-grid" role="region" aria-label="Datos del usuario" tabIndex={0}>
             <div className="profile-info-item">
               <span>Nombre completo</span>
               <strong>{session ? fullName : "Sin iniciar sesión"}</strong>
@@ -87,7 +99,11 @@ export default function Perfil() {
                 {session ? session.phone || "No especificado" : "No disponible"}
               </strong>
             </div>
-          </div>
+            {[
+              ["Dirección", profile?.direccion], ["Región", profile?.region],
+              ["Comuna", profile?.comuna], ["Género", ({ femenino: "Femenino", masculino: "Masculino", otro: "Otro", "prefiero-no-decir": "Prefiero no decir" } as Record<string, string>)[profile?.genero || ""]],
+            ].map(([label, value]) => <div className="profile-info-item" key={label}><span>{label}</span><strong>{value || "No especificado"}</strong></div>)}
+          </div>}
         </article>
       </section>
     </main>
