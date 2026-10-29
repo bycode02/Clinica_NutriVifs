@@ -62,14 +62,14 @@ export const ProductCard = ({ product, hidden, onViewDetail }: Props) => {
           </strong>
           <button
             type="button"
-            className="view-detail-button"
+            className="btn view-detail-button"
             onClick={() => onViewDetail(product)}
           >
             Ver detalle
           </button>
           <button
             type="button"
-            className="add-cart-button"
+            className="btn add-cart-button"
             disabled={atStockLimit}
             onClick={() => {
               if (addToCart(product.id)) setAdded(true);
@@ -78,7 +78,7 @@ export const ProductCard = ({ product, hidden, onViewDetail }: Props) => {
             {added ? "Agregado" : "Agregar al carrito"}
           </button>
           <div className="product-quantity-controls">
-            <button
+            <button className="btn"
               type="button"
               aria-label="Quitar una unidad"
               onClick={() => changeQuantity(product.id, -1)}
@@ -86,7 +86,7 @@ export const ProductCard = ({ product, hidden, onViewDetail }: Props) => {
               −
             </button>
             <span>{quantity}</span>
-            <button
+            <button className="btn"
               type="button"
               aria-label="Agregar una unidad"
               disabled={atStockLimit}

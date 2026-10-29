@@ -129,3 +129,18 @@ Los bloques finales de 600px y 360px ajustan registro y carrito para celulares, 
 Perfil/carrito mantienen su cambio de distribución a 820px. Administración conserva sus reglas en `src/styles/administrar.css` a 1000px y 700px.
 
 El menú principal pasa a una segunda fila hasta 1000px para evitar desbordes en tablets intermedias (por ejemplo, 820px).
+
+## Bootstrap
+
+Bootstrap 5.3.8 está instalado por npm y se carga desde `src/styles/bootstrap.css`, importado en `src/main.tsx`. El CSS se incluye en una capa `bootstrap` para que los estilos propios de la clínica tengan prioridad. Los formularios usan `form-control`, `form-select`, `form-check-input` e `is-invalid`; los botones usan `btn` y las tarjetas de perfil, resumen y administración usan `card`. La lógica de interacción sigue en React, sin cargar los plugins JavaScript de Bootstrap.
+
+Las pruebas `npm run test:roles` incluyen renderizado de las 11 páginas públicas con invitado y los tres roles, y comprobación de acceso a los dos paneles administrativos.
+
+En entornos Windows restringidos, si `npm run build` falla con `spawn EPERM` al cargar la configuración, se puede verificar la compilación con:
+
+```powershell
+node node_modules/typescript/bin/tsc -b
+node --experimental-strip-types node_modules/vite/bin/vite.js build --configLoader native
+```
+
+La versión instalada de React Router declara Node >=22.22.0. Se recomienda usar una versión de Node compatible al ejecutar el proyecto fuera de este entorno.

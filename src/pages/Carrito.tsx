@@ -50,7 +50,7 @@ export default function Carrito() {
                     <h2>{product.name}</h2>
                     <strong>{formatCurrency(product.price)}</strong>
                     <div className="cart-item-actions">
-                      <button
+                      <button className="btn"
                         type="button"
                         aria-label="Disminuir cantidad"
                         onClick={() => changeQuantity(product.code, -1)}
@@ -58,7 +58,7 @@ export default function Carrito() {
                         −
                       </button>
                       <span>{product.quantity}</span>
-                      <button
+                      <button className="btn"
                         type="button"
                         aria-label="Aumentar cantidad"
                         onClick={() => changeQuantity(product.code, 1)}
@@ -67,7 +67,7 @@ export default function Carrito() {
                       </button>
                       <button
                         type="button"
-                        className="remove-cart-item"
+                        className="btn remove-cart-item"
                         onClick={() => removeFromCart(product.code)}
                       >
                         Eliminar
@@ -82,16 +82,16 @@ export default function Carrito() {
             </p>
           </div>
 
-          <div className="cart-page-summary">
+          <div className="card cart-page-summary">
             <h2>Resumen</h2>
             <div className="cart-page-summary-row">
               <span>Productos</span>
               <strong>{formatCurrency(cartTotal)}</strong>
             </div>
-            <button type="button" className="cart-page-button" onClick={clearCart}>
+            <button type="button" className="btn cart-page-button" onClick={clearCart}>
               Vaciar carrito
             </button>
-            <button type="button" className="cart-page-button primary" onClick={pay}>
+            <button type="button" className="btn cart-page-button primary" onClick={pay}>
               Pagar
             </button>
 
@@ -103,14 +103,14 @@ export default function Carrito() {
                     <>
                       <button
                         type="button"
-                        className="cart-page-button primary"
+                        className="btn cart-page-button primary"
                         onClick={notice.onConfirm}
                       >
                         Confirmar
                       </button>
                       <button
                         type="button"
-                        className="cart-page-button"
+                        className="btn cart-page-button"
                         onClick={() => setNotice(null)}
                       >
                         Cancelar
@@ -119,7 +119,7 @@ export default function Carrito() {
                   ) : (
                     <button
                       type="button"
-                      className="cart-page-button"
+                      className="btn cart-page-button"
                       onClick={() => setNotice(null)}
                     >
                       Cerrar

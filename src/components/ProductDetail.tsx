@@ -46,7 +46,7 @@ export const ProductDetail = ({ product, onClose }: Props) => {
         <div className="detail-panel-header">
           <h2 id="detail-title">Detalle del producto</h2>
           <button
-            className="detail-close-button"
+            className="btn detail-close-button"
             type="button"
             aria-label="Cerrar detalle"
             onClick={onClose}
@@ -75,7 +75,7 @@ export const ProductDetail = ({ product, onClose }: Props) => {
               </p>
               <button
                 type="button"
-                className="add-cart-button"
+                className="btn add-cart-button"
                 disabled={atLimit || outOfStock}
                 onClick={() => addToCart(product.id)}
               >

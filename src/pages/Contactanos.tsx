@@ -56,7 +56,7 @@ export default function Contactanos() {
                   id="contacto-identificacion"
                   name="identificacion"
                   placeholder="Ej: +569... o correo@gmail.com"
-                  className={claseCampo(errores.identificacion)}
+                  className={["form-control", claseCampo(errores.identificacion)].filter(Boolean).join(" ")}
                   value={identificacion}
                   onChange={(event) => {
                     setIdentificacion(event.target.value);
@@ -71,7 +71,7 @@ export default function Contactanos() {
                 <select
                   id="contacto-motivo"
                   name="motivo"
-                  className={claseCampo(errores.motivo)}
+                  className={["form-select", claseCampo(errores.motivo)].filter(Boolean).join(" ")}
                   value={motivo}
                   onChange={(event) => {
                     setMotivo(event.target.value);
@@ -96,7 +96,7 @@ export default function Contactanos() {
                   name="mensaje"
                   maxLength={500}
                   placeholder="Escribe tu consulta (máximo 500 caracteres)..."
-                  className={claseCampo(errores.mensaje)}
+                  className={["form-control", claseCampo(errores.mensaje)].filter(Boolean).join(" ")}
                   value={mensaje}
                   onChange={(event) => {
                     setMensaje(event.target.value);
@@ -106,7 +106,7 @@ export default function Contactanos() {
                 <CampoError mensaje={errores.mensaje} />
               </div>
 
-              <button type="submit" className="btn-agendar">
+              <button type="submit" className="btn btn-agendar">
                 Enviar Mensaje
               </button>
               <p role="status" aria-live="polite">

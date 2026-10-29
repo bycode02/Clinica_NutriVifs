@@ -158,21 +158,21 @@ export default function Agendar() {
             <div className="campo-formulario">
               <label htmlFor="nombre">Nombre</label>
               <input id="nombre" autoComplete="given-name" name="nombre" type="text" maxLength={100}
-                className={claseCampo(errores.nombre)} value={datos.nombre} onChange={onChange} />
+                className={["form-control", claseCampo(errores.nombre)].filter(Boolean).join(" ")} value={datos.nombre} onChange={onChange} />
               <CampoError mensaje={errores.nombre} />
             </div>
 
             <div className="campo-formulario">
               <label htmlFor="apellido">Apellido</label>
               <input id="apellido" autoComplete="family-name" name="apellido" type="text" maxLength={100}
-                className={claseCampo(errores.apellido)} value={datos.apellido} onChange={onChange} />
+                className={["form-control", claseCampo(errores.apellido)].filter(Boolean).join(" ")} value={datos.apellido} onChange={onChange} />
               <CampoError mensaje={errores.apellido} />
             </div>
 
             <div className="campo-formulario">
               <label htmlFor="rut">RUT (ej: 12.345.678-9)</label>
               <input id="rut" name="rut" type="text" inputMode="text" placeholder="12.345.678-9" maxLength={12}
-                className={claseCampo(errores.rut)} value={datos.rut}
+                className={["form-control", claseCampo(errores.rut)].filter(Boolean).join(" ")} value={datos.rut}
                 onKeyDown={soloTeclas(/^[0-9kK.-]$/)}
                 onChange={(event) => actualizar("rut", formatearRut(event.target.value))} />
               <CampoError mensaje={errores.rut} />
@@ -182,7 +182,7 @@ export default function Agendar() {
               <label htmlFor="fecha-nacimiento">Fecha de nacimiento</label>
               <input id="fecha-nacimiento" autoComplete="bday" name="fechaNacimiento" type="date"
                 max={`${ANIO_MAXIMO_NACIMIENTO}-12-31`}
-                className={claseCampo(errores.fechaNacimiento)} value={datos.fechaNacimiento} onChange={onChange} />
+                className={["form-control", claseCampo(errores.fechaNacimiento)].filter(Boolean).join(" ")} value={datos.fechaNacimiento} onChange={onChange} />
               <small className="campo-ayuda">
                 Solo pueden agendar una consulta personas mayores de 14 años.
               </small>
@@ -193,7 +193,7 @@ export default function Agendar() {
               <label htmlFor="correo">Correo (ej: usuario@gmail.com)</label>
               <input id="correo" autoComplete="email" name="correo" type="text" inputMode="email" maxLength={42}
                 placeholder="usuario@duoc.cl"
-                className={claseCampo(errores.correo)} value={datos.correo} onChange={onChange} />
+                className={["form-control", claseCampo(errores.correo)].filter(Boolean).join(" ")} value={datos.correo} onChange={onChange} />
               <CampoError mensaje={errores.correo} />
             </div>
 
@@ -201,7 +201,7 @@ export default function Agendar() {
               <label htmlFor="telefono">Telefono (ej: +56934020512)</label>
               <input id="telefono" autoComplete="tel" name="telefono" type="tel" inputMode="tel"
                 placeholder="+56934020512" maxLength={12}
-                className={claseCampo(errores.telefono)} value={datos.telefono}
+                className={["form-control", claseCampo(errores.telefono)].filter(Boolean).join(" ")} value={datos.telefono}
                 onKeyDown={soloTeclas(/^[0-9]$/)}
                 onChange={(event) => actualizar("telefono", formatearTelefono(event.target.value))} />
               <CampoError mensaje={errores.telefono} />
@@ -210,13 +210,13 @@ export default function Agendar() {
             <div className="campo-formulario">
               <label htmlFor="mascota">Nombre de tu mascota</label>
               <input id="mascota" name="mascota" type="text"
-                className={claseCampo(errores.mascota)} value={datos.mascota} onChange={onChange} />
+                className={["form-control", claseCampo(errores.mascota)].filter(Boolean).join(" ")} value={datos.mascota} onChange={onChange} />
               <CampoError mensaje={errores.mascota} />
             </div>
 
             <div className="campo-formulario">
               <label htmlFor="especie">Especie</label>
-              <select id="especie" name="especie" className={claseCampo(errores.especie)}
+              <select id="especie" name="especie" className={["form-select", claseCampo(errores.especie)].filter(Boolean).join(" ")}
                 value={datos.especie}
                 onChange={(event) => {
                   actualizar("especie", event.target.value);
@@ -235,13 +235,13 @@ export default function Agendar() {
             <div className="campo-formulario campo-completo" hidden={datos.especie !== "otro"}>
               <label htmlFor="otra-especie">Escribe la especie</label>
               <input id="otra-especie" name="otraEspecie" type="text" placeholder="Ej: Hurón"
-                className={claseCampo(errores.otraEspecie)} value={datos.otraEspecie} onChange={onChange} />
+                className={["form-control", claseCampo(errores.otraEspecie)].filter(Boolean).join(" ")} value={datos.otraEspecie} onChange={onChange} />
               <CampoError mensaje={errores.otraEspecie} />
             </div>
 
             <div className="campo-formulario">
               <label htmlFor="tipo-consulta">Tipo de consulta</label>
-              <select id="tipo-consulta" name="tipoConsulta" className={claseCampo(errores.tipoConsulta)}
+              <select id="tipo-consulta" name="tipoConsulta" className={["form-select", claseCampo(errores.tipoConsulta)].filter(Boolean).join(" ")}
                 value={datos.tipoConsulta} onChange={onChange}>
                 <option value="" disabled>Selecciona una opcion</option>
                 <option value="general">Consulta general</option>
@@ -255,7 +255,7 @@ export default function Agendar() {
             <div className="campo-formulario">
               <label htmlFor="fecha">Fecha preferida</label>
               <input id="fecha" name="fecha" type="date" min={todayIso()}
-                className={claseCampo(errores.fecha)} value={datos.fecha} onChange={onChange} />
+                className={["form-control", claseCampo(errores.fecha)].filter(Boolean).join(" ")} value={datos.fecha} onChange={onChange} />
               <CampoError mensaje={errores.fecha} />
             </div>
 
@@ -263,11 +263,11 @@ export default function Agendar() {
               <label htmlFor="motivo">Motivo de la consulta (minimo 20 caracteres)</label>
               <textarea id="motivo" name="motivo" rows={5} minLength={20} maxLength={500}
                 placeholder="Describe con detalle lo que le ocurre a tu mascota"
-                className={claseCampo(errores.motivo)} value={datos.motivo} onChange={onChange} />
+                className={["form-control", claseCampo(errores.motivo)].filter(Boolean).join(" ")} value={datos.motivo} onChange={onChange} />
               <CampoError mensaje={errores.motivo} />
             </div>
 
-            <button type="submit" className="btn-agendar campo-completo">
+            <button type="submit" className="btn btn-agendar campo-completo">
               Solicitar consulta
             </button>
             <p className="campo-completo" role="status" aria-live="polite">

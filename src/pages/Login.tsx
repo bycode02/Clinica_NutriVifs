@@ -57,10 +57,10 @@ export const Login = () => {
         Ingresa para continuar con tus solicitudes y reservas.
       </p>
       <form className="auth-form" onSubmit={handleSubmit}>
-        <div className="auth-field"><label htmlFor="login-role">Rol de la cuenta</label><select id="login-role" value={role} onChange={e => setRole(e.target.value as Role)}><option value="Administrador">ADMINISTRADOR</option><option value="Vendedor">VENDEDOR</option><option value="Cliente">USUARIO</option></select><small>Modo demostración: puedes elegir cualquier rol para esta sesión.</small></div>
+        <div className="auth-field"><label htmlFor="login-role">Rol de la cuenta</label><select className="form-select" id="login-role" value={role} onChange={e => setRole(e.target.value as Role)}><option value="Administrador">ADMINISTRADOR</option><option value="Vendedor">VENDEDOR</option><option value="Cliente">USUARIO</option></select><small>Modo demostración: puedes elegir cualquier rol para esta sesión.</small></div>
         <div className="auth-field">
           <label htmlFor="email">Correo electrónico</label>
-          <input
+          <input className="form-control"
             id="email"
             name="email"
             type="email"
@@ -75,7 +75,7 @@ export const Login = () => {
         </div>
         <div className="auth-field">
           <label htmlFor="password">Contraseña</label>
-          <input
+          <input className="form-control"
             id="password"
             name="password"
             type="password"
@@ -91,7 +91,7 @@ export const Login = () => {
         <p className="auth-message" aria-live="polite">
           {message}
         </p>
-        <button className="auth-button" type="submit">
+        <button className="btn auth-button" type="submit">
           Ingresar
         </button>
       </form>

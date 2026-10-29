@@ -133,7 +133,7 @@ export function soloTeclas(patron: RegExp) {
 }
 
 export const claseCampo = (mensaje?: string) =>
-  mensaje ? "campo-invalido" : undefined;
+  mensaje ? "campo-invalido is-invalid" : undefined;
 
 export const MENSAJES = {
   correoAgendamiento:

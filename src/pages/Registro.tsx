@@ -92,7 +92,7 @@ export function UserForm({ managed = false, editProfile = false, initial, onDone
       </p>
       </>}
       <form className="auth-form" onSubmit={handleSubmit} noValidate>
-        {managed && !editProfile && <><label htmlFor="user-role">Rol</label><select id="user-role" value={role} onChange={e => setRole(e.target.value as Role)} disabled={session?.role !== "Administrador"}>
+        {managed && !editProfile && <><label htmlFor="user-role">Rol</label><select className="form-select" id="user-role" value={role} onChange={e => setRole(e.target.value as Role)} disabled={session?.role !== "Administrador"}>
           <option value="Cliente">USUARIO</option>
           {session?.role === "Administrador" && <><option value="Administrador">ADMINISTRADOR</option><option value="Vendedor">VENDEDOR</option></>}
         </select></>}
@@ -103,7 +103,7 @@ export function UserForm({ managed = false, editProfile = false, initial, onDone
           autoComplete="given-name"
           name="name"
           maxLength={100}
-          className={claseCampo(errores.name)}
+          className={["form-control", claseCampo(errores.name)].filter(Boolean).join(" ")}
           value={datos.name}
           onChange={onChange}
         />
@@ -116,7 +116,7 @@ export function UserForm({ managed = false, editProfile = false, initial, onDone
           autoComplete="family-name"
           name="apellido"
           maxLength={100}
-          className={claseCampo(errores.apellido)}
+          className={["form-control", claseCampo(errores.apellido)].filter(Boolean).join(" ")}
           value={datos.apellido}
           onChange={onChange}
         />
@@ -131,7 +131,7 @@ export function UserForm({ managed = false, editProfile = false, initial, onDone
           name="email"
           placeholder="usuario@duoc.cl"
           maxLength={42}
-          className={claseCampo(errores.email)}
+          className={["form-control", claseCampo(errores.email)].filter(Boolean).join(" ")}
           value={datos.email}
           onChange={onChange}
         />
@@ -145,7 +145,7 @@ export function UserForm({ managed = false, editProfile = false, initial, onDone
           name="phone"
           placeholder="+56934040042"
           maxLength={12}
-          className={claseCampo(errores.phone)}
+          className={["form-control", claseCampo(errores.phone)].filter(Boolean).join(" ")}
           value={datos.phone}
           onKeyDown={soloTeclas(/^[0-9]$/)}
           onChange={(event) =>
@@ -162,7 +162,7 @@ export function UserForm({ managed = false, editProfile = false, initial, onDone
           autoComplete="bday"
           name="birthDate"
           max={`${ANIO_MAXIMO_NACIMIENTO}-12-31`}
-          className={claseCampo(errores.birthDate)}
+          className={["form-control", claseCampo(errores.birthDate)].filter(Boolean).join(" ")}
           value={datos.birthDate}
           onChange={onChange}
         />
@@ -174,7 +174,7 @@ export function UserForm({ managed = false, editProfile = false, initial, onDone
           id="reg-standalone-direccion"
           autoComplete="street-address"
           name="direccion"
-          className={claseCampo(errores.direccion)}
+          className={["form-control", claseCampo(errores.direccion)].filter(Boolean).join(" ")}
           value={datos.direccion}
           onChange={onChange}
         />
@@ -185,7 +185,7 @@ export function UserForm({ managed = false, editProfile = false, initial, onDone
           id="reg-standalone-region"
           autoComplete="address-level1"
           name="region"
-          className={claseCampo(errores.region)}
+          className={["form-select", claseCampo(errores.region)].filter(Boolean).join(" ")}
           value={datos.region}
           onChange={onChange}
         >
@@ -204,7 +204,7 @@ export function UserForm({ managed = false, editProfile = false, initial, onDone
           autoComplete="address-level2"
           name="comuna"
           disabled={comunas.length === 0}
-          className={claseCampo(errores.comuna)}
+          className={["form-select", claseCampo(errores.comuna)].filter(Boolean).join(" ")}
           value={datos.comuna}
           onChange={onChange}
         >
@@ -225,7 +225,7 @@ export function UserForm({ managed = false, editProfile = false, initial, onDone
         <select
           id="reg-standalone-genero"
           name="genero"
-          className={claseCampo(errores.genero)}
+          className={["form-select", claseCampo(errores.genero)].filter(Boolean).join(" ")}
           value={datos.genero}
           onChange={onChange}
         >
@@ -246,7 +246,7 @@ export function UserForm({ managed = false, editProfile = false, initial, onDone
           id="reg-standalone-pass"
           autoComplete="new-password"
           name="password"
-          className={claseCampo(errores.password)}
+          className={["form-control", claseCampo(errores.password)].filter(Boolean).join(" ")}
           value={datos.password}
           onChange={onChange}
         />
@@ -258,7 +258,7 @@ export function UserForm({ managed = false, editProfile = false, initial, onDone
           id="reg-standalone-confirm-pass"
           autoComplete="new-password"
           name="confirmPassword"
-          className={claseCampo(errores.confirmPassword)}
+          className={["form-control", claseCampo(errores.confirmPassword)].filter(Boolean).join(" ")}
           value={datos.confirmPassword}
           onChange={onChange}
         />
@@ -266,7 +266,7 @@ export function UserForm({ managed = false, editProfile = false, initial, onDone
         <small>Debe tener entre 4 y 13 caracteres y al menos una mayúscula.</small>
 
         <label className="auth-checkbox">
-          <input
+          <input className="form-check-input"
             type="checkbox"
             id="reg-standalone-terminos"
             name="aceptaTerminos"
@@ -281,14 +281,14 @@ export function UserForm({ managed = false, editProfile = false, initial, onDone
 
         </>}
 
-        <button type="submit" className="btn-primary">
+        <button type="submit" className="btn btn-primary">
           {editProfile ? "Guardar cambios" : managed ? "Guardar usuario" : "Registrarme"}
         </button>
         <p className="profile-message" role="status">
           {message}
         </p>
       </form>
-      {managed || editProfile ? <button type="button" onClick={onDone}>Cancelar</button> : <nav className="auth-links" aria-label="Opciones de cuenta">
+      {managed || editProfile ? <button className="btn" type="button" onClick={onDone}>Cancelar</button> : <nav className="auth-links" aria-label="Opciones de cuenta">
         <Link to="/login">Ya tengo una cuenta</Link>
         <Link to="/">Volver al inicio</Link>
       </nav>}

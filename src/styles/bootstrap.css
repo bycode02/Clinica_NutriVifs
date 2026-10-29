@@ -1,0 +1,51 @@
+/* Bootstrap is bundled locally. Existing clinic styles take precedence. */
+@import "bootstrap/dist/css/bootstrap.min.css" layer(bootstrap);
+
+:root {
+  --bs-body-font-family: "Trebuchet MS", Verdana, sans-serif;
+  --bs-body-color: #183b39;
+  --bs-body-bg: #f4f8f4;
+  --bs-primary: #176b58;
+  --bs-primary-rgb: 23, 107, 88;
+  --bs-link-color: #176b58;
+  --bs-link-hover-color: #105241;
+}
+
+/* Keep the existing page widths instead of Bootstrap's breakpoint caps. */
+.container { max-width: none; padding-inline: 0; }
+.btn-primary {
+  --bs-btn-bg: #176b58;
+  --bs-btn-border-color: #176b58;
+  --bs-btn-hover-bg: #105241;
+  --bs-btn-hover-border-color: #105241;
+  --bs-btn-active-bg: #105241;
+  --bs-btn-active-border-color: #105241;
+  --bs-btn-disabled-bg: #176b58;
+  --bs-btn-disabled-border-color: #176b58;
+  --bs-btn-focus-shadow-rgb: 23, 107, 88;
+}
+.form-control:focus, .form-select:focus {
+  border-color: #176b58;
+  box-shadow: 0 0 0 .2rem rgb(23 107 88 / 15%);
+}
+.form-check-input:checked { background-color: #176b58; border-color: #176b58; }
+.form-control.is-invalid, .form-select.is-invalid { border-color: #b02a37; }
+.form-select { padding-right: 2.5rem; }
+/* Checkbox sizing must override the legacy full-width text input rule. */
+.auth-form input.form-check-input {
+  width: 1.1rem;
+  height: 1.1rem;
+  min-height: 1.1rem;
+  flex: 0 0 1.1rem;
+  padding: 0;
+  margin: .2rem 0 0;
+  background-image: var(--bs-form-check-bg-image);
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.auth-form input.form-check-input:checked {
+  background-color: #176b58;
+  border-color: #176b58;
+}
+.auth-checkbox { display: flex; align-items: flex-start; gap: .6rem; }

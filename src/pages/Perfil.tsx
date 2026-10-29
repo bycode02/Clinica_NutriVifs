@@ -31,7 +31,7 @@ export default function Perfil() {
     <main className="profile-page">
       <section className="profile-page-shell" aria-labelledby="profile-page-title">
         <div className="profile-sidebar">
-          <div className="profile-sidebar-card">
+          <div className="card profile-sidebar-card">
             <div className="profile-avatar">{initials}</div>
             <p className="profile-badge">{session ? session.role || "Cliente" : "Invitado"}</p>
             <h1>{session ? fullName : "Invitado"}</h1>
@@ -45,7 +45,7 @@ export default function Perfil() {
               {session ? (
                 <button
                   type="button"
-                  className="profile-page-logout"
+                  className="btn profile-page-logout"
                   onClick={handleLogout}
                 >
                   Cerrar sesión
@@ -59,13 +59,13 @@ export default function Perfil() {
           </div>
         </div>
 
-        <article className="profile-details-card">
+        <article className="card profile-details-card">
           <div className="profile-page-header">
             <div>
               <p className="profile-kicker">Perfil</p>
               <h2 id="profile-page-title">Información del usuario</h2>
             </div>
-            {session && profile && <button ref={editButton} type="button" className="profile-edit-button" aria-expanded={editing} aria-controls="profile-editor" onClick={() => { setEditing(!editing); setMessage(""); }}>
+            {session && profile && <button ref={editButton} type="button" className="btn profile-edit-button" aria-expanded={editing} aria-controls="profile-editor" onClick={() => { setEditing(!editing); setMessage(""); }}>
               {editing ? "Cancelar edición" : "Editar perfil"}
             </button>}
           </div>

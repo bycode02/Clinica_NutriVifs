@@ -135,3 +135,38 @@ test("todos los roles editan su perfil, conservan credenciales y persisten el co
     else delete globalThis.localStorage;
   }
 });
+
+// Render every public route with realistic persisted sessions, without touching browser data.
+Module._extensions[".css"] = () => {};
+const { MemoryRouter } = require("react-router");
+const { default: App } = require("../src/App.tsx");
+const publicRoutes = ["/", "/consultas", "/productos", "/blog", "/contactanos", "/quienes-somos", "/perfil", "/carrito", "/login", "/registro", "/agendar"];
+for (const role of [null, "Cliente", "Vendedor", "Administrador"]) {
+  test(`todas las páginas públicas se renderizan con sesión ${role || "invitado"}`, () => {
+    const previous = Object.getOwnPropertyDescriptor(globalThis, "localStorage");
+    const storage = new Map();
+    Object.defineProperty(globalThis, "localStorage", { configurable: true, value: {
+      getItem: key => storage.get(key) ?? null,
+      setItem: (key, value) => storage.set(key, value),
+      removeItem: key => storage.delete(key),
+    } });
+    try {
+      storage.set("clinica-nutridifs-profiles", JSON.stringify([user]));
+      if (role) storage.set("clinica-nutridifs-session", JSON.stringify({ ...user, role }));
+      for (const route of publicRoutes) {
+        const html = renderToStaticMarkup(createElement(MemoryRouter, { initialEntries: [route] }, createElement(AppProvider, null, createElement(App))));
+        assert.match(html, /<h[12][ >]/, route);
+        assert.doesNotMatch(html, /NaN|\[object Object\]/, route);
+        if (route === "/perfil") assert.equal(html.includes("Editar perfil"), !!role);
+      }
+      for (const route of ["/administrar", "/vendedor"]) {
+        const html = renderToStaticMarkup(createElement(MemoryRouter, { initialEntries: [route] }, createElement(AppProvider, null, createElement(App))));
+        const permitted = route === "/administrar" ? role === "Administrador" : role === "Vendedor";
+        assert.equal(html.includes('class="management container"'), permitted, `${role}: ${route}`);
+      }
+    } finally {
+      if (previous) Object.defineProperty(globalThis, "localStorage", previous);
+      else delete globalThis.localStorage;
+    }
+  });
+}

@@ -42,7 +42,7 @@ export default function Productos() {
           <div className="filter-section">
             <div className="product-search">
               <label htmlFor="product-search">Buscar por nombre</label>
-              <input id="product-search" type="search" placeholder="Escribe el nombre del producto" value={search} onChange={event => setSearch(event.target.value)} />
+              <input className="form-control" id="product-search" type="search" placeholder="Escribe el nombre del producto" value={search} onChange={event => setSearch(event.target.value)} />
             </div>
             <h2>Filtrar por Categoría</h2>
 
@@ -51,7 +51,7 @@ export default function Productos() {
                 <button
                   key={item}
                   type="button"
-                  className={`filter-btn${category === item ? " active" : ""}`}
+                  className={["btn", `filter-btn${category === item ? " active" : ""}`].filter(Boolean).join(" ")}
                   onClick={() => setCategory(item)}
                 >
                   {item === "todos" ? "Todos" : item}
@@ -61,7 +61,7 @@ export default function Productos() {
 
             <div className="price-filter">
               <label htmlFor="price-filter">Filtrar por precio</label>
-              <select
+              <select className="form-select"
                 id="price-filter"
                 value={priceFilter}
                 onChange={(event) => setPriceFilter(event.target.value)}
