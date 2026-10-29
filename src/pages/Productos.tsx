@@ -38,11 +38,21 @@ export default function Productos() {
   return (
     <>
       <main>
-        <section className="products-page container" aria-labelledby="products-title">
+        <section
+          className="products-page container"
+          aria-labelledby="products-title"
+        >
           <div className="filter-section">
             <div className="product-search">
               <label htmlFor="product-search">Buscar por nombre</label>
-              <input className="form-control" id="product-search" type="search" placeholder="Escribe el nombre del producto" value={search} onChange={event => setSearch(event.target.value)} />
+              <input
+                className="form-control"
+                id="product-search"
+                type="search"
+                placeholder="Escribe el nombre del producto"
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+              />
             </div>
             <h2>Filtrar por Categoría</h2>
 
@@ -51,7 +61,12 @@ export default function Productos() {
                 <button
                   key={item}
                   type="button"
-                  className={["btn", `filter-btn${category === item ? " active" : ""}`].filter(Boolean).join(" ")}
+                  className={[
+                    "btn",
+                    `filter-btn${category === item ? " active" : ""}`,
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
                   onClick={() => setCategory(item)}
                 >
                   {item === "todos" ? "Todos" : item}
@@ -61,7 +76,8 @@ export default function Productos() {
 
             <div className="price-filter">
               <label htmlFor="price-filter">Filtrar por precio</label>
-              <select className="form-select"
+              <select
+                className="form-select"
                 id="price-filter"
                 value={priceFilter}
                 onChange={(event) => setPriceFilter(event.target.value)}
@@ -80,49 +96,21 @@ export default function Productos() {
             </p>
           </div>
 
-          <div className="products-introduction">
-            <span className="products-label">Clinica NutriDifs</span>
-            <h1 className="products-title" id="products-title">
-              Nuestros productos
-            </h1>
-            <p>
-              En nuestra clínica tenemos los mejores productos para la salud y
-              bienestar de tus mascotas, todos de la mejor calidad y con los
-              precios más competitivos del mercado.
-            </p>
-            <p>
-              Nuestro catálogo de productos veterinarios incluye medicamentos,
-              vacunas, antiparasitarios y suplementos nutricionales
-              seleccionados para satisfacer las necesidades de tu compañero
-              peludo.
-            </p>
-
-            <div className="products-info">
-              <div className="products-info-item">
-                <strong>Calidad</strong>
-                <span>Productos seleccionados</span>
-              </div>
-              <div className="products-info-item">
-                <strong>Variedad</strong>
-                <span>Opciones para tu mascota</span>
-              </div>
-              <div className="products-info-item">
-                <strong>Bienestar</strong>
-                <span>Cuidado responsable</span>
-              </div>
-            </div>
-          </div>
-
           <div className="products-catalog">
             <div className="catalogo-header">
-              <h2>Catálogo Farmacéutico Veterinario</h2>
+              <h1 id="products-title">Catálogo Farmacéutico Veterinario</h1>
               <p>
                 Encuentra medicamentos, antiparasitarios y vacunas certificadas
                 para tus mascotas.
               </p>
             </div>
 
-            {visibleCount === 0 && <p role="status">No se encontraron productos. Prueba otro nombre o cambia los filtros.</p>}
+            {visibleCount === 0 && (
+              <p role="status">
+                No se encontraron productos. Prueba otro nombre o cambia los
+                filtros.
+              </p>
+            )}
             <div className="products-grid" id="products-grid">
               {products.map((product) => (
                 <ProductCard

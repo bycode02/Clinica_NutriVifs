@@ -3,7 +3,11 @@ import { useApp, type ProductoCatalogo } from "../context/AppContext";
 import { imagenProducto } from "../data/productos";
 import { formatCurrency } from "../utils/format";
 
-export const ProductDescription = ({ product }: { product: ProductoCatalogo }) =>
+export const ProductDescription = ({
+  product,
+}: {
+  product: ProductoCatalogo;
+}) =>
   product.description ? (
     <>{product.description}</>
   ) : (
@@ -21,7 +25,7 @@ type Props = {
 };
 
 export const ProductCard = ({ product, hidden, onViewDetail }: Props) => {
-  const { addToCart, changeQuantity, getQuantity } = useApp();
+  const { addToCart, getQuantity } = useApp();
   const [added, setAdded] = useState(false);
   const quantity = getQuantity(product.id);
   const atStockLimit = quantity >= product.stock;
@@ -77,24 +81,6 @@ export const ProductCard = ({ product, hidden, onViewDetail }: Props) => {
           >
             {added ? "Agregado" : "Agregar al carrito"}
           </button>
-          <div className="product-quantity-controls">
-            <button className="btn"
-              type="button"
-              aria-label="Quitar una unidad"
-              onClick={() => changeQuantity(product.id, -1)}
-            >
-              −
-            </button>
-            <span>{quantity}</span>
-            <button className="btn"
-              type="button"
-              aria-label="Agregar una unidad"
-              disabled={atStockLimit}
-              onClick={() => addToCart(product.id)}
-            >
-              +
-            </button>
-          </div>
         </div>
       </div>
     </article>
